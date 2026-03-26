@@ -1,0 +1,48 @@
+[
+  {
+    "id": 1,
+    "date": "14.01.26",
+    "title": "Dawn Patrol en El Hombre",
+    "category": "CULTURE",
+    "excerpt": "Primeras luces. El silencio antes de la primera serie. La magia de empezar el día en el agua.",
+    "image": "images/stock-sunset.png",
+    "content": "<p>No hay nada como el amanecer en Playa del Hombre. Las primeras luces del día revelan las líneas que entran desde el norte, limpias y ordenadas. Es el momento en que el agua está más fría, pero también más tranquila.</p><p>El 'Dawn Patrol' no es solo surfear temprano; es un ritual. Es el café caliente en el termo mientras chequeas las condiciones, el saludo silencioso a los otros madrugadores, y la satisfacción de haber cogido las mejores olas antes de que el resto del mundo despierte.</p><h3>La Importancia de la Rutina</h3><p>Establecer una rutina matutina te conecta con los ritmos naturales. En Waya, fomentamos este respeto por los ciclos del mar.</p>"
+  },
+  {
+    "id": 2,
+    "date": "12.01.26",
+    "title": "Local Heroes",
+    "category": "PEOPLE",
+    "excerpt": "Historias de quienes han surfeado estas costas antes que nosotros. Respeto al linaje.",
+    "image": "images/stock-community.png",
+    "content": "<p>Cada spot tiene sus leyendas. En Telde, la historia del surf se ha escrito ola a ola por generaciones de locales que han cuidado y respetado nuestras playas.</p><p>Hoy rendimos homenaje a aquellos pioneros que exploraron estos picos con tablas pesadas y sin invento. Su legado vive en cada sesión que compartimos hoy.</p>"
+  },
+  {
+    "id": 3,
+    "date": "10.01.26",
+    "title": "The Perfect Quiver",
+    "category": "GEAR",
+    "excerpt": "¿Softboard o Fibra? Eligiendo la herramienta correcta para las condiciones de hoy.",
+    "image": "images/stock-quiver.png",
+    "content": "<p>Elegir la tabla adecuada es un arte. No siempre la tabla más corta es la mejor opción. En días pequeños y fofos, un longboard o un 'corchopan' de calidad puede ser la diferencia entre frustrarse o divertirse.</p><p>En Waya, creemos que el mejor surfista es el que más se divierte, y para eso, necesitas el equipo correcto. Ven a nuestro Quiver Room y déjate asesorar.</p>"
+  },
+  {
+    "id": 4,
+    "date": "08.01.26",
+    "title": "\"El surf no es deporte, es arte en movimiento.\"",
+    "category": "THOUGHTS",
+    "excerpt": "",
+    "image": "",
+    "content": "<p>Es una danza con la naturaleza. No compites contra ella, fluyes con ella. Cada ola es un lienzo efímero que desaparece tras ser montada.</p>",
+    "isTextOnly": true
+  },
+  {
+    "id": 5,
+    "date": "05.01.26",
+    "title": "Road to Nowhere",
+    "category": "TRAVEL",
+    "excerpt": "Explorando el norte de la isla en busca de spots solitarios.",
+    "image": "images/stock-hero-main.png",
+    "content": "<p>A veces, hay que salir de la zona de confort. Cogimos la furgoneta y pusimos rumbo al norte, sin un destino fijo, solo persiguiendo el swell.</p><p>Encontramos rincones olvidados, olas solitarias y esa sensación de libertad que solo el 'road trip' te puede dar. Gran Canaria tiene tesoros escondidos para quien tiene la paciencia de buscarlos.</p>"
+  }
+]

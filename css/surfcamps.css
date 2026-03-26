@@ -1,0 +1,638 @@
+/* ==========================================
+   SURFCAMPS - WAYA SURF SCHOOL
+   ========================================== */
+
+/* ---- HERO ---- */
+.camp-hero {
+  position: relative;
+  height: 100vh;
+  min-height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  text-align: center;
+}
+
+.camp-hero-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center 40%;
+}
+
+.camp-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.3) 0%,
+    rgba(0, 0, 0, 0.15) 40%,
+    rgba(0, 0, 0, 0.65) 100%
+  );
+}
+
+.camp-hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 720px;
+  padding: 0 1.5rem;
+}
+
+.camp-hero-badge {
+  display: inline-block;
+  border: 2px solid #FDD802;
+  color: #FDD802;
+  padding: 0.5rem 1.5rem;
+  border-radius: 50px;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  backdrop-filter: blur(6px);
+  background: rgba(0, 0, 0, 0.25);
+  margin-bottom: 1.5rem;
+  animation: camp-pulse 2.5s ease-in-out infinite;
+}
+
+@keyframes camp-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(253, 216, 2, 0.3); }
+  50% { box-shadow: 0 0 0 12px rgba(253, 216, 2, 0); }
+}
+
+.camp-hero-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 4.5rem;
+  font-weight: 900;
+  color: #fff;
+  line-height: 1.05;
+  margin: 0 0 1rem 0;
+  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+}
+
+.camp-hero-date {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: #FDD802;
+  text-transform: uppercase;
+  margin: 0 0 1rem 0;
+}
+
+.camp-hero-desc {
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.6;
+  margin: 0 0 2.5rem 0;
+}
+
+.camp-hero-form {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.camp-hero-input {
+  background: rgba(255, 255, 255, 0.12);
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  padding: 1rem 1.75rem;
+  border-radius: 50px;
+  color: #fff;
+  width: 320px;
+  max-width: 100%;
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  backdrop-filter: blur(10px);
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+
+.camp-hero-input::placeholder {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.camp-hero-input:focus {
+  outline: none;
+  border-color: #FDD802;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.camp-hero-submit {
+  background: #FDD802;
+  color: #1a1a1a;
+  padding: 1rem 2.5rem;
+  border-radius: 50px;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.camp-hero-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(253, 216, 2, 0.35);
+}
+
+.camp-hero-note {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.45);
+  margin-top: 1rem;
+}
+
+/* Scroll indicator */
+.camp-scroll {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-family: 'Outfit', sans-serif;
+}
+
+.camp-scroll-line {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.4), transparent);
+  animation: camp-scroll-anim 1.5s ease-in-out infinite;
+}
+
+@keyframes camp-scroll-anim {
+  0% { opacity: 1; transform: scaleY(1); }
+  50% { opacity: 0.3; transform: scaleY(0.5); }
+  100% { opacity: 1; transform: scaleY(1); }
+}
+
+/* ---- WHAT'S INCLUDED ---- */
+.camp-includes-section {
+  padding: 6rem 0;
+}
+
+.camp-includes-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.camp-includes-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 2.8rem;
+  font-weight: 900;
+  color: #1a1a1a;
+  line-height: 1.1;
+  margin: 0.5rem 0 0 0;
+}
+
+.camp-includes-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.camp-include-card {
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 20px;
+  padding: 2.5rem 2rem;
+  text-align: center;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.camp-include-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+}
+
+.camp-include-card--highlight {
+  background: #1a1a1a;
+  border-color: #1a1a1a;
+}
+
+.camp-include-card--highlight .camp-include-title {
+  color: #FDD802;
+}
+
+.camp-include-card--highlight .camp-include-desc {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.camp-include-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 18px;
+  background: #FDD802;
+  color: #1a1a1a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem auto;
+}
+
+.camp-include-card--highlight .camp-include-icon {
+  background: #FDD802;
+}
+
+.camp-include-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 0.6rem 0;
+}
+
+.camp-include-desc {
+  font-size: 0.9rem;
+  color: #666;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ---- EXPERIENCE SECTION ---- */
+.camp-experience-section {
+  padding: 5rem 0;
+  background: #f8f9fa;
+}
+
+.camp-experience-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+.camp-experience-tag {
+  margin-bottom: 0.5rem;
+}
+
+.camp-experience-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: #1a1a1a;
+  line-height: 1.1;
+  margin: 0 0 1.5rem 0;
+}
+
+.camp-experience-text {
+  font-size: 1.05rem;
+  color: #555;
+  line-height: 1.7;
+  margin: 0 0 2rem 0;
+}
+
+.camp-experience-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.camp-experience-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.9rem;
+  color: #333;
+  font-weight: 500;
+}
+
+.camp-experience-list li::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  min-width: 8px;
+  border-radius: 50%;
+  background: #FDD802;
+}
+
+.camp-experience-img {
+  border-radius: 24px;
+  overflow: hidden;
+  aspect-ratio: 4/3;
+}
+
+.camp-experience-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ---- CTA / NEWSLETTER SECTION ---- */
+.camp-cta-section {
+  padding: 6rem 0;
+}
+
+.camp-cta-box {
+  background: #1a1a1a;
+  border-radius: 32px;
+  padding: 5rem 4rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.camp-cta-box::before {
+  content: '';
+  position: absolute;
+  top: -100px;
+  right: -100px;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: rgba(253, 216, 2, 0.06);
+}
+
+.camp-cta-box::after {
+  content: '';
+  position: absolute;
+  bottom: -80px;
+  left: -80px;
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  background: rgba(253, 216, 2, 0.04);
+}
+
+.camp-cta-content {
+  position: relative;
+  z-index: 1;
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+.camp-cta-badge {
+  display: inline-block;
+  background: #FDD802;
+  color: #1a1a1a;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  font-size: 0.75rem;
+  padding: 0.4rem 1.2rem;
+  border-radius: 50px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 1.5rem;
+}
+
+.camp-cta-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: #fff;
+  line-height: 1.1;
+  margin: 0 0 1rem 0;
+}
+
+.camp-cta-desc {
+  font-size: 1.05rem;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.6;
+  margin: 0 0 2.5rem 0;
+}
+
+.camp-cta-form {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.camp-cta-input {
+  background: rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  padding: 1rem 1.75rem;
+  border-radius: 50px;
+  color: #fff;
+  width: 300px;
+  max-width: 100%;
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+
+.camp-cta-input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.camp-cta-input:focus {
+  outline: none;
+  border-color: #FDD802;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.camp-cta-submit {
+  background: #FDD802;
+  color: #1a1a1a;
+  padding: 1rem 2.5rem;
+  border-radius: 50px;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.camp-cta-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(253, 216, 2, 0.35);
+}
+
+.camp-cta-privacy {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.3);
+  margin-top: 1rem;
+}
+
+/* Success state */
+.camp-form-success {
+  display: none;
+  text-align: center;
+  padding: 1rem 0;
+}
+
+.camp-form-success.active {
+  display: block;
+}
+
+.camp-form-success-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #FDD802;
+  color: #1a1a1a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem auto;
+}
+
+.camp-form-success-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0 0 0.5rem 0;
+}
+
+.camp-form-success-desc {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+}
+
+/* ==========================================
+   RESPONSIVE - TABLET
+   ========================================== */
+@media (max-width: 1024px) {
+  .camp-hero-title {
+    font-size: 3.5rem;
+  }
+
+  .camp-includes-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .camp-experience-grid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  .camp-experience-img {
+    order: -1;
+  }
+
+  .camp-cta-box {
+    padding: 4rem 2.5rem;
+  }
+}
+
+/* ==========================================
+   RESPONSIVE - MOBILE
+   ========================================== */
+@media (max-width: 768px) {
+  .camp-hero {
+    height: auto;
+    min-height: 100vh;
+    padding: 8rem 0 4rem;
+  }
+
+  .camp-hero-title {
+    font-size: 2.5rem;
+  }
+
+  .camp-hero-date {
+    font-size: 1rem;
+  }
+
+  .camp-hero-desc {
+    font-size: 1rem;
+  }
+
+  .camp-hero-form {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .camp-hero-input {
+    width: 100%;
+    max-width: 340px;
+  }
+
+  .camp-hero-submit {
+    width: 100%;
+    max-width: 340px;
+  }
+
+  .camp-scroll {
+    display: none;
+  }
+
+  .camp-includes-section {
+    padding: 4rem 0;
+  }
+
+  .camp-includes-title {
+    font-size: 2rem;
+  }
+
+  .camp-includes-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .camp-include-card {
+    padding: 2rem 1.5rem;
+  }
+
+  .camp-experience-section {
+    padding: 3rem 0;
+  }
+
+  .camp-experience-title {
+    font-size: 1.8rem;
+  }
+
+  .camp-experience-list {
+    grid-template-columns: 1fr;
+  }
+
+  .camp-cta-section {
+    padding: 3rem 0;
+  }
+
+  .camp-cta-box {
+    padding: 3rem 1.5rem;
+    border-radius: 24px;
+  }
+
+  .camp-cta-title {
+    font-size: 1.8rem;
+  }
+
+  .camp-cta-form {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .camp-cta-input {
+    width: 100%;
+    max-width: 340px;
+  }
+
+  .camp-cta-submit {
+    width: 100%;
+    max-width: 340px;
+  }
+}
+
+@media (max-width: 375px) {
+  .camp-hero-title {
+    font-size: 2rem;
+  }
+
+  .camp-includes-title {
+    font-size: 1.7rem;
+  }
+
+  .camp-cta-title {
+    font-size: 1.5rem;
+  }
+}
