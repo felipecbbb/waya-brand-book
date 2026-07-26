@@ -1,0 +1,751 @@
+/* ============================================================
+   Mi Cuenta — Panel de cliente · Waya Surf School
+   Adaptado de Entreolas y re-tokenizado a las variables de
+   /css/styles.css (--color-primary #FDD802 · --color-dark #1a1a1a ·
+   --color-gray · --color-light-gray · --radius · --shadow).
+   Fuentes: Outfit (heading) · Inter (body).
+
+   PUENTE de tokens: Entreolas usaba --color-navy/--color-yellow/--color-red/
+   --color-line/--color-muted/--radius-md/--shadow-md. Aquí se mapean a los
+   tokens Waya para no reescribir cada regla. No se inventan tokens nuevos:
+   son alias sobre los de styles.css.
+   ============================================================ */
+:root {
+  --color-navy: var(--color-dark, #1a1a1a);
+  --color-yellow: var(--color-primary, #FDD802);
+  --color-red: var(--color-primary, #FDD802);
+  --color-text: var(--color-dark, #1a1a1a);
+  --color-muted: var(--color-gray, #666666);
+  --color-line: #e6e6e6;
+  --color-bg: #ffffff;
+  --color-sand: var(--color-light-gray, #f5f5f5);
+  --radius-md: var(--radius, 12px);
+  --radius-sm: 8px;
+  --shadow-md: var(--shadow, 0 4px 20px rgba(0, 0, 0, 0.08));
+}
+
+/* ------------------------------------------------------------
+   Header fijo del sitio sobre el panel: forzar fondo sólido y
+   texto oscuro (sin hero detrás), y dejar hueco superior.
+   ------------------------------------------------------------ */
+body:has(#account-root) .header {
+  background: rgba(255, 255, 255, 0.98) !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05) !important;
+  backdrop-filter: blur(10px) !important;
+}
+body:has(#account-root) .header .nav-link,
+body:has(#account-root) .header .dropdown-toggle {
+  color: var(--color-dark) !important;
+  text-shadow: none !important;
+}
+body:has(#account-root) .header .logo img.logo-full,
+body:has(#account-root) .header .logo img.logo-mobile {
+  filter: none !important;
+}
+body:has(#account-root) .header .mobile-toggle span {
+  background-color: var(--color-dark) !important;
+}
+
+#account-root {
+  display: block;
+  padding-top: 92px; /* hueco para el header fijo */
+  min-height: 60vh;
+  font-family: var(--font-body, 'Inter', sans-serif);
+  color: var(--color-text);
+}
+
+/* ============================================================
+   Dashboard layout (sidebar + contenido)
+   ============================================================ */
+.account-app {
+  display: flex;
+  align-items: stretch;
+  background: var(--color-bg);
+}
+
+.account-sidebar {
+  width: 264px;
+  flex-shrink: 0;
+  background: #fff;
+  border-right: 1px solid var(--color-line);
+  padding: 18px 0 24px;
+  position: sticky;
+  top: 92px;
+  align-self: flex-start;
+  max-height: calc(100vh - 92px);
+  overflow-y: auto;
+}
+
+/* Botón "volver al inicio" */
+.account-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0 18px 14px;
+  padding: 8px 12px;
+  border: 1px solid var(--color-line);
+  border-radius: 999px;
+  font-family: var(--font-heading, 'Outfit', sans-serif);
+  font-size: .78rem;
+  font-weight: 600;
+  color: var(--color-navy);
+  text-decoration: none;
+  transition: background .15s;
+}
+.account-back:hover { background: var(--color-sand); }
+
+/* Botón menú: solo móvil */
+.account-menu-btn { display: none; }
+
+.account-avatar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  padding: 0 18px 16px;
+  border-bottom: 1px solid var(--color-line);
+  margin-bottom: 8px;
+}
+.account-avatar-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--color-yellow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading, 'Outfit', sans-serif);
+  font-weight: 800;
+  font-size: 1.05rem;
+  color: var(--color-navy);
+  flex-shrink: 0;
+}
+.account-avatar-name {
+  font-family: var(--font-heading, 'Outfit', sans-serif);
+  font-weight: 700;
+  font-size: .85rem;
+  color: var(--color-navy);
+  text-align: left;
+  line-height: 1.2;
+}
+.account-avatar-email {
+  font-size: .72rem;
+  color: var(--color-muted);
+  margin-top: 1px;
+  word-break: break-all;
+  text-align: left;
+}
+
+.account-nav { list-style: none; margin: 0; padding: 0; }
+.account-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 10px 18px;
+  font-family: var(--font-heading, 'Outfit', sans-serif);
+  font-size: .82rem;
+  font-weight: 600;
+  color: var(--color-muted);
+  cursor: pointer;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  transition: color .15s, background .15s;
+  border-left: 3px solid transparent;
+}
+.account-nav-item:hover { color: var(--color-navy); background: #f8f8f5; }
+.account-nav-item.active {
+  color: var(--color-navy);
+  background: #fffbe6;
+  border-left-color: var(--color-yellow);
+}
+.account-nav-item svg { flex-shrink: 0; opacity: .6; }
+.account-nav-item.active svg,
+.account-nav-item:hover svg { opacity: 1; }
+.account-nav-divider { height: 1px; background: var(--color-line); margin: 8px 0; }
+.account-nav-item.danger { color: #b91c1c; }
+.account-nav-item.danger:hover { background: #fef2f2; }
+
+/* Contenido */
+.account-content {
+  flex: 1;
+  min-width: 0;
+  overflow-x: hidden;
+  padding: 34px clamp(20px, 4vw, 56px) 60px;
+}
+.account-content-header {
+  margin-bottom: 20px;
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.account-content-header h2 {
+  font-family: var(--font-heading, 'Outfit', sans-serif);
+  font-weight: 800;
+  font-size: 1.7rem;
+  color: var(--color-navy);
+  margin: 0;
+  line-height: 1.05;
+}
+.account-content-header p { color: var(--color-muted); font-size: .85rem; margin: 0; }
+
+.tab-loading {
+  padding: 40px 10px;
+  color: var(--color-muted);
+  font-size: .9rem;
+  text-align: center;
+}
+
+/* ============================================================
+   Form cards (Mis datos y reutilizadas por tabs externos)
+   ============================================================ */
+.account-form-card {
+  background: #fff;
+  border: 1px solid var(--color-line);
+  border-radius: 14px;
+  padding: 24px;
+  margin-bottom: 16px;
+}
+.account-form-card h3 {
+  font-family: var(--font-heading, 'Outfit', sans-serif);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  font-size: .75rem;
+  font-weight: 700;
+  color: var(--color-muted);
+  margin: 0 0 18px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--color-line);
+}
+.account-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.account-form-grid.single { grid-template-columns: 1fr; }
+.account-field { display: flex; flex-direction: column; gap: 5px; }
+.account-field.full { grid-column: 1 / -1; }
+.account-field label {
+  font-family: var(--font-heading, 'Outfit', sans-serif);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  font-size: .72rem;
+  font-weight: 600;
+  color: var(--color-navy);
+}
+.account-field input,
+.account-field select,
+.account-field textarea {
+  width: 100%;
+  border: 1px solid var(--color-line);
+  border-radius: 12px;
+  padding: 11px 14px;
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: .92rem;
+  color: var(--color-text);
+  background: #fff;
+  outline: none;
+  transition: border-color .2s, box-shadow .2s;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+.account-field select,
+.family-form select,
+.checkout-form select,
+.tab-panel select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23666666' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 38px;
+  cursor: pointer;
+}
+.account-field input:focus,
+.account-field select:focus,
+.account-field textarea:focus {
+  border-color: var(--color-yellow);
+  box-shadow: 0 0 0 3px rgba(253, 216, 2, 0.30);
+}
+.account-field input:disabled,
+.account-field input[readonly] {
+  background: #f9fafb;
+  color: var(--color-muted);
+  cursor: default;
+}
+.account-field .field-hint { font-size: .75rem; color: var(--color-muted); margin-top: 2px; }
+
+.account-msg { font-size: .85rem; min-height: 1.2em; margin-top: 4px; }
+.account-form-card .btn { margin-top: 8px; }
+
+/* Meta genérica + order cards (tab pedidos) */
+.order-card {
+  background: #fff;
+  border: 1px solid var(--color-line);
+  border-radius: 14px;
+  padding: 18px 20px;
+  margin-bottom: 12px;
+}
+.order-card h4 {
+  font-family: var(--font-heading, 'Outfit', sans-serif);
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--color-navy);
+  margin: 0;
+}
+.order-card .meta { font-size: .82rem; color: var(--color-muted); margin: 6px 0 0; }
+
+/* Status badges */
+.status-badge {
+  display: inline-block;
+  font-size: .7rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: #f1f5f9;
+  color: #64748b;
+  text-transform: capitalize;
+}
+.status-badge.active,
+.status-badge.paid,
+.status-badge.delivered { background: #ecfdf5; color: #065f46; }
+.status-badge.pending { background: #fef3c7; color: #92400e; }
+.status-badge.shipped { background: #dbeafe; color: #1d4ed8; }
+.status-badge.exhausted { background: #f3f4f6; color: #6b7280; }
+.status-badge.expired { background: #fef3c7; color: #92400e; }
+.status-badge.partial { background: #fff7ed; color: #9a3412; }
+.status-badge.cancelled { background: #fee2e2; color: #b91c1c; }
+
+/* ============================================================
+   Auth page (login / registro / onboarding / cambio de contraseña)
+   ============================================================ */
+.auth-page {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: calc(100vh - 220px);
+  border-top: 1px solid var(--color-line);
+}
+.auth-page-single { grid-template-columns: 1fr; }
+.auth-page-single .auth-page-form { margin: 0 auto; }
+
+.auth-page-left {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 32px;
+  background: #fff;
+}
+.auth-page-form { width: 100%; max-width: 420px; }
+
+.auth-title {
+  font-family: var(--font-heading, 'Outfit', sans-serif);
+  font-weight: 800;
+  font-size: 2rem;
+  color: var(--color-navy);
+  margin: 0 0 8px;
+  line-height: 1.1;
+}
+.auth-subtitle { color: var(--color-muted); font-size: .92rem; margin: 0 0 28px; line-height: 1.5; }
+
+.auth-view { display: none; }
+.auth-view.active { display: block; }
+
+.auth-form { display: flex; flex-direction: column; gap: 18px; }
+.auth-field { display: flex; flex-direction: column; gap: 6px; }
+.auth-field label {
+  font-family: var(--font-heading, 'Outfit', sans-serif);
+  font-size: .78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: var(--color-navy);
+}
+.auth-field input:not([type="checkbox"]),
+.auth-field select,
+.phone-prefix-select {
+  width: 100%;
+  border: 1px solid var(--color-line);
+  border-radius: 12px;
+  padding: 13px 16px;
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: .95rem;
+  color: var(--color-text);
+  background: #fff;
+  outline: none;
+  transition: border-color .2s, box-shadow .2s;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+.phone-prefix-select { width: auto; padding-right: 30px; }
+.auth-field select,
+.phone-prefix-select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23666666' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 34px;
+  cursor: pointer;
+}
+.auth-field input:not([type="checkbox"])::placeholder { color: #b0b8c1; }
+.auth-field input:not([type="checkbox"]):focus,
+.auth-field select:focus,
+.phone-prefix-select:focus {
+  border-color: var(--color-yellow);
+  box-shadow: 0 0 0 3px rgba(253, 216, 2, 0.25);
+}
+
+.auth-error { font-size: .84rem; color: #dc2626; min-height: 1em; margin: 0; }
+
+.auth-submit-btn {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 999px;
+  background: var(--color-primary, #FDD802);
+  color: var(--color-dark, #1a1a1a);
+  font-family: var(--font-heading, 'Outfit', sans-serif);
+  font-size: .9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  cursor: pointer;
+  transition: background .2s, transform .1s, box-shadow .2s;
+  box-shadow: 0 4px 15px rgba(253, 216, 2, 0.3);
+}
+.auth-submit-btn:hover { background: #e8c702; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(253, 216, 2, 0.4); }
+.auth-submit-btn:active { transform: scale(.98); }
+.auth-submit-btn:disabled { opacity: .6; cursor: not-allowed; transform: none; box-shadow: none; }
+.auth-submit-ghost {
+  background: transparent;
+  color: var(--color-dark);
+  border: 2px solid var(--color-dark);
+  box-shadow: none;
+}
+.auth-submit-ghost:hover { background: var(--color-dark); color: #fff; box-shadow: none; }
+
+.auth-checkbox-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: .9rem;
+  line-height: 1.4;
+  cursor: pointer;
+  text-transform: none;
+  letter-spacing: normal;
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-weight: 400;
+  color: var(--color-text);
+}
+.auth-checkbox-label input[type="checkbox"] { width: auto; margin-top: 3px; flex-shrink: 0; accent-color: var(--color-primary); }
+.auth-checkbox-label a { color: var(--color-navy); text-decoration: underline; font-weight: 600; }
+
+.auth-switch { text-align: center; font-size: .88rem; color: var(--color-muted); margin-top: 24px; }
+.auth-switch a { color: var(--color-navy); font-weight: 700; text-decoration: none; }
+.auth-switch a:hover { text-decoration: underline; }
+
+/* Panel derecho — brand card */
+.auth-page-right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  background: var(--color-dark, #1a1a1a);
+  position: relative;
+  overflow: hidden;
+}
+.auth-page-right::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 30% 70%, rgba(253, 216, 2, .18) 0%, transparent 60%),
+              radial-gradient(circle at 80% 20%, rgba(253, 216, 2, .10) 0%, transparent 50%);
+}
+.auth-brand-card {
+  position: relative;
+  z-index: 1;
+  max-width: 380px;
+  background: rgba(255, 255, 255, .06);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, .1);
+  border-radius: 20px;
+  padding: 40px 32px;
+}
+.auth-brand-content { color: #fff; }
+.auth-brand-tagline {
+  font-family: var(--font-heading, 'Outfit', sans-serif);
+  font-size: .75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  color: var(--color-yellow);
+  margin: 0 0 16px;
+}
+.auth-brand-heading {
+  font-family: var(--font-heading, 'Outfit', sans-serif);
+  font-weight: 800;
+  font-size: 1.9rem;
+  margin: 0 0 14px;
+  line-height: 1.1;
+}
+.auth-brand-desc { font-size: .9rem; color: rgba(255, 255, 255, .72); line-height: 1.6; margin: 0; }
+
+/* ============================================================
+   Componentes reutilizados por los tabs externos
+   (family / bonos / calendar / enrollments / payments)
+   ============================================================ */
+
+/* Family */
+.family-member-card {
+  background: #fff;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  padding: 18px 20px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  transition: border-color .2s, box-shadow .2s;
+}
+.family-member-card:hover { border-color: var(--color-yellow); box-shadow: 0 2px 12px rgba(0, 0, 0, .04); }
+.family-member-info { display: flex; flex-direction: column; gap: 3px; }
+.family-member-info strong { font-family: var(--font-heading, 'Outfit', sans-serif); font-size: .95rem; color: var(--color-navy); }
+.family-member-info .meta { font-size: .8rem; color: var(--color-muted); }
+.family-member-actions { display: flex; gap: 6px; }
+.family-form { background: #fff; border: 1px solid var(--color-line); border-radius: var(--radius-md); padding: 24px; margin-top: 16px; }
+.family-form h4 { font-family: var(--font-heading, 'Outfit', sans-serif); font-weight: 700; font-size: 1.15rem; color: var(--color-navy); margin: 0 0 16px; }
+.family-form form { display: grid; gap: 12px; }
+.family-form label {
+  font-family: var(--font-heading, 'Outfit', sans-serif);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  font-size: .72rem;
+  font-weight: 600;
+  color: var(--color-navy);
+  display: grid;
+  gap: 5px;
+}
+.family-form input,
+.family-form select {
+  width: 100%;
+  border: 1px solid var(--color-line);
+  border-radius: 12px;
+  padding: 11px 14px;
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: .92rem;
+  color: var(--color-text);
+  background: #fff;
+  outline: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  transition: border-color .2s, box-shadow .2s;
+}
+.family-form input:focus,
+.family-form select:focus { border-color: var(--color-yellow); box-shadow: 0 0 0 3px rgba(253, 216, 2, 0.25); }
+
+/* Selects genéricos dentro de tabs */
+.checkout-form select,
+.tab-panel select {
+  width: 100%;
+  border: 1px solid var(--color-line);
+  border-radius: 12px;
+  padding: 11px 14px;
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: .92rem;
+  color: var(--color-text);
+  background-color: #fff;
+  outline: none;
+  cursor: pointer;
+  transition: border-color .2s, box-shadow .2s;
+}
+.checkout-form select:focus,
+.tab-panel select:focus { border-color: var(--color-yellow); box-shadow: 0 0 0 3px rgba(253, 216, 2, 0.25); }
+
+/* Booking modal (tab calendario) */
+.booking-modal {
+  position: fixed; inset: 0; z-index: 100;
+  background: rgba(0, 0, 0, .5);
+  display: flex; align-items: center; justify-content: center;
+  padding: 16px;
+}
+.booking-modal-content {
+  background: #fff;
+  border-radius: var(--radius-md);
+  max-width: 420px; width: 100%;
+  max-height: 85vh; overflow-y: auto;
+  box-shadow: var(--shadow-md);
+}
+
+/* Calendario mensual (Reservar Clases) */
+.cal-main { display: grid; grid-template-columns: minmax(300px, 360px) 1fr; gap: 28px; align-items: start; margin-top: 16px; }
+.cal-left { position: sticky; top: 108px; }
+.cal-right { min-width: 0; }
+.cal-day-title { font-family: var(--font-heading, 'Outfit', sans-serif); font-weight: 700; font-size: 1.05rem; color: var(--color-navy); text-transform: capitalize; margin: 0 0 14px; }
+.mc-cal { background: #fff; border: 1px solid var(--color-line); border-radius: 16px; padding: 18px 20px; }
+.mc-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.mc-title { font-family: var(--font-heading, 'Outfit', sans-serif); font-weight: 700; color: var(--color-navy); font-size: 1.05rem; }
+.mc-nav {
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 1px solid var(--color-line); background: #fff; color: var(--color-navy);
+  font-size: 1.3rem; line-height: 1; cursor: pointer;
+}
+.mc-nav:hover { background: var(--color-sand); }
+.mc-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
+.mc-weekdays span { text-align: center; font-size: .7rem; font-weight: 700; color: var(--color-muted); padding: 4px 0; }
+.mc-day {
+  aspect-ratio: 1; border: 1px solid transparent; background: transparent;
+  border-radius: 10px; color: var(--color-navy); font-size: .95rem; font-weight: 600;
+  cursor: pointer; display: grid; place-items: center;
+}
+.mc-day.mc-off { color: #c8cdd2; cursor: default; }
+.mc-day.has-class { background: var(--color-sand); border-color: var(--color-line); }
+.mc-day.has-class:hover { border-color: var(--color-navy); }
+.mc-day.active { background: var(--color-navy); color: #fff; border-color: var(--color-navy); }
+.mc-empty { aspect-ratio: 1; }
+.cal-pick-hint {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;
+  color: var(--color-muted); font-size: .92rem; text-align: center; padding: 48px 20px;
+  border: 1px dashed var(--color-line); border-radius: 16px;
+}
+.cal-pick-hint svg { color: var(--color-line); }
+.cal-pick-hint p { margin: 0; }
+
+/* ============================================================
+   Payments (Mis Pagos)
+   ============================================================ */
+.pay-summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 20px; }
+.pay-summary-card { background: #fff; border: 1px solid var(--color-line); border-radius: 14px; padding: 16px 18px; }
+.pay-summary-green { background: #f0fdf4; border-color: #bbf7d0; }
+.pay-summary-yellow { background: #fffbeb; border-color: #fde68a; }
+.pay-summary-neutral { background: #f8fafc; border-color: #e2e8f0; }
+.pay-summary-label { font-size: .72rem; text-transform: uppercase; font-weight: 600; letter-spacing: .04em; color: var(--color-muted); margin-bottom: 2px; }
+.pay-summary-green .pay-summary-label { color: #065f46; }
+.pay-summary-yellow .pay-summary-label { color: #92400e; }
+.pay-summary-value { font-size: 1.35rem; font-family: var(--font-heading, 'Outfit', sans-serif); font-weight: 800; color: var(--color-navy); }
+.pay-summary-green .pay-summary-value { color: #065f46; }
+.pay-summary-yellow .pay-summary-value { color: #92400e; }
+.pay-summary-hint { font-size: .76rem; color: #92400e; margin-top: 4px; }
+.pay-table-wrap { overflow-x: auto; }
+.pay-table { width: 100%; border-collapse: collapse; font-size: .86rem; }
+.pay-table th {
+  text-align: left; padding: 10px 14px; font-size: .72rem; text-transform: uppercase;
+  letter-spacing: .04em; font-weight: 600; color: var(--color-muted);
+  background: #f9fafb; border-bottom: 1px solid var(--color-line);
+  font-family: var(--font-heading, 'Outfit', sans-serif);
+}
+.pay-table td { padding: 10px 14px; border-bottom: 1px solid #f1f5f9; color: var(--color-navy); }
+.pay-table tbody tr:hover { background: #fafbfc; }
+.pay-amount { font-weight: 600; color: #065f46 !important; }
+.pay-source-badge { display: inline-block; font-size: .7rem; font-weight: 600; padding: 2px 8px; border-radius: 4px; background: #f1f5f9; color: #64748b; }
+.pay-source-web { background: #dbeafe; color: #1d4ed8; }
+.pay-domain-badge { display: inline-block; font-size: .72rem; font-weight: 600; padding: 2px 10px; border-radius: 99px; white-space: nowrap; }
+
+/* ============================================================
+   Bono payment info (tab bonos)
+   ============================================================ */
+.bono-payment-info { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--color-line); }
+.bono-payment-row { display: flex; justify-content: space-between; font-size: .82rem; color: var(--color-muted); margin-bottom: 6px; }
+.bono-payment-bar { height: 5px; background: #f1f5f9; border-radius: 3px; overflow: hidden; }
+.bono-payment-bar-fill { height: 100%; border-radius: 3px; transition: width .3s; }
+.bono-pay-badge { font-size: .66rem; font-weight: 700; padding: 2px 8px; border-radius: 4px; }
+.bono-pay-ok { background: #dcfce7; color: #166534; }
+.bono-pay-pending { background: #fef3c7; color: #92400e; }
+.bono-pay-btn {
+  font-size: .78rem !important; padding: 7px 14px !important;
+  background: #22c55e !important; color: #fff !important; border: none !important;
+  border-radius: 6px !important; cursor: pointer !important; font-weight: 600 !important;
+}
+.bono-pay-btn:hover { background: #16a34a !important; }
+.bono-pay-detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
+.bono-pay-detail-item { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px 14px; }
+.bono-pay-detail-highlight { grid-column: 1 / -1; background: #fffbeb; border-color: #fde68a; }
+.bono-pay-detail-label { display: block; font-size: .72rem; text-transform: uppercase; font-weight: 600; color: var(--color-muted); margin-bottom: 2px; }
+.bono-pay-detail-highlight .bono-pay-detail-label { color: #92400e; }
+.bono-pay-detail-value { font-size: 1.2rem; font-family: var(--font-heading, 'Outfit', sans-serif); font-weight: 800; color: var(--color-navy); }
+.bono-pay-detail-highlight .bono-pay-detail-value { color: #92400e; }
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+@media (max-width: 768px) {
+  #account-root { padding-top: 76px; }
+  .account-app { flex-direction: column; }
+  .account-sidebar {
+    position: static; width: 100%; height: auto; max-height: none;
+    padding: 0; border-right: none; border-bottom: 1px solid var(--color-line);
+  }
+  .account-back { margin: 12px 16px; width: calc(100% - 32px); justify-content: center; }
+  .account-avatar { flex-direction: row; align-items: center; gap: 10px; padding: 12px 16px; margin-bottom: 0; border-bottom: none; }
+  .account-avatar-info { flex: 1; min-width: 0; }
+  .account-avatar-circle { width: 36px; height: 36px; font-size: .95rem; }
+  .account-avatar-name { font-size: .82rem; }
+  .account-avatar-email { font-size: .7rem; }
+
+  .account-menu-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 42px; height: 42px; border: 1px solid var(--color-line);
+    border-radius: 10px; background: #fff; color: var(--color-navy); cursor: pointer; flex-shrink: 0;
+  }
+  .account-nav { display: none; flex-direction: column; gap: 4px; padding: 6px 12px 14px; border-bottom: 1px solid var(--color-line); }
+  .account-sidebar.menu-open .account-nav { display: flex; }
+  .account-nav-item {
+    width: 100%; padding: 13px 14px; font-size: .92rem;
+    border: none; border-left: 3px solid transparent; border-radius: 10px;
+    display: flex; align-items: center; gap: 11px; text-align: left; background: none;
+  }
+  .account-nav-item.active { background: #fffbe6; border-left-color: var(--color-yellow); color: var(--color-navy); }
+
+  .account-content { padding: 20px 16px; }
+  .account-content-header { margin-bottom: 16px; flex-direction: column; gap: 4px; }
+  .account-content-header h2 { font-size: 1.4rem; }
+  .account-form-grid { grid-template-columns: 1fr; }
+  .account-form-card { padding: 18px 14px; border-radius: 10px; }
+  .account-field input, .account-field select, .account-field textarea { padding: 13px 14px; font-size: .95rem; }
+
+  .auth-page { grid-template-columns: 1fr; min-height: auto; }
+  .auth-page-right { display: none; }
+  .auth-page-left { padding: 28px 20px; }
+  .auth-title { font-size: 1.7rem; }
+  .auth-page-form { max-width: 100%; }
+
+  .cal-main { grid-template-columns: 1fr; gap: 20px; }
+  .cal-left { position: static; }
+
+  .pay-summary-grid { grid-template-columns: 1fr; }
+  .pay-table-wrap { overflow-x: hidden; }
+  .pay-table thead { display: none; }
+  .pay-table, .pay-table tbody, .pay-table tr, .pay-table td { display: block; width: 100%; }
+  .pay-table tr { padding: 12px 14px; border-bottom: 1px solid #f1f5f9; }
+  .pay-table td { padding: 3px 0; border: none; display: flex; justify-content: space-between; font-size: .84rem; }
+  .pay-table td::before {
+    content: attr(data-label); font-weight: 600; font-size: .72rem; text-transform: uppercase;
+    color: var(--color-muted); font-family: var(--font-heading, 'Outfit', sans-serif); margin-right: 8px;
+  }
+
+  .bono-pay-detail-grid { grid-template-columns: 1fr; }
+  .family-form { padding: 16px; }
+  .family-member-card { padding: 14px; }
+}
+
+@media (max-width: 480px) {
+  .account-content-header h2 { font-size: 1.25rem; }
+  .account-content { padding: 16px 12px; }
+  .account-form-card { padding: 14px 12px; margin-bottom: 12px; }
+  .account-avatar { padding: 10px 12px; }
+  .account-avatar-circle { width: 32px; height: 32px; font-size: .85rem; }
+  .account-avatar-email { display: none; }
+
+  .account-nav { display: none; }
+  .account-sidebar.menu-open .account-nav { display: flex; }
+
+  .account-form-card .btn,
+  .account-form-card button[type="submit"] { width: 100%; text-align: center; min-height: 48px; }
+
+  .family-member-card { flex-direction: column; align-items: stretch; }
+  .family-member-actions { flex-direction: column; gap: 6px; width: 100%; }
+  .family-member-actions .btn {
+    width: 100%; text-align: center; min-height: 44px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .tab-panel .btn, .tab-panel button { min-height: 44px; }
+  .bono-card, .booking-card-item, .family-member-card, .pay-summary-card { word-break: break-word; overflow-wrap: break-word; }
+}

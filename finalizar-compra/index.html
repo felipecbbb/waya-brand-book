@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Se sirve en /finalizar-compra/ (subcarpeta). base=/ hace que el fetch de
+         components.js y los enlaces/imágenes relativos del header/footer globales
+         resuelvan contra la raíz del sitio, no contra /finalizar-compra/. -->
+    <base href="/">
+    <title>Finalizar compra | Waya Surf School</title>
+    <meta name="description" content="Revisa tu carrito, aplica tu código de descuento y completa el pago de forma segura en Waya Surf School.">
+    <meta name="robots" content="noindex, nofollow">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/images/waya-isotipo.png">
+
+    <!-- Fonts (Outfit + Inter, como el resto del sitio) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+
+    <!-- CSS del sitio Waya + sistema de reservas (tokens, .btn.red/.line, cart-*) -->
+    <link rel="stylesheet" href="/css/styles.css?v=btn_yellow">
+    <link rel="stylesheet" href="/css/reservas.css">
+    <link rel="stylesheet" href="/css/i18n.css">
+
+    <!-- Estilos propios del checkout (Waya no los tiene en la librería común).
+         Todo tokenizado con las variables de /css/styles.css. -->
+    <style>
+        .co-page { padding: 140px 0 80px; min-height: 60vh; }
+        .co-intro { margin-bottom: 28px; }
+        .co-kicker {
+            font-family: var(--font-heading, 'Outfit'), sans-serif;
+            font-size: .78rem; font-weight: 700; letter-spacing: .12em;
+            text-transform: uppercase; color: var(--color-gray);
+        }
+        .co-title {
+            font-family: var(--font-heading, 'Outfit'), sans-serif;
+            font-size: clamp(2rem, 5vw, 2.8rem); font-weight: 800;
+            color: var(--color-dark); line-height: 1.05; margin-top: 4px;
+        }
+
+        .co-grid { display: grid; grid-template-columns: 1fr 380px; gap: 32px; align-items: start; }
+        @media (max-width: 860px) { .co-grid { grid-template-columns: 1fr; } }
+
+        /* --- Formulario --- */
+        .co-form { display: flex; flex-direction: column; gap: 14px; }
+        .co-form label { display: flex; flex-direction: column; gap: 6px; font-size: .9rem; font-weight: 600; color: var(--color-dark); }
+        .co-form input, .co-form textarea {
+            border: 1px solid #e5e5e5; border-radius: 8px; padding: 11px 14px;
+            font-family: var(--font-body, 'Inter'), sans-serif; font-size: .95rem; font-weight: 400;
+            color: var(--color-dark); background: #fff; width: 100%;
+        }
+        .co-form input:focus, .co-form textarea:focus { outline: none; border-color: var(--color-primary); box-shadow: 0 0 0 3px rgba(253,216,2,.25); }
+        .co-form textarea { min-height: 76px; resize: vertical; }
+        .co-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        @media (max-width: 480px) { .co-row-2 { grid-template-columns: 1fr; } }
+        .co-section-title {
+            font-family: var(--font-heading, 'Outfit'), sans-serif; font-weight: 700;
+            font-size: 1.05rem; color: var(--color-dark); margin: 14px 0 2px;
+        }
+        .co-tel-wrap { display: flex; gap: 8px; align-items: stretch; }
+        .co-tel-wrap .phone-prefix-select {
+            border: 1px solid #e5e5e5; border-radius: 8px; padding: 0 8px;
+            background: #fff; font-size: .92rem; color: var(--color-dark); max-width: 130px;
+        }
+        .co-invoice-toggle { flex-direction: row !important; align-items: center; gap: 10px; cursor: pointer; }
+        .co-invoice-toggle input { width: auto; }
+        .co-invoice-fields { display: flex; flex-direction: column; gap: 12px; margin-top: 4px;
+            padding: 14px; background: var(--color-light-gray); border-radius: var(--radius); }
+
+        .co-pay-btn { width: 100%; margin-top: 8px; padding: 14px; font-size: 1rem; }
+        .co-secure { text-align: center; font-size: .78rem; color: var(--color-gray); margin-top: 10px; }
+        .co-secure svg { vertical-align: middle; margin-right: 4px; }
+
+        /* --- Aviso de login (packs de clases) --- */
+        .co-notice {
+            border-radius: var(--radius); padding: 16px 18px; margin-bottom: 20px;
+            background: #fff8d6; border: 1px solid var(--color-primary);
+        }
+        .co-notice.hard { border-color: #b91c1c; background: #fef2f2; }
+        .co-notice p { margin: 0; font-size: .92rem; color: var(--color-dark); }
+        .co-notice p.tt { font-weight: 700; margin-bottom: 4px; }
+        .co-notice a { color: var(--color-dark); font-weight: 600; text-decoration: underline; }
+
+        /* --- Panel de auth inline --- */
+        .co-auth { border: 1px solid #e5e5e5; border-radius: var(--radius); padding: 18px; margin-bottom: 20px; background: #fff; }
+        .co-auth-tabs { display: flex; gap: 8px; margin-bottom: 14px; }
+        .co-auth-tab {
+            flex: 1; padding: 9px; border: 1px solid #e5e5e5; border-radius: 8px; background: #fff;
+            font-weight: 600; font-size: .9rem; cursor: pointer; color: var(--color-gray);
+        }
+        .co-auth-tab.active { background: var(--color-dark); color: #fff; border-color: var(--color-dark); }
+        .co-auth form { display: flex; flex-direction: column; gap: 10px; }
+        .co-auth input {
+            border: 1px solid #e5e5e5; border-radius: 8px; padding: 10px 12px; font-size: .92rem;
+            font-family: var(--font-body, 'Inter'), sans-serif;
+        }
+        .co-auth-msg { font-size: .84rem; margin-top: 2px; min-height: 1em; }
+
+        /* --- Resumen del pedido --- */
+        .co-summary {
+            background: #fff; border: 1px solid #e5e5e5; border-radius: var(--radius);
+            padding: 22px; position: sticky; top: 100px;
+        }
+        .co-summary h3 {
+            font-family: var(--font-heading, 'Outfit'), sans-serif; font-weight: 700;
+            font-size: 1.15rem; color: var(--color-dark); margin-bottom: 14px;
+        }
+        .co-sum-item { display: flex; justify-content: space-between; gap: 12px; font-size: .9rem; padding: 7px 0; color: var(--color-dark); }
+        .co-sum-item .name { color: var(--color-gray); }
+        .co-sum-total { display: flex; justify-content: space-between; padding-top: 12px; margin-top: 6px; border-top: 1px solid #e5e5e5; font-size: .92rem; }
+        .co-sum-final { font-weight: 800; font-size: 1.15rem; color: var(--color-dark); }
+        .co-coupon { margin-top: 16px; padding-top: 16px; border-top: 1px solid #e5e5e5; }
+        .co-coupon label {
+            font-family: var(--font-heading, 'Outfit'), sans-serif; font-size: .72rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: .06em; color: var(--color-gray); display: block; margin-bottom: 6px;
+        }
+        .co-coupon-row { display: flex; gap: 8px; }
+        .co-coupon-row input {
+            flex: 1; border: 1px solid #e5e5e5; border-radius: 8px; padding: 9px 12px;
+            font-size: .9rem; text-transform: uppercase; font-family: var(--font-body, 'Inter'), sans-serif;
+        }
+        .co-coupon-row .btn { font-size: .82rem; padding: 9px 14px; white-space: nowrap; }
+        .co-coupon-msg { font-size: .82rem; margin-top: 6px; min-height: 1em; }
+
+        /* --- Estados vacío / éxito --- */
+        .co-state { max-width: 560px; margin: 0 auto; text-align: center; padding: 40px 20px; }
+        .co-state h2 { font-family: var(--font-heading, 'Outfit'), sans-serif; font-weight: 800; font-size: 1.8rem; color: var(--color-dark); margin-bottom: 12px; }
+        .co-state p { color: var(--color-gray); margin-bottom: 8px; }
+        .co-state-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 22px; }
+        .co-check-badge {
+            width: 68px; height: 68px; border-radius: 50%; background: var(--color-primary);
+            display: inline-flex; align-items: center; justify-content: center; margin-bottom: 18px;
+        }
+        [hidden] { display: none !important; }
+    </style>
+</head>
+
+<body>
+    <!-- Header global del sitio (inyectado por components.js) -->
+    <div id="header-placeholder"></div>
+
+    <main>
+        <section class="co-page">
+            <div class="container">
+
+                <!-- ====== Vista principal (carrito con contenido) ====== -->
+                <div id="co-main" hidden>
+                    <div class="co-intro">
+                        <p class="co-kicker" data-i18n="checkout.kicker">Finalizar compra</p>
+                        <h1 class="co-title" data-i18n="checkout.title">Completa tu reserva</h1>
+                    </div>
+
+                    <div class="co-grid">
+                        <div id="co-form-wrap">
+                            <!-- Aviso login / panel de auth se inyecta aquí desde checkout.js -->
+                            <div id="co-auth-slot"></div>
+
+                            <form id="co-form" class="co-form" novalidate>
+                                <label data-i18n="checkout.name">Nombre completo
+                                    <input type="text" name="nombre" autocomplete="name" required>
+                                </label>
+                                <label data-i18n="checkout.email">Email
+                                    <input type="email" name="email" autocomplete="email" required>
+                                </label>
+                                <label data-i18n="checkout.phone">Teléfono
+                                    <!-- El selector de prefijo se inserta por JS (phonePrefixSelectHtml) -->
+                                    <input type="tel" name="telefono" autocomplete="tel" required>
+                                </label>
+
+                                <!-- Bloque de envío: solo visible si hay productos físicos en el carrito -->
+                                <div id="co-shipping" hidden>
+                                    <p class="co-section-title" data-i18n="checkout.shipping">Dirección de envío</p>
+                                    <label data-i18n="checkout.address">Dirección
+                                        <input type="text" name="direccion" autocomplete="street-address">
+                                    </label>
+                                    <div class="co-row-2">
+                                        <label data-i18n="checkout.city">Ciudad
+                                            <input type="text" name="ciudad" autocomplete="address-level2">
+                                        </label>
+                                        <label data-i18n="checkout.zip">Código postal
+                                            <input type="text" name="cp" autocomplete="postal-code">
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <label data-i18n="checkout.notes">Notas del pedido
+                                    <textarea name="notas" placeholder="Indicaciones especiales, tallas, alergias, etc."></textarea>
+                                </label>
+
+                                <label class="co-invoice-toggle">
+                                    <input type="checkbox" name="quiere_factura" id="co-invoice-check">
+                                    <span data-i18n="checkout.invoice">Quiero factura</span>
+                                </label>
+                                <div id="co-invoice-fields" class="co-invoice-fields" hidden>
+                                    <label data-i18n="checkout.invoiceName">Nombre o razón social
+                                        <input type="text" name="factura_nombre">
+                                    </label>
+                                    <label data-i18n="checkout.invoiceNif">NIF / CIF
+                                        <input type="text" name="factura_nif">
+                                    </label>
+                                    <label data-i18n="checkout.invoiceAddress">Dirección fiscal
+                                        <input type="text" name="factura_direccion" placeholder="Si es distinta a la de envío">
+                                    </label>
+                                </div>
+
+                                <button type="submit" class="btn red co-pay-btn" data-i18n="checkout.pay">Reservar</button>
+                                <p class="co-secure">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                                    <span data-i18n="checkout.secure">Sin pago ahora — lo abonas en la escuela</span>
+                                </p>
+                            </form>
+                        </div>
+
+                        <!-- Resumen del pedido + cupón (render desde checkout.js) -->
+                        <aside id="co-summary" class="co-summary"></aside>
+                    </div>
+                </div>
+
+                <!-- ====== Vista carrito vacío ====== -->
+                <div id="co-empty" class="co-state" hidden>
+                    <h2 data-i18n="checkout.emptyTitle">No hay nada que pagar</h2>
+                    <p data-i18n="checkout.emptyText">Tu carrito está vacío.</p>
+                    <div class="co-state-actions">
+                        <a class="btn red" href="/reservar.html" data-i18n="checkout.goBook">Reservar una clase</a>
+                        <a class="btn line" href="/" data-i18n="checkout.goHome">Volver al inicio</a>
+                    </div>
+                </div>
+
+                <!-- ====== Vista éxito (?success=1 / ?pago=ok) ====== -->
+                <div id="co-success" class="co-state" hidden>
+                    <div class="co-check-badge">
+                        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+                    </div>
+                    <h2 data-i18n="checkout.okTitle">¡Reserva confirmada! 🤙</h2>
+                    <p data-i18n="checkout.okText">Tu reserva se ha registrado correctamente.</p>
+                    <p data-i18n="checkout.okEmail">Pásate por la escuela o te contactamos para completar el pago. Te enviamos la confirmación por email.</p>
+                    <div class="co-state-actions">
+                        <a class="btn red" href="/mi-cuenta/" data-i18n="checkout.myAccount">Ver mi cuenta</a>
+                        <a class="btn line" href="/" data-i18n="checkout.goHome">Volver al inicio</a>
+                    </div>
+                    <p style="margin-top:22px;font-size:.82rem">
+                        ¿Alguna duda? <a href="mailto:info@wayasurf.com">info@wayasurf.com</a> ·
+                        <a href="https://wa.me/34636562448" target="_blank" rel="noopener">WhatsApp</a>
+                    </p>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer global del sitio (inyectado por components.js) -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Globales públicos: deben cargar ANTES del módulo del checkout -->
+    <script src="/js/translations.js?v=2"></script>
+    <script src="/js/i18n.js?v=2"></script>
+    <script src="/js/components.js"></script>
+
+    <!-- Núcleo del checkout (su propio módulo, NO carrito.js) -->
+    <script type="module" src="/finalizar-compra/checkout.js"></script>
+</body>
+
+</html>

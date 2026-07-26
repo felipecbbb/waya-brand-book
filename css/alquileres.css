@@ -1,0 +1,568 @@
+/* ==========================================
+   ALQUILERES - WAYA SURF SCHOOL
+   ========================================== */
+
+/* ---- HERO ---- */
+.rent-hero {
+  position: relative;
+  height: 50vh;
+  min-height: 360px;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+}
+
+.rent-hero-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center 40%;
+}
+
+.rent-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.15) 0%,
+    rgba(0, 0, 0, 0.08) 40%,
+    rgba(0, 0, 0, 0.6) 100%
+  );
+}
+
+.rent-hero-content {
+  position: relative;
+  z-index: 2;
+  padding-bottom: 3.5rem;
+}
+
+.rent-hero-tag {
+  display: inline-block;
+  border: 2px solid #FDD802;
+  color: #FDD802;
+  padding: 0.4rem 1.2rem;
+  border-radius: 50px;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  backdrop-filter: blur(6px);
+  background: rgba(0, 0, 0, 0.2);
+  margin-bottom: 1rem;
+}
+
+.rent-hero-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 3.2rem;
+  font-weight: 900;
+  color: #fff;
+  line-height: 1.1;
+  margin: 0 0 0.75rem 0;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+}
+
+.rent-hero-desc {
+  font-size: 1.15rem;
+  color: rgba(255, 255, 255, 0.85);
+  max-width: 520px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ---- INTRO ---- */
+.rent-intro-section {
+  padding: 6rem 0;
+}
+
+.rent-intro-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 4rem;
+  align-items: start;
+}
+
+.rent-intro-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 2.8rem;
+  font-weight: 900;
+  color: #1a1a1a;
+  line-height: 1.1;
+  margin: 0.5rem 0 0 0;
+}
+
+.rent-intro-lead {
+  font-size: 1.15rem;
+  line-height: 1.7;
+  color: #333;
+  margin: 0 0 1.25rem 0;
+}
+
+.rent-intro-text {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #666;
+  margin: 0 0 1.5rem 0;
+}
+
+.rent-hours {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.rent-hour-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #f8f9fa;
+  border-radius: 50px;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.rent-hour-badge svg {
+  color: #FDD802;
+}
+
+/* ---- GEAR CARDS ---- */
+.rent-gear-section {
+  padding: 5rem 0;
+  background: #f8f9fa;
+}
+
+.rent-gear-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  max-width: 960px;
+  margin: 3rem auto 0;
+}
+
+.rent-gear-card {
+  background: #fff;
+  border: 2px solid rgba(0, 0, 0, 0.06);
+  border-radius: 24px;
+  padding: 2.5rem 2rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.rent-gear-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+}
+
+.rent-gear-card--featured {
+  border-color: #FDD802;
+  background: #FDD802;
+  box-shadow: 0 8px 24px rgba(253, 216, 2, 0.2);
+}
+
+.rent-gear-card--featured:hover {
+  box-shadow: 0 16px 36px rgba(253, 216, 2, 0.3);
+}
+
+.rent-gear-badge {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1a1a1a;
+  color: #FDD802;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: 0.7rem;
+  padding: 0.3rem 1rem;
+  border-radius: 0 0 10px 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.rent-gear-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 18px;
+  background: #FDD802;
+  color: #1a1a1a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem auto;
+}
+
+.rent-gear-card--featured .rent-gear-icon {
+  background: #1a1a1a;
+  color: #FDD802;
+}
+
+.rent-gear-tag {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #999;
+  margin-bottom: 0.25rem;
+}
+
+.rent-gear-card--featured .rent-gear-tag {
+  color: rgba(0, 0, 0, 0.45);
+}
+
+.rent-gear-name {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #1a1a1a;
+  margin: 0 0 0.6rem 0;
+}
+
+.rent-gear-desc {
+  font-size: 0.9rem;
+  color: #666;
+  line-height: 1.5;
+  margin: 0 0 1rem 0;
+}
+
+.rent-gear-card--featured .rent-gear-desc {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.rent-gear-specs {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+}
+
+.rent-gear-spec {
+  display: inline-block;
+  background: rgba(0, 0, 0, 0.05);
+  padding: 0.3rem 0.8rem;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #555;
+}
+
+.rent-gear-card--featured .rent-gear-spec {
+  background: rgba(0, 0, 0, 0.1);
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.rent-gear-price {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.rent-gear-price-val {
+  font-family: 'Outfit', sans-serif;
+  font-size: 2.8rem;
+  font-weight: 900;
+  color: #1a1a1a;
+  line-height: 1;
+}
+
+.rent-gear-price-per {
+  font-size: 0.9rem;
+  color: #888;
+  font-weight: 500;
+}
+
+.rent-gear-card--featured .rent-gear-price-per {
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.rent-gear-btn {
+  display: block;
+  width: 100%;
+  padding: 0.9rem 1.5rem;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-align: center;
+  background: #FDD802;
+  color: #1a1a1a;
+  border: 2px solid #FDD802;
+  transition: all 0.3s ease;
+}
+
+.rent-gear-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(253, 216, 2, 0.3);
+  color: #1a1a1a;
+}
+
+.rent-gear-btn--dark {
+  background: #1a1a1a;
+  color: #FDD802;
+  border-color: #1a1a1a;
+}
+
+.rent-gear-btn--dark:hover {
+  background: #333;
+  color: #FDD802;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* ---- PROCESS ---- */
+.rent-process-section {
+  padding: 5rem 0;
+}
+
+.rent-process-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 4rem;
+  align-items: start;
+}
+
+.rent-process-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: #1a1a1a;
+  line-height: 1.1;
+  margin: 0.5rem 0 0 0;
+}
+
+.rent-steps {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.rent-step {
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-start;
+}
+
+.rent-step-num {
+  font-family: 'Outfit', sans-serif;
+  font-size: 2rem;
+  font-weight: 900;
+  color: #FDD802;
+  line-height: 1;
+  min-width: 48px;
+}
+
+.rent-step-content strong {
+  display: block;
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 0.25rem;
+}
+
+.rent-step-content span {
+  font-size: 0.9rem;
+  color: #666;
+  line-height: 1.5;
+}
+
+/* ---- CONDITIONS BOX ---- */
+.rent-conditions-section {
+  padding: 5rem 0;
+}
+
+.rent-conditions-box {
+  background: #1a1a1a;
+  border-radius: 24px;
+  padding: 3.5rem 4rem;
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 3rem;
+  align-items: center;
+}
+
+.rent-conditions-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #FDD802;
+  margin: 0 0 1rem 0;
+}
+
+.rent-conditions-desc {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.6;
+  margin: 0 0 1.5rem 0;
+}
+
+.rent-conditions-tags {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.rent-condition-tag {
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  padding: 0.6rem 1.2rem;
+  border-radius: 50px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+  white-space: nowrap;
+}
+
+.rent-conditions-cta {
+  text-align: center;
+}
+
+.rent-conditions-cta-text {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #fff;
+  margin: 0 0 1rem 0;
+}
+
+.rent-conditions-btn {
+  display: block;
+  width: 100%;
+  padding: 1rem 2rem;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-align: center;
+  background: #FDD802;
+  color: #1a1a1a;
+  border: 2px solid #FDD802;
+  transition: all 0.3s ease;
+}
+
+.rent-conditions-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(253, 216, 2, 0.3);
+  color: #1a1a1a;
+}
+
+/* ==========================================
+   RESPONSIVE - TABLET
+   ========================================== */
+@media (max-width: 1024px) {
+  .rent-intro-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .rent-gear-grid {
+    grid-template-columns: 1fr;
+    max-width: 380px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .rent-process-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .rent-conditions-box {
+    grid-template-columns: 1fr;
+    text-align: center;
+    padding: 3rem 2rem;
+  }
+
+  .rent-conditions-tags {
+    justify-content: center;
+  }
+}
+
+/* ==========================================
+   RESPONSIVE - MOBILE
+   ========================================== */
+@media (max-width: 768px) {
+  .rent-hero {
+    height: 40vh;
+    min-height: 280px;
+  }
+
+  .rent-hero-title {
+    font-size: 2.2rem;
+  }
+
+  .rent-hero-desc {
+    font-size: 1rem;
+  }
+
+  .rent-hero-content {
+    padding-bottom: 2.5rem;
+  }
+
+  .rent-intro-section {
+    padding: 4rem 0;
+  }
+
+  .rent-intro-title {
+    font-size: 2rem;
+  }
+
+  .rent-gear-section {
+    padding: 3rem 0;
+  }
+
+  .rent-gear-card {
+    padding: 2rem 1.5rem;
+  }
+
+  .rent-gear-price-val {
+    font-size: 2.2rem;
+  }
+
+  .rent-process-section {
+    padding: 3rem 0;
+  }
+
+  .rent-process-title {
+    font-size: 1.8rem;
+  }
+
+  .rent-conditions-section {
+    padding: 3rem 0;
+  }
+
+  .rent-conditions-box {
+    padding: 2.5rem 1.5rem;
+    border-radius: 20px;
+  }
+
+  .rent-conditions-title {
+    font-size: 1.4rem;
+  }
+
+  .rent-hours {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+}
+
+@media (max-width: 375px) {
+  .rent-hero-title {
+    font-size: 1.9rem;
+  }
+
+  .rent-intro-title {
+    font-size: 1.7rem;
+  }
+}

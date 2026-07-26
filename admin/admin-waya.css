@@ -1,0 +1,324 @@
+/* ============================================================
+   admin-waya.css — Capa de identidad Waya sobre el panel admin.
+   Se carga DESPUÉS de admin.css para redefinir las superficies clave
+   (login, chrome, botones) con el lenguaje visual de Waya, sin tocar
+   las ~9000 líneas heredadas.
+   ============================================================ */
+
+/* ---------- LOGIN (rediseño Waya, clases propias wl-*) ---------- */
+.wl-login {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+  background:
+    radial-gradient(1200px 600px at 100% -10%, rgba(253, 216, 2, 0.14), transparent 60%),
+    radial-gradient(900px 500px at -10% 110%, rgba(253, 216, 2, 0.10), transparent 55%),
+    #f5f5f5;
+  font-family: 'Inter', sans-serif;
+  z-index: 50;
+}
+
+.wl-card {
+  width: 100%;
+  max-width: 430px;
+  background: #ffffff;
+  border-radius: 22px;
+  padding: 2.75rem 2.5rem 2.5rem;
+  box-shadow: 0 24px 70px rgba(26, 26, 26, 0.10);
+  border: 1px solid rgba(26, 26, 26, 0.05);
+  text-align: left;
+  animation: wl-in 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes wl-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.wl-logo {
+  height: 50px;
+  width: auto;
+  display: block;
+  margin-bottom: 1.75rem;
+}
+
+.wl-title {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  font-size: 1.55rem;
+  line-height: 1.1;
+  color: #1a1a1a;
+  margin: 0 0 0.45rem;
+  letter-spacing: -0.01em;
+}
+
+.wl-sub {
+  color: #666666;
+  font-size: 0.95rem;
+  margin: 0 0 1.85rem;
+}
+
+.wl-field { margin-bottom: 1.1rem; }
+
+.wl-field label {
+  display: block;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 600;
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #1a1a1a;
+  margin-bottom: 0.45rem;
+}
+
+.wl-field input {
+  width: 100%;
+  padding: 0.9rem 1rem;
+  border: 1.5px solid #e6e6e6;
+  border-radius: 12px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  color: #1a1a1a;
+  background: #fafafa;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+}
+
+.wl-field input::placeholder { color: #aaa; }
+
+.wl-field input:focus {
+  outline: none;
+  border-color: #FDD802;
+  box-shadow: 0 0 0 4px rgba(253, 216, 2, 0.20);
+  background: #ffffff;
+}
+
+.wl-btn {
+  width: 100%;
+  margin-top: 0.5rem;
+  padding: 0.95rem;
+  border: none;
+  border-radius: 50px;
+  background: #FDD802;
+  color: #1a1a1a;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  font-size: 0.92rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+  box-shadow: 0 6px 20px rgba(253, 216, 2, 0.35);
+}
+
+.wl-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(253, 216, 2, 0.45);
+  background: #f5d000;
+}
+
+.wl-btn:disabled { opacity: 0.6; cursor: default; transform: none; box-shadow: none; }
+
+.wl-error {
+  display: none;
+  background: #fee2e2;
+  color: #b91c1c;
+  border-radius: 10px;
+  padding: 0.7rem 0.9rem;
+  font-size: 0.88rem;
+  margin-bottom: 1rem;
+  border: 1px solid #fecaca;
+}
+
+.wl-error.visible { display: block; }
+
+/* ---------- CHROME: acercar el panel al lenguaje Waya ---------- */
+/* Botón primario del panel (Entreolas usa .btn.red) → píldora amarilla Waya */
+.btn.red {
+  background: #FDD802 !important;
+  color: #1a1a1a !important;
+  border-radius: 50px !important;
+  font-family: 'Outfit', sans-serif !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.03em;
+  box-shadow: 0 4px 14px rgba(253, 216, 2, 0.30);
+  border: none !important;
+}
+.btn.red:hover { background: #f5d000 !important; transform: translateY(-1px); }
+
+/* Logo isotipo Waya en el sidebar */
+.admin-sidebar-logo-img {
+  height: 34px;
+  width: auto;
+  display: block;
+  flex: 0 0 auto;
+}
+
+/* CTA primario del panel (Guardar / Crear / Confirmar) → píldora amarilla Waya */
+.act-action-btn.primary {
+  background: #FDD802 !important;
+  color: #1a1a1a !important;
+  border: none !important;
+  box-shadow: 0 4px 14px rgba(253, 216, 2, 0.30);
+}
+.act-action-btn.primary:hover {
+  background: #f5d000 !important;
+  transform: translateY(-1px);
+}
+.act-action-btn.primary svg { stroke: #1a1a1a; }
+
+/* ============================================================
+   REFINAMIENTO DE PÁGINAS INTERNAS (Waya premium)
+   Pule los componentes clave de todas las secciones sin tocar
+   admin.css. Carga después → gana por orden.
+   ============================================================ */
+
+/* Cabecera de sección */
+.admin-section-title { font-family: 'Outfit', sans-serif; font-weight: 800; letter-spacing: -0.01em; }
+
+/* --- Cards de contenido --- */
+.form-card,
+.list-card,
+.next-card,
+.ncl-card,
+.dash-next-card,
+.dash-empty-card {
+  background: #fff !important;
+  border: 1px solid #ededed !important;
+  border-radius: 16px !important;
+  box-shadow: 0 1px 2px rgba(26, 26, 26, 0.03) !important;
+}
+
+/* --- Stat / KPI tiles --- */
+.stat-card,
+.kpi-card,
+.h-card {
+  background: #fff !important;
+  border: 1px solid #ededed !important;
+  border-radius: 16px !important;
+  box-shadow: 0 1px 2px rgba(26, 26, 26, 0.03);
+  padding: 1.25rem 1.4rem !important;
+  transition: box-shadow 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
+}
+.stat-card:hover,
+.kpi-card:hover {
+  box-shadow: 0 10px 34px rgba(26, 26, 26, 0.08) !important;
+  transform: translateY(-2px);
+  border-color: #e2e2e2 !important;
+}
+.stat-value, .kpi-value {
+  font-family: 'Outfit', sans-serif !important;
+  font-weight: 800 !important;
+  color: #1a1a1a !important;
+  letter-spacing: -0.02em;
+}
+.stat-label, .kpi-label {
+  font-family: 'Outfit', sans-serif !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.08em !important;
+  font-size: 0.68rem !important;
+  color: #999 !important;
+  font-weight: 600 !important;
+}
+.stat-sub { color: #888 !important; font-size: 0.8rem !important; }
+/* Barra de acento amarilla arriba de cada tile */
+.stat-card { position: relative; overflow: hidden; }
+.stat-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--color-primary, #FDD802), rgba(253, 216, 2, 0.35));
+}
+
+/* --- Tablas --- */
+.admin-content table,
+.form-card table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+}
+.admin-content table thead th,
+.form-card table thead th {
+  font-family: 'Outfit', sans-serif !important;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.7rem !important;
+  color: #999 !important;
+  font-weight: 700 !important;
+  border-bottom: 1px solid #ededed !important;
+  padding: 0.7rem 0.9rem !important;
+  text-align: left;
+}
+.admin-content table tbody td,
+.form-card table tbody td {
+  padding: 0.85rem 0.9rem !important;
+  border-bottom: 1px solid #f4f4f4 !important;
+  font-size: 0.9rem;
+}
+.admin-content table tbody tr,
+.form-card table tbody tr { transition: background 0.15s ease; }
+.admin-content table tbody tr:hover,
+.form-card table tbody tr:hover { background: rgba(253, 216, 2, 0.05); }
+
+/* --- Badges de estado --- */
+.status-badge,
+.admin-badge,
+.debt-badge,
+.save-badge {
+  display: inline-flex; align-items: center; gap: 0.3rem;
+  font-family: 'Outfit', sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 0.68rem !important;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.22rem 0.6rem !important;
+  border-radius: 999px !important;
+}
+
+/* --- Empty states --- */
+.admin-empty,
+.next-empty,
+.dash-empty-card {
+  color: #999 !important;
+  text-align: center;
+  padding: 2.5rem 1rem !important;
+  font-size: 0.92rem;
+}
+
+/* --- Filtros / toolbar --- */
+.toolbar, .admin-filter, .cli-filters {
+  display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center;
+}
+.cli-filter-btn,
+.admin-filter button,
+.dash-preset-btn {
+  border-radius: 999px !important;
+  font-family: 'Outfit', sans-serif !important;
+  font-weight: 600 !important;
+  font-size: 0.8rem !important;
+  border: 1px solid #e6e6e6 !important;
+  transition: all 0.2s ease;
+}
+.cli-filter-btn.active,
+.dash-preset-btn.active {
+  background: #1a1a1a !important;
+  color: #fff !important;
+  border-color: #1a1a1a !important;
+}
+
+/* Inputs de búsqueda/fecha más pulidos */
+.admin-content input[type="text"],
+.admin-content input[type="search"],
+.admin-content input[type="date"],
+.admin-content input[type="email"],
+.admin-content input[type="tel"],
+.admin-content select {
+  border-radius: 10px !important;
+  border: 1.5px solid #e6e6e6 !important;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.admin-content input:focus,
+.admin-content select:focus {
+  outline: none;
+  border-color: var(--color-primary, #FDD802) !important;
+  box-shadow: 0 0 0 3px rgba(253, 216, 2, 0.16) !important;
+}

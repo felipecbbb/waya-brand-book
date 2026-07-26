@@ -1,0 +1,17 @@
+.DS_Store
+*.zip
+*.log
+
+# build / deps
+node_modules/
+dist/
+
+# entorno (secretos locales)
+.env.local
+.env*.local
+
+# vercel
+.vercel
+
+# docs internos (plan + maps de Entreolas — no exponer en repo público)
+docs/reservas/

@@ -1,1633 +1,620 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Identidad Corporativa — Waya Surf School</title>
+    <title>Waya Surf School | Escuela de Surf en Telde, Gran Canaria</title>
+    <meta name="description"
+        content="Clases de surf en Telde, Gran Canaria. Escuela de surf para todos los niveles en Playa del Hombre. Cursos privados, grupales y surfcamps. ¡Reserva ahora!">
+    <meta name="keywords"
+        content="escuela de surf telde, surf gran canaria, clases surf playa del hombre, surfcamp gran canaria, curso surf principiantes">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://wayasurf.com/">
+    <meta property="og:title" content="Waya Surf School | Escuela de Surf en Telde, Gran Canaria">
+    <meta property="og:description"
+        content="Descubre el surf en Gran Canaria con Waya Surf School. Clases personalizadas, monitores titulados y la mejor metodología en Playa del Hombre.">
+    <meta property="og:image" content="https://wayasurf.com/images/stock-hero-main.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://wayasurf.com/">
+    <meta property="twitter:title" content="Waya Surf School | Escuela de Surf en Telde, Gran Canaria">
+    <meta property="twitter:description"
+        content="Descubre el surf en Gran Canaria con Waya Surf School. Clases personalizadas, monitores titulados y la mejor metodología en Playa del Hombre.">
+    <meta property="twitter:image" content="https://wayasurf.com/images/stock-hero-main.png">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://wayasurf.com/">
+
+    <!-- Favicon -->
     <link rel="icon" type="image/png" href="images/waya-isotipo.png">
+
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <style>
-        /* ── Reset ── */
-        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
 
-        /* ── Tokens (mirror de la marca) ── */
-        :root {
-            --primary: #FDD802;
-            --primary-hover: #E8C702;
-            --dark: #1a1a1a;
-            --gray: #666666;
-            --light-gray: #f5f5f5;
-            --white: #ffffff;
-            --radius: 12px;
-            --font-heading: 'Outfit', sans-serif;
-            --font-body: 'Inter', sans-serif;
-        }
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/styles.css?v=btn_yellow">
+    <link rel="stylesheet" href="css/home-redesign.css?v=1">
+    <link rel="stylesheet" href="css/i18n.css">
 
-        html { scroll-behavior: smooth; font-size: 16px; }
-        body { font-family: var(--font-body); color: var(--dark); line-height: 1.6; background: var(--white); }
-        img { max-width: 100%; height: auto; display: block; }
-
-        /* ── Layout ── */
-        .wrap { max-width: 1120px; margin: 0 auto; padding: 0 2rem; }
-
-        /* ── Cover ── */
-        .cover {
-            position: relative;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            background: var(--dark);
-            overflow: hidden;
-        }
-        .cover::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background:
-                radial-gradient(ellipse at 20% 80%, rgba(253,216,2,0.15) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 20%, rgba(253,216,2,0.08) 0%, transparent 50%);
-        }
-        .cover-inner { position: relative; z-index: 1; }
-        .cover-logo { height: 90px; margin: 0 auto 2rem; filter: brightness(0) invert(1); }
-        .cover h1 {
-            font-family: var(--font-heading);
-            font-size: 4rem;
-            font-weight: 900;
-            color: var(--white);
-            letter-spacing: -1px;
-            line-height: 1.1;
-            margin-bottom: 1rem;
-        }
-        .cover h1 span { color: var(--primary); }
-        .cover p {
-            font-size: 1.25rem;
-            color: rgba(255,255,255,0.7);
-            max-width: 540px;
-            margin: 0 auto 2.5rem;
-        }
-        .cover-scroll {
-            display: inline-flex;
-            align-items: center;
-            gap: .5rem;
-            color: rgba(255,255,255,0.5);
-            font-size: .85rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            animation: pulse 2s ease-in-out infinite;
-        }
-        @keyframes pulse {
-            0%,100% { opacity: .5; transform: translateY(0); }
-            50% { opacity: 1; transform: translateY(6px); }
-        }
-
-        /* ── TOC ── */
-        .toc {
-            background: var(--light-gray);
-            padding: 3rem 0;
-            border-bottom: 1px solid rgba(0,0,0,0.06);
-        }
-        .toc h2 {
-            font-family: var(--font-heading);
-            font-size: 1.4rem;
-            font-weight: 700;
-            margin-bottom: 1.5rem;
-        }
-        .toc-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-        }
-        .toc-grid a {
-            display: flex;
-            align-items: center;
-            gap: .75rem;
-            padding: 1rem 1.25rem;
-            background: var(--white);
-            border-radius: var(--radius);
-            text-decoration: none;
-            color: var(--dark);
-            font-weight: 600;
-            font-size: .95rem;
-            border: 1px solid rgba(0,0,0,0.05);
-            transition: all .25s ease;
-        }
-        .toc-grid a:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-            border-color: var(--primary);
-        }
-        .toc-num {
-            width: 32px;
-            height: 32px;
-            background: var(--primary);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: var(--font-heading);
-            font-weight: 800;
-            font-size: .85rem;
-            flex-shrink: 0;
-        }
-
-        /* ── Sections ── */
-        .brand-section {
-            padding: 5rem 0;
-            border-bottom: 1px solid rgba(0,0,0,0.06);
-        }
-        .brand-section:last-child { border-bottom: none; }
-        .brand-section.alt { background: var(--light-gray); }
-        .section-label {
-            display: inline-flex;
-            align-items: center;
-            gap: .5rem;
-            background: var(--primary);
-            color: var(--dark);
-            padding: .45rem 1.1rem;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: .8rem;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 1rem;
-        }
-        .section-title {
-            font-family: var(--font-heading);
-            font-size: 2.5rem;
-            font-weight: 800;
-            line-height: 1.15;
-            margin-bottom: 1rem;
-        }
-        .section-desc {
-            font-size: 1.1rem;
-            color: var(--gray);
-            max-width: 680px;
-            line-height: 1.8;
-            margin-bottom: 2.5rem;
-        }
-
-        /* ── 1. Marca ── */
-        .brand-meaning {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-            align-items: center;
-        }
-        .brand-meaning-text h3 {
-            font-family: var(--font-heading);
-            font-size: 1.6rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-        .brand-meaning-text p {
-            color: var(--gray);
-            line-height: 1.8;
-            margin-bottom: 1rem;
-        }
-        .meaning-highlight {
-            background: var(--dark);
-            color: var(--white);
-            border-radius: var(--radius);
-            padding: 2.5rem;
-            text-align: center;
-        }
-        .meaning-highlight .swahili {
-            font-family: var(--font-heading);
-            font-size: 5rem;
-            font-weight: 900;
-            color: var(--primary);
-            line-height: 1;
-            margin-bottom: .5rem;
-        }
-        .meaning-highlight .translation {
-            font-size: 1.3rem;
-            color: rgba(255,255,255,0.6);
-            font-style: italic;
-        }
-        .meaning-highlight .lang-tag {
-            display: inline-block;
-            margin-top: 1rem;
-            background: rgba(253,216,2,0.15);
-            color: var(--primary);
-            padding: .3rem .8rem;
-            border-radius: 50px;
-            font-size: .8rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        /* ── 2. Logos ── */
-        .logo-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 2rem;
-        }
-        .logo-card {
-            border-radius: var(--radius);
-            padding: 2.5rem 2rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 200px;
-            border: 1px solid rgba(0,0,0,0.06);
-            position: relative;
-            transition: all .3s ease;
-        }
-        .logo-card:hover { transform: translateY(-5px); box-shadow: 0 12px 35px rgba(0,0,0,0.1); }
-        .logo-card img { max-height: 80px; width: auto; margin-bottom: 1rem; }
-        .logo-card.bg-white { background: var(--white); }
-        .logo-card.bg-dark { background: var(--dark); }
-        .logo-card.bg-primary { background: var(--primary); }
-        .logo-card-label {
-            font-size: .8rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            opacity: .6;
-        }
-        .logo-card.bg-dark .logo-card-label { color: rgba(255,255,255,0.6); }
-
-        .logo-rules {
-            margin-top: 2.5rem;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 1.5rem;
-        }
-        .logo-rule {
-            padding: 1.5rem;
-            border-radius: var(--radius);
-            border: 1px solid rgba(0,0,0,0.06);
-            background: var(--white);
-        }
-        .logo-rule h4 {
-            font-family: var(--font-heading);
-            font-weight: 700;
-            font-size: 1rem;
-            margin-bottom: .5rem;
-            display: flex;
-            align-items: center;
-            gap: .5rem;
-        }
-        .logo-rule p { font-size: .9rem; color: var(--gray); line-height: 1.6; }
-        .rule-icon {
-            width: 28px;
-            height: 28px;
-            border-radius: 6px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: .85rem;
-            flex-shrink: 0;
-        }
-        .rule-icon.do { background: #d4edda; color: #155724; }
-        .rule-icon.dont { background: #f8d7da; color: #721c24; }
-
-        /* ── 3. Colores ── */
-        .color-palette {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-        }
-        .color-swatch {
-            border-radius: var(--radius);
-            overflow: hidden;
-            border: 1px solid rgba(0,0,0,0.06);
-            transition: all .3s ease;
-        }
-        .color-swatch:hover { transform: translateY(-5px); box-shadow: 0 12px 35px rgba(0,0,0,0.1); }
-        .color-preview {
-            height: 140px;
-            display: flex;
-            align-items: flex-end;
-            padding: 1rem;
-        }
-        .color-preview span {
-            font-family: var(--font-heading);
-            font-weight: 800;
-            font-size: 2rem;
-            opacity: .3;
-        }
-        .color-info {
-            padding: 1.25rem;
-            background: var(--white);
-        }
-        .color-name {
-            font-family: var(--font-heading);
-            font-weight: 700;
-            font-size: 1rem;
-            margin-bottom: .25rem;
-        }
-        .color-hex {
-            font-family: 'SF Mono', 'Fira Code', monospace;
-            font-size: .85rem;
-            color: var(--gray);
-            margin-bottom: .25rem;
-        }
-        .color-use {
-            font-size: .8rem;
-            color: rgba(0,0,0,0.4);
-        }
-
-        .color-combos {
-            margin-top: 2.5rem;
-        }
-        .color-combos h3 {
-            font-family: var(--font-heading);
-            font-weight: 700;
-            font-size: 1.3rem;
-            margin-bottom: 1.5rem;
-        }
-        .combo-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-        }
-        .combo-card {
-            border-radius: var(--radius);
-            overflow: hidden;
-            border: 1px solid rgba(0,0,0,0.06);
-        }
-        .combo-preview {
-            padding: 2rem;
-            text-align: center;
-        }
-        .combo-preview h4 {
-            font-family: var(--font-heading);
-            font-size: 1.4rem;
-            font-weight: 800;
-            margin-bottom: .5rem;
-        }
-        .combo-preview p { font-size: .95rem; }
-        .combo-label {
-            padding: .75rem 1.25rem;
-            background: var(--white);
-            font-size: .8rem;
-            color: var(--gray);
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border-top: 1px solid rgba(0,0,0,0.06);
-        }
-
-        /* ── 4. Tipografia ── */
-        .type-showcase {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-        }
-        .type-family {
-            padding: 2.5rem;
-            border-radius: var(--radius);
-            border: 1px solid rgba(0,0,0,0.06);
-        }
-        .type-family-name {
-            font-size: .8rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: var(--gray);
-            margin-bottom: .5rem;
-        }
-        .type-family-role {
-            display: inline-block;
-            background: var(--primary);
-            color: var(--dark);
-            padding: .25rem .75rem;
-            border-radius: 50px;
-            font-size: .75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 1.5rem;
-        }
-        .type-specimen {
-            margin-bottom: 2rem;
-        }
-        .type-specimen .big {
-            font-size: 3.5rem;
-            line-height: 1.1;
-            margin-bottom: .5rem;
-        }
-        .type-specimen .medium {
-            font-size: 1.5rem;
-            color: var(--gray);
-            margin-bottom: .25rem;
-        }
-        .type-specimen .small {
-            font-size: 1rem;
-            color: rgba(0,0,0,0.35);
-        }
-        .type-weights {
-            display: flex;
-            flex-wrap: wrap;
-            gap: .75rem;
-        }
-        .type-weight {
-            padding: .5rem 1rem;
-            border-radius: 8px;
-            background: var(--light-gray);
-            font-size: .85rem;
-        }
-        .type-weight strong {
-            display: block;
-            font-size: .7rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--gray);
-            margin-bottom: .15rem;
-        }
-
-        .type-scale {
-            margin-top: 2.5rem;
-        }
-        .type-scale h3 {
-            font-family: var(--font-heading);
-            font-weight: 700;
-            font-size: 1.3rem;
-            margin-bottom: 1.5rem;
-        }
-        .scale-row {
-            display: flex;
-            align-items: baseline;
-            gap: 1.5rem;
-            padding: 1rem 0;
-            border-bottom: 1px solid rgba(0,0,0,0.06);
-        }
-        .scale-row:last-child { border-bottom: none; }
-        .scale-label {
-            width: 120px;
-            flex-shrink: 0;
-            font-size: .8rem;
-            font-weight: 600;
-            color: var(--gray);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        .scale-sample {
-            font-family: var(--font-heading);
-            color: var(--dark);
-        }
-
-        /* ── 5. Botones ── */
-        .btn-showcase {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1.5rem;
-            align-items: center;
-            margin-bottom: 2rem;
-        }
-        .btn-demo {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: .85rem 2rem;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: .9rem;
-            cursor: pointer;
-            border: none;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all .3s ease;
-            text-decoration: none;
-        }
-        .btn-demo.primary {
-            background: var(--primary);
-            color: var(--dark);
-            box-shadow: 0 4px 15px rgba(253,216,2,0.3);
-        }
-        .btn-demo.primary:hover {
-            background: var(--primary-hover);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(253,216,2,0.4);
-        }
-        .btn-demo.secondary {
-            background: transparent;
-            color: var(--dark);
-            border: 2px solid var(--dark);
-        }
-        .btn-demo.secondary:hover {
-            background: var(--dark);
-            color: var(--white);
-        }
-        .btn-demo.ghost {
-            border: 2px solid rgba(255,255,255,0.6);
-            color: var(--white);
-            background: transparent;
-        }
-        .ghost-demo-bg {
-            background: var(--dark);
-            padding: 2rem;
-            border-radius: var(--radius);
-            display: inline-flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-
-        .btn-specs {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-        }
-        .btn-spec {
-            padding: 1.25rem;
-            border-radius: var(--radius);
-            background: var(--light-gray);
-        }
-        .btn-spec dt {
-            font-size: .75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--gray);
-            margin-bottom: .35rem;
-        }
-        .btn-spec dd {
-            font-family: 'SF Mono', monospace;
-            font-size: .9rem;
-            font-weight: 600;
-        }
-
-        /* ── 6. Iconografia ── */
-        .icon-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: 1.5rem;
-        }
-        .icon-card {
-            text-align: center;
-            padding: 2rem 1rem;
-            border-radius: var(--radius);
-            border: 1px solid rgba(0,0,0,0.06);
-            transition: all .3s ease;
-        }
-        .icon-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
-        .icon-card img {
-            height: 50px;
-            width: auto;
-            margin: 0 auto 1rem;
-        }
-        .icon-card span {
-            font-size: .8rem;
-            font-weight: 600;
-            color: var(--gray);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        /* ── 7. Fundador ── */
-        .founder {
-            display: grid;
-            grid-template-columns: 320px 1fr;
-            gap: 3rem;
-            align-items: center;
-        }
-        .founder-photo {
-            border-radius: var(--radius);
-            width: 100%;
-            height: 400px;
-            object-fit: cover;
-        }
-        .founder-info h3 {
-            font-family: var(--font-heading);
-            font-size: 2rem;
-            font-weight: 800;
-            margin-bottom: .5rem;
-        }
-        .founder-role {
-            color: var(--gray);
-            font-size: 1.1rem;
-            margin-bottom: 1.5rem;
-        }
-        .founder-info p {
-            color: var(--gray);
-            line-height: 1.8;
-            margin-bottom: 1rem;
-        }
-        .founder-badges {
-            display: flex;
-            flex-wrap: wrap;
-            gap: .5rem;
-            margin-top: 1.5rem;
-        }
-        .founder-badge {
-            background: var(--light-gray);
-            padding: .4rem .9rem;
-            border-radius: 50px;
-            font-size: .8rem;
-            font-weight: 600;
-            color: var(--dark);
-            border: 1px solid rgba(0,0,0,0.06);
-        }
-
-        /* ── 8. Valores ── */
-        .values-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-        }
-        .value-card {
-            padding: 2rem;
-            border-radius: var(--radius);
-            background: var(--white);
-            border: 1px solid rgba(0,0,0,0.06);
-            text-align: center;
-            transition: all .3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        .value-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: var(--primary);
-            transform: scaleX(0);
-            transition: transform .3s ease;
-        }
-        .value-card:hover::before { transform: scaleX(1); }
-        .value-card:hover { transform: translateY(-5px); box-shadow: 0 12px 35px rgba(0,0,0,0.1); }
-        .value-num {
-            font-family: var(--font-heading);
-            font-size: 2.5rem;
-            font-weight: 900;
-            color: var(--primary);
-            line-height: 1;
-            margin-bottom: .75rem;
-        }
-        .value-card h4 {
-            font-family: var(--font-heading);
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-bottom: .5rem;
-        }
-        .value-card p {
-            font-size: .85rem;
-            color: var(--gray);
-            line-height: 1.6;
-        }
-
-        /* ── 9. Personalidad ── */
-        .personality-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-        }
-        .personality-card {
-            padding: 2rem;
-            border-radius: var(--radius);
-            border: 1px solid rgba(0,0,0,0.06);
-        }
-        .personality-card h4 {
-            font-family: var(--font-heading);
-            font-weight: 700;
-            font-size: 1.1rem;
-            margin-bottom: .5rem;
-        }
-        .personality-card p { font-size: .9rem; color: var(--gray); line-height: 1.7; }
-        .personality-card .trait-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: .4rem;
-            margin-top: 1rem;
-        }
-        .trait-tag {
-            background: rgba(253,216,2,0.15);
-            color: var(--dark);
-            padding: .25rem .65rem;
-            border-radius: 50px;
-            font-size: .75rem;
-            font-weight: 600;
-        }
-
-        /* ── 10. Contacto ── */
-        .contact-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 1.5rem;
-        }
-        .contact-card {
-            padding: 2rem;
-            border-radius: var(--radius);
-            background: var(--white);
-            border: 1px solid rgba(0,0,0,0.06);
-            text-align: center;
-        }
-        .contact-card .contact-icon {
-            width: 50px;
-            height: 50px;
-            background: var(--primary);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1rem;
-            font-size: 1.4rem;
-        }
-        .contact-card h4 {
-            font-family: var(--font-heading);
-            font-weight: 700;
-            margin-bottom: .35rem;
-        }
-        .contact-card p { font-size: .9rem; color: var(--gray); }
-
-        /* ── 11. Servicios ── */
-        .services-overview {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-        }
-        .service-item {
-            padding: 1.5rem;
-            border-radius: var(--radius);
-            border: 1px solid rgba(0,0,0,0.06);
-            display: flex;
-            gap: 1rem;
-            align-items: flex-start;
-            transition: all .3s ease;
-        }
-        .service-item:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.08); }
-        .service-dot {
-            width: 12px;
-            height: 12px;
-            background: var(--primary);
-            border-radius: 50%;
-            margin-top: .4rem;
-            flex-shrink: 0;
-        }
-        .service-item h4 {
-            font-family: var(--font-heading);
-            font-weight: 700;
-            margin-bottom: .25rem;
-        }
-        .service-item p { font-size: .85rem; color: var(--gray); line-height: 1.5; }
-
-        /* ── 12. UI Components ── */
-        .ui-components {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-        }
-        .ui-block {
-            padding: 2rem;
-            border-radius: var(--radius);
-            border: 1px solid rgba(0,0,0,0.06);
-        }
-        .ui-block h4 {
-            font-family: var(--font-heading);
-            font-weight: 700;
-            margin-bottom: 1rem;
-            font-size: 1rem;
-        }
-        .ui-tags { display: flex; flex-wrap: wrap; gap: .5rem; }
-        .ui-tag {
-            background: #f8f9fa;
-            color: var(--dark);
-            padding: .4rem .8rem;
-            border-radius: 6px;
-            font-size: .8rem;
-            font-weight: 600;
-            border: 1px solid rgba(0,0,0,0.05);
-        }
-        .ui-card-demo {
-            background: var(--white);
-            border-radius: var(--radius);
-            padding: 2rem;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            border: 1px solid rgba(0,0,0,0.05);
-        }
-        .ui-card-demo h5 {
-            font-family: var(--font-heading);
-            font-size: 1.2rem;
-            font-weight: 700;
-            margin-bottom: .5rem;
-        }
-        .ui-card-demo p { font-size: .9rem; color: var(--gray); }
-        .ui-radius-demos {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-        }
-        .ui-radius-box {
-            width: 60px;
-            height: 60px;
-            background: var(--primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: .7rem;
-            font-weight: 700;
-        }
-        .ui-shadow-demos {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-        .ui-shadow-box {
-            padding: 1rem 1.5rem;
-            background: var(--white);
-            border-radius: var(--radius);
-            font-size: .85rem;
-        }
-
-        /* ── Footer ── */
-        .brand-footer {
-            background: var(--dark);
-            padding: 3rem 0;
-            text-align: center;
-            color: rgba(255,255,255,0.5);
-            font-size: .85rem;
-        }
-        .brand-footer img {
-            height: 40px;
-            margin: 0 auto 1rem;
-            opacity: .6;
-        }
-
-        /* ── Responsive ── */
-        @media (max-width: 768px) {
-            .cover h1 { font-size: 2.5rem; }
-            .brand-meaning,
-            .type-showcase,
-            .founder,
-            .ui-components { grid-template-columns: 1fr; }
-            .founder-photo { height: 280px; }
-            .section-title { font-size: 2rem; }
-        }
-    </style>
+    <!-- Structured Data (LocalBusiness) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SportsActivityLocation",
+      "name": "Waya Surf School",
+      "image": "https://wayasurf.com/images/stock-hero-main.png",
+      "@id": "https://wayasurf.com",
+      "url": "https://wayasurf.com",
+      "telephone": "+34636562448",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Paseo Marítimo, Playa del Hombre",
+        "addressLocality": "Telde",
+        "addressRegion": "Las Palmas",
+        "postalCode": "35213",
+        "addressCountry": "ES"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 28.0016,
+        "longitude": -15.3853
+      },
+      "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday"
+        ],
+        "opens": "09:00",
+        "closes": "20:00"
+      },
+      "priceRange": "$$"
+    }
+    </script>
 </head>
-<body>
 
-    <!-- ═══════════════════════════════════════════
-         COVER
-         ═══════════════════════════════════════════ -->
-    <section class="cover">
-        <div class="cover-inner">
-            <img src="images/waya-logo-new.png" alt="Waya Surf School" class="cover-logo">
-            <h1>Identidad<br><span>Corporativa</span></h1>
-            <p>Manual de marca de Waya Surf School. Guia completa de identidad visual, valores, tipografia, paleta de color y elementos de diseno.</p>
-            <div class="cover-scroll">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-                Scroll para explorar
-            </div>
-        </div>
-    </section>
+<body class="home-page">
+    <!-- Header Placeholder -->
+    <div id="header-placeholder"></div>
 
-    <!-- ═══════════════════════════════════════════
-         TABLE OF CONTENTS
-         ═══════════════════════════════════════════ -->
-    <section class="toc">
-        <div class="wrap">
-            <h2>Contenido del Manual</h2>
-            <div class="toc-grid">
-                <a href="#marca"><span class="toc-num">01</span> La Marca</a>
-                <a href="#logos"><span class="toc-num">02</span> Logotipos</a>
-                <a href="#colores"><span class="toc-num">03</span> Colores</a>
-                <a href="#tipografia"><span class="toc-num">04</span> Tipografia</a>
-                <a href="#botones"><span class="toc-num">05</span> Botones</a>
-                <a href="#iconografia"><span class="toc-num">06</span> Iconografia</a>
-                <a href="#fundador"><span class="toc-num">07</span> Fundador</a>
-                <a href="#valores"><span class="toc-num">08</span> Valores</a>
-                <a href="#personalidad"><span class="toc-num">09</span> Personalidad</a>
-                <a href="#contacto"><span class="toc-num">10</span> Contacto</a>
-                <a href="#servicios"><span class="toc-num">11</span> Servicios</a>
-                <a href="#componentes"><span class="toc-num">12</span> Componentes UI</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- ═══════════════════════════════════════════
-         01. LA MARCA
-         ═══════════════════════════════════════════ -->
-    <section class="brand-section" id="marca">
-        <div class="wrap">
-            <span class="section-label">01 La Marca</span>
-            <h2 class="section-title">Waya Surf School</h2>
-            <p class="section-desc">Escuela de surf profesional con raices canarias, ubicada en Playa del Hombre, Telde, Gran Canaria. Una marca que une historia, pasion y ensenanza del surfing.</p>
-
-            <div class="brand-meaning">
-                <div class="meaning-highlight">
-                    <div class="swahili">Waya</div>
-                    <div class="translation">"Camino" o "Senda"</div>
-                    <span class="lang-tag">Lengua Swahili</span>
-                </div>
-                <div class="brand-meaning-text">
-                    <h3>El origen del nombre</h3>
-                    <p><strong>Waya</strong> en el habla africana Swahili significa <em>camino</em> o <em>senda</em>, simbolizando direccion, orientacion y un viaje.</p>
-                    <p>En Waya Surf School vemos el surf como un viaje para toda la vida, donde cada surfista sigue su propio camino, que les da rienda a vivir mil experiencias y momentos para toda la vida.</p>
-                    <p>La marca representa ese puente entre generaciones de surfistas: quienes vivieron las primeras olas en Gran Canaria y quienes las estan descubriendo ahora.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ═══════════════════════════════════════════
-         02. LOGOTIPOS
-         ═══════════════════════════════════════════ -->
-    <section class="brand-section alt" id="logos">
-        <div class="wrap">
-            <span class="section-label">02 Logotipos</span>
-            <h2 class="section-title">Sistema de logos</h2>
-            <p class="section-desc">La marca dispone de multiples versiones del logotipo para adaptarse a distintos contextos y fondos. Cada version tiene un uso especifico.</p>
-
-            <div class="logo-grid">
-                <div class="logo-card bg-white">
-                    <img src="images/waya-logo-new.png" alt="Logo principal">
-                    <span class="logo-card-label">Logo Principal</span>
-                </div>
-                <div class="logo-card bg-white">
-                    <img src="images/waya-logo-black.png" alt="Logo negro">
-                    <span class="logo-card-label">Version Oscura</span>
-                </div>
-                <div class="logo-card bg-dark">
-                    <img src="images/waya-logo-yellow.png" alt="Logo amarillo">
-                    <span class="logo-card-label">Sobre Fondo Oscuro</span>
-                </div>
-                <div class="logo-card bg-white">
-                    <img src="images/waya-isotipo.png" alt="Isotipo" style="max-height:60px;">
-                    <span class="logo-card-label">Isotipo / Favicon</span>
-                </div>
-                <div class="logo-card bg-primary">
-                    <img src="images/waya-logo-black.png" alt="Logo sobre amarillo">
-                    <span class="logo-card-label">Sobre Fondo Primario</span>
-                </div>
-                <div class="logo-card bg-dark">
-                    <img src="images/isotype-yellow.png" alt="Isotipo amarillo" style="max-height:60px;">
-                    <span class="logo-card-label">Isotipo Amarillo</span>
-                </div>
-            </div>
-
-            <div class="logo-rules">
-                <div class="logo-rule">
-                    <h4><span class="rule-icon do">&#10003;</span> Espacio de respeto</h4>
-                    <p>Mantener siempre un area de seguridad alrededor del logo equivalente a la altura de la "W" del logotipo.</p>
-                </div>
-                <div class="logo-rule">
-                    <h4><span class="rule-icon do">&#10003;</span> Tamano minimo</h4>
-                    <p>Altura minima del logo completo: 40px en digital, 15mm en impresion. Usar isotipo por debajo de esos limites.</p>
-                </div>
-                <div class="logo-rule">
-                    <h4><span class="rule-icon dont">&#10007;</span> No distorsionar</h4>
-                    <p>Nunca estirar, rotar, cambiar proporciones ni aplicar efectos como sombras o bordes al logotipo.</p>
-                </div>
-                <div class="logo-rule">
-                    <h4><span class="rule-icon dont">&#10007;</span> No cambiar colores</h4>
-                    <p>Usar exclusivamente las versiones de color proporcionadas. No aplicar otros colores sobre el logo.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ═══════════════════════════════════════════
-         03. COLORES
-         ═══════════════════════════════════════════ -->
-    <section class="brand-section" id="colores">
-        <div class="wrap">
-            <span class="section-label">03 Colores</span>
-            <h2 class="section-title">Paleta de colores</h2>
-            <p class="section-desc">Una paleta que evoca la energia del sol canario, la claridad del oceano y la solidez de la roca volcanica. Minimalista pero con personalidad.</p>
-
-            <div class="color-palette">
-                <div class="color-swatch">
-                    <div class="color-preview" style="background: #FDD802;">
-                        <span style="color: rgba(0,0,0,0.2);">Aa</span>
-                    </div>
-                    <div class="color-info">
-                        <div class="color-name">Amarillo Waya</div>
-                        <div class="color-hex">#FDD802</div>
-                        <div class="color-use">Color primario &middot; CTAs &middot; Acentos</div>
-                    </div>
-                </div>
-                <div class="color-swatch">
-                    <div class="color-preview" style="background: #E8C702;">
-                        <span style="color: rgba(0,0,0,0.2);">Aa</span>
-                    </div>
-                    <div class="color-info">
-                        <div class="color-name">Amarillo Hover</div>
-                        <div class="color-hex">#E8C702</div>
-                        <div class="color-use">Estado hover del primario</div>
-                    </div>
-                </div>
-                <div class="color-swatch">
-                    <div class="color-preview" style="background: #1a1a1a;">
-                        <span style="color: rgba(255,255,255,0.15);">Aa</span>
-                    </div>
-                    <div class="color-info">
-                        <div class="color-name">Negro Waya</div>
-                        <div class="color-hex">#1A1A1A</div>
-                        <div class="color-use">Texto principal &middot; Fondos oscuros</div>
-                    </div>
-                </div>
-                <div class="color-swatch">
-                    <div class="color-preview" style="background: #666666;">
-                        <span style="color: rgba(255,255,255,0.15);">Aa</span>
-                    </div>
-                    <div class="color-info">
-                        <div class="color-name">Gris Medio</div>
-                        <div class="color-hex">#666666</div>
-                        <div class="color-use">Texto secundario &middot; Descripciones</div>
-                    </div>
-                </div>
-                <div class="color-swatch">
-                    <div class="color-preview" style="background: #f5f5f5;">
-                        <span style="color: rgba(0,0,0,0.1);">Aa</span>
-                    </div>
-                    <div class="color-info">
-                        <div class="color-name">Gris Claro</div>
-                        <div class="color-hex">#F5F5F5</div>
-                        <div class="color-use">Fondos alternos &middot; Secciones</div>
-                    </div>
-                </div>
-                <div class="color-swatch">
-                    <div class="color-preview" style="background: #ffffff; border: 1px solid #eee;">
-                        <span style="color: rgba(0,0,0,0.08);">Aa</span>
-                    </div>
-                    <div class="color-info">
-                        <div class="color-name">Blanco</div>
-                        <div class="color-hex">#FFFFFF</div>
-                        <div class="color-use">Fondo base &middot; Cards &middot; UI</div>
+    <!-- ============================================
+         1. HERO SLIDESHOW
+         ============================================ -->
+    <section class="hero-slideshow" id="hero">
+        <!-- Slides -->
+        <div class="hero-slides">
+            <div class="hero-slide active" style="background-image: url('images/hero-slide-1.jpg')">
+                <div class="hero-slide-overlay"></div>
+                <div class="hero-slide-content">
+                    <span class="hero-slide-tag" data-i18n="home.hero.slide1_tag">Playa del Hombre, Telde</span>
+                    <h1 class="hero-slide-title" data-i18n="home.hero.slide1_title">Tu viaje en las olas<br>comienza aquí</h1>
+                    <p class="hero-slide-sub" data-i18n="home.hero.slide1_sub">Clases para todos los niveles con instructores titulados por la Federación Española de Surf.</p>
+                    <div class="hero-slide-actions">
+                        <a href="reservar.html" class="btn btn-primary hero-cta" data-i18n="home.hero.slide1_cta1">Reservar Clase</a>
+                        <a href="informacion-general.html" class="btn hero-cta-ghost" data-i18n="home.hero.slide1_cta2">Ver Cursos</a>
                     </div>
                 </div>
             </div>
 
-            <div class="color-combos">
-                <h3>Combinaciones aprobadas</h3>
-                <div class="combo-grid">
-                    <div class="combo-card">
-                        <div class="combo-preview" style="background: #1a1a1a; color: #FDD802;">
-                            <h4>Waya Surf</h4>
-                            <p style="color: rgba(255,255,255,0.6);">Amarillo sobre negro</p>
-                        </div>
-                        <div class="combo-label">Principal &mdash; Heroes y secciones destacadas</div>
+            <div class="hero-slide" style="background-image: url('images/hero-slide-2.jpg')">
+                <div class="hero-slide-overlay"></div>
+                <div class="hero-slide-content">
+                    <span class="hero-slide-tag" data-i18n="home.hero.slide2_tag">Grupos Reducidos</span>
+                    <h1 class="hero-slide-title" data-i18n="home.hero.slide2_title">Aprende surf<br>con quien sabe</h1>
+                    <p class="hero-slide-sub" data-i18n="home.hero.slide2_sub">Más de 15 años de experiencia. Grupos de máximo 8 personas para una atención 100% personalizada.</p>
+                    <div class="hero-slide-actions">
+                        <a href="clases-grupales.html" class="btn btn-primary hero-cta" data-i18n="home.hero.slide2_cta1">Clases Grupales</a>
+                        <a href="clases-privadas.html" class="btn hero-cta-ghost" data-i18n="home.hero.slide2_cta2">Clases Privadas</a>
                     </div>
-                    <div class="combo-card">
-                        <div class="combo-preview" style="background: #FDD802; color: #1a1a1a;">
-                            <h4>Reservar</h4>
-                            <p style="color: rgba(26,26,26,0.6);">Negro sobre amarillo</p>
-                        </div>
-                        <div class="combo-label">Botones CTA &mdash; Acciones principales</div>
+                </div>
+            </div>
+
+            <div class="hero-slide" style="background-image: url('images/hero-slide-3.jpg')">
+                <div class="hero-slide-overlay"></div>
+                <div class="hero-slide-content">
+                    <span class="hero-slide-tag" data-i18n="home.hero.slide3_tag">Metodología Propia</span>
+                    <h1 class="hero-slide-title" data-i18n="home.hero.slide3_title">Seguridad, técnica<br>y diversión</h1>
+                    <p class="hero-slide-sub" data-i18n="home.hero.slide3_sub">Teoría en la arena, práctica en el agua. Cada sesión está diseñada para que progreses de verdad.</p>
+                    <div class="hero-slide-actions">
+                        <a href="metodologia.html" class="btn btn-primary hero-cta" data-i18n="home.hero.slide3_cta1">Nuestra Metodología</a>
+                        <a href="niveles.html" class="btn hero-cta-ghost" data-i18n="home.hero.slide3_cta2">Ver Niveles</a>
                     </div>
-                    <div class="combo-card">
-                        <div class="combo-preview" style="background: #ffffff; color: #1a1a1a;">
-                            <h4>Contenido</h4>
-                            <p style="color: #666;">Negro sobre blanco</p>
-                        </div>
-                        <div class="combo-label">Cuerpo de texto &mdash; Lectura general</div>
+                </div>
+            </div>
+
+            <div class="hero-slide" style="background-image: url('images/hero-slide-4.jpg')">
+                <div class="hero-slide-overlay"></div>
+                <div class="hero-slide-content">
+                    <span class="hero-slide-tag" data-i18n="home.hero.slide4_tag">Víctor Bueno Ureña</span>
+                    <h1 class="hero-slide-title" data-i18n="home.hero.slide4_title">Instructor certificado,<br>surfista de corazón</h1>
+                    <p class="hero-slide-sub" data-i18n="home.hero.slide4_sub">Formado en Inglaterra, curtido en olas de todo el mundo. Tu progresión es nuestra pasión.</p>
+                    <div class="hero-slide-actions">
+                        <a href="nosotros.html" class="btn btn-primary hero-cta" data-i18n="home.hero.slide4_cta1">Conoce al Equipo</a>
+                        <a href="reservar.html" class="btn hero-cta-ghost" data-i18n="home.hero.slide4_cta2">Reservar Ahora</a>
                     </div>
-                    <div class="combo-card">
-                        <div class="combo-preview" style="background: #f5f5f5; color: #1a1a1a;">
-                            <h4>Secciones</h4>
-                            <p style="color: #666;">Fondo alterno</p>
-                        </div>
-                        <div class="combo-label">Secciones alternas &mdash; Separacion visual</div>
+                </div>
+            </div>
+
+            <div class="hero-slide" style="background-image: url('images/hero-slide-5.jpg')">
+                <div class="hero-slide-overlay"></div>
+                <div class="hero-slide-content">
+                    <span class="hero-slide-tag" data-i18n="home.hero.slide5_tag">Tu Primera Ola</span>
+                    <h1 class="hero-slide-title" data-i18n="home.hero.slide5_title">Hoy puede ser<br>el día</h1>
+                    <p class="hero-slide-sub" data-i18n="home.hero.slide5_sub">El 95% de nuestros alumnos se pone de pie en su primera clase. ¿Qué esperas?</p>
+                    <div class="hero-slide-actions">
+                        <a href="reservar.html" class="btn btn-primary hero-cta" data-i18n="home.hero.slide5_cta1">Reservar Clase</a>
+                        <a href="bono-residente.html" class="btn hero-cta-ghost" data-i18n="home.hero.slide5_cta2">Bono Residente</a>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
 
-    <!-- ═══════════════════════════════════════════
-         04. TIPOGRAFIA
-         ═══════════════════════════════════════════ -->
-    <section class="brand-section alt" id="tipografia">
-        <div class="wrap">
-            <span class="section-label">04 Tipografia</span>
-            <h2 class="section-title">Sistema tipografico</h2>
-            <p class="section-desc">Dos familias tipograficas complementarias: una geometrica y expresiva para titulos, otra humanista y legible para cuerpo de texto.</p>
+        <!-- Controls -->
+        <div class="hero-slideshow-controls">
+            <button class="hero-slideshow-btn hero-prev" aria-label="Anterior">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            </button>
+            <div class="hero-slideshow-dots"></div>
+            <button class="hero-slideshow-btn hero-next" aria-label="Siguiente">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"></polyline></svg>
+            </button>
+        </div>
 
-            <div class="type-showcase">
-                <div class="type-family">
-                    <div class="type-family-name">Google Fonts</div>
-                    <span class="type-family-role">Titulos</span>
-                    <div class="type-specimen">
-                        <div class="big" style="font-family: 'Outfit'; font-weight: 900;">Outfit</div>
-                        <div class="medium" style="font-family: 'Outfit'; font-weight: 400;">ABCDEFGHIJKLM</div>
-                        <div class="small" style="font-family: 'Outfit'; font-weight: 300;">abcdefghijklmnopqrstuvwxyz 0123456789</div>
-                    </div>
-                    <div class="type-weights">
-                        <div class="type-weight" style="font-family: 'Outfit'; font-weight: 300;"><strong>300</strong> Light</div>
-                        <div class="type-weight" style="font-family: 'Outfit'; font-weight: 400;"><strong>400</strong> Regular</div>
-                        <div class="type-weight" style="font-family: 'Outfit'; font-weight: 600;"><strong>600</strong> SemiBold</div>
-                        <div class="type-weight" style="font-family: 'Outfit'; font-weight: 700;"><strong>700</strong> Bold</div>
-                        <div class="type-weight" style="font-family: 'Outfit'; font-weight: 800;"><strong>800</strong> ExtraBold</div>
-                        <div class="type-weight" style="font-family: 'Outfit'; font-weight: 900;"><strong>900</strong> Black</div>
-                    </div>
-                </div>
-                <div class="type-family">
-                    <div class="type-family-name">Google Fonts</div>
-                    <span class="type-family-role">Cuerpo</span>
-                    <div class="type-specimen">
-                        <div class="big" style="font-family: 'Inter'; font-weight: 600;">Inter</div>
-                        <div class="medium" style="font-family: 'Inter'; font-weight: 400;">ABCDEFGHIJKLM</div>
-                        <div class="small" style="font-family: 'Inter'; font-weight: 300;">abcdefghijklmnopqrstuvwxyz 0123456789</div>
-                    </div>
-                    <div class="type-weights">
-                        <div class="type-weight" style="font-family: 'Inter'; font-weight: 300;"><strong>300</strong> Light</div>
-                        <div class="type-weight" style="font-family: 'Inter'; font-weight: 400;"><strong>400</strong> Regular</div>
-                        <div class="type-weight" style="font-family: 'Inter'; font-weight: 500;"><strong>500</strong> Medium</div>
-                        <div class="type-weight" style="font-family: 'Inter'; font-weight: 600;"><strong>600</strong> SemiBold</div>
-                    </div>
-                </div>
-            </div>
+        <!-- Progress Bar -->
+        <div class="hero-slideshow-progress">
+            <div class="hero-slideshow-progress-bar"></div>
+        </div>
 
-            <div class="type-scale">
-                <h3>Escala tipografica</h3>
-                <div class="scale-row">
-                    <span class="scale-label">Hero Title</span>
-                    <span class="scale-sample" style="font-size: 3.4rem; font-weight: 800; letter-spacing: -0.02em;">Tu viaje en las olas</span>
-                </div>
-                <div class="scale-row">
-                    <span class="scale-label">H1 / 4rem</span>
-                    <span class="scale-sample" style="font-size: 2.5rem; font-weight: 900; letter-spacing: -1px;">Waya Surf School</span>
-                </div>
-                <div class="scale-row">
-                    <span class="scale-label">H2 / 3rem</span>
-                    <span class="scale-sample" style="font-size: 2rem; font-weight: 800;">Servicios Waya</span>
-                </div>
-                <div class="scale-row">
-                    <span class="scale-label">H3 / 1.5rem</span>
-                    <span class="scale-sample" style="font-size: 1.5rem; font-weight: 700;">Clases Grupales</span>
-                </div>
-                <div class="scale-row">
-                    <span class="scale-label">Body / 1rem</span>
-                    <span class="scale-sample" style="font-size: 1rem; font-weight: 400; font-family: 'Inter'; color: #666;">Nuestra metodologia ha sido desarrollada y perfeccionada por nuestro director tecnico.</span>
-                </div>
-                <div class="scale-row">
-                    <span class="scale-label">Small / .85rem</span>
-                    <span class="scale-sample" style="font-size: .85rem; font-weight: 400; font-family: 'Inter'; color: #999;">Tags, etiquetas, pies de foto y metadata.</span>
-                </div>
-                <div class="scale-row">
-                    <span class="scale-label">Nav / 1rem</span>
-                    <span class="scale-sample" style="font-size: 1rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">WAYA &nbsp; SURF &nbsp; ALQUILERES &nbsp; RESERVAR</span>
-                </div>
-            </div>
+        <!-- Scroll Indicator -->
+        <div class="hero-scroll-indicator">
+            <span></span>
         </div>
     </section>
 
-    <!-- ═══════════════════════════════════════════
-         05. BOTONES
-         ═══════════════════════════════════════════ -->
-    <section class="brand-section" id="botones">
-        <div class="wrap">
-            <span class="section-label">05 Botones</span>
-            <h2 class="section-title">Sistema de botones</h2>
-            <p class="section-desc">Botones con forma de pastilla (pill shape), transmitiendo la fluidez y dinamismo del surf. Tres variantes para distintos contextos.</p>
-
-            <div class="btn-showcase">
-                <a class="btn-demo primary">Reservar Clase</a>
-                <a class="btn-demo secondary">Conocenos Mejor</a>
-            </div>
-
-            <div class="ghost-demo-bg">
-                <a class="btn-demo ghost">Ver Cursos</a>
-                <a class="btn-demo primary">Reservar Ahora</a>
-            </div>
-
-            <br><br>
-
-            <div class="btn-specs">
-                <div class="btn-spec">
-                    <dt>Forma</dt>
-                    <dd>border-radius: 50px</dd>
+    <!-- ============================================
+         2. NOSOTROS (Intro)
+         ============================================ -->
+    <section class="section home-about" id="nosotros">
+        <div class="container">
+            <div class="home-about-inner">
+                <div class="home-about-brand">
+                    <img src="images/about-victor.jpg" alt="Víctor Bueno Ureña - Waya Surf" class="home-about-photo">
                 </div>
-                <div class="btn-spec">
-                    <dt>Padding</dt>
-                    <dd>0.85rem 2rem</dd>
-                </div>
-                <div class="btn-spec">
-                    <dt>Tipografia</dt>
-                    <dd>700 / 0.9rem / uppercase</dd>
-                </div>
-                <div class="btn-spec">
-                    <dt>Letter Spacing</dt>
-                    <dd>1px</dd>
-                </div>
-                <div class="btn-spec">
-                    <dt>Hover Primario</dt>
-                    <dd>translateY(-2px)</dd>
-                </div>
-                <div class="btn-spec">
-                    <dt>Sombra CTA</dt>
-                    <dd>0 4px 15px rgba(253,216,2,0.3)</dd>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ═══════════════════════════════════════════
-         06. ICONOGRAFIA
-         ═══════════════════════════════════════════ -->
-    <section class="brand-section alt" id="iconografia">
-        <div class="wrap">
-            <span class="section-label">06 Iconografia</span>
-            <h2 class="section-title">Elementos graficos</h2>
-            <p class="section-desc">Iconos y elementos decorativos que refuerzan la identidad visual de la marca, usados en la web y materiales de comunicacion.</p>
-
-            <div class="icon-grid">
-                <div class="icon-card">
-                    <img src="images/waya-isotipo.png" alt="Isotipo">
-                    <span>Isotipo</span>
-                </div>
-                <div class="icon-card">
-                    <img src="images/isotype-yellow.png" alt="Isotipo Yellow">
-                    <span>Isotipo Yellow</span>
-                </div>
-                <div class="icon-card">
-                    <img src="images/hero-icon-surfboard.png" alt="Surfboard Icon">
-                    <span>Surfboard</span>
-                </div>
-                <div class="icon-card">
-                    <img src="images/icon-spiral-palm.png" alt="Spiral Palm">
-                    <span>Spiral Palm</span>
-                </div>
-                <div class="icon-card">
-                    <img src="images/icon-surf-wave.png" alt="Surf Wave">
-                    <span>Surf Wave</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ═══════════════════════════════════════════
-         07. FUNDADOR
-         ═══════════════════════════════════════════ -->
-    <section class="brand-section" id="fundador">
-        <div class="wrap">
-            <span class="section-label">07 Fundador</span>
-            <h2 class="section-title">La persona detras de Waya</h2>
-            <p class="section-desc">La marca esta profundamente ligada a la historia y trayectoria de su fundador.</p>
-
-            <div class="founder">
-                <img src="images/about-victor.jpg" alt="Victor Bueno Urena" class="founder-photo">
-                <div class="founder-info">
-                    <h3>Victor Bueno Urena</h3>
-                    <div class="founder-role">Fundador &middot; Director Tecnico &middot; Head Coach</div>
-                    <p>Surfista y bodyboarder local de Gran Canaria desde los 6 anos. Tras mas de 15 anos de experiencia en el surf y mas de 6 anos como instructor, ha volcado todo su conocimiento en crear Waya Surf School.</p>
-                    <p>Instructor licenciado por la <strong>Federacion Espanola de Surf</strong> y graduado en <strong>Educacion Fisica y Entrenamiento Deportivo</strong> por la Universidad de York (Inglaterra).</p>
-                    <p>Experiencia internacional como Manager y Head Coach en campamentos de surf en Francia, Cantabria, Fuerteventura y Gran Canaria junto a Planet Surf Camps.</p>
-
-                    <div class="founder-badges">
-                        <span class="founder-badge">Fed. Espanola de Surf</span>
-                        <span class="founder-badge">Grado Univ. Ed. Fisica</span>
-                        <span class="founder-badge">+15 anos surfeando</span>
-                        <span class="founder-badge">+6 anos instructor</span>
-                        <span class="founder-badge">Planet Surf Camps</span>
-                        <span class="founder-badge">Competidor Nacional</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ═══════════════════════════════════════════
-         08. VALORES
-         ═══════════════════════════════════════════ -->
-    <section class="brand-section alt" id="valores">
-        <div class="wrap">
-            <span class="section-label">08 Valores</span>
-            <h2 class="section-title">Los 5 pilares de Waya</h2>
-            <p class="section-desc">Estos valores guian cada clase, cada interaccion y cada decision de la marca. Son el ADN de la experiencia Waya.</p>
-
-            <div class="values-grid">
-                <div class="value-card">
-                    <div class="value-num">01</div>
-                    <h4>Aprendizaje Progresivo</h4>
-                    <p>Cada alumno avanza segun sus capacidades con un plan estructurado para mejorar de manera progresiva.</p>
-                </div>
-                <div class="value-card">
-                    <div class="value-num">02</div>
-                    <h4>Ensenanza Individualizada</h4>
-                    <p>Atencion personalizada constante, analisis de errores y feedback individualizado en cada sesion.</p>
-                </div>
-                <div class="value-card">
-                    <div class="value-num">03</div>
-                    <h4>Seguridad</h4>
-                    <p>Protocolos esenciales, conocimiento del entorno y manejo del material antes de cada sesion.</p>
-                </div>
-                <div class="value-card">
-                    <div class="value-num">04</div>
-                    <h4>Entendimiento</h4>
-                    <p>Surf consciente: que los alumnos entiendan el por que, sean independientes y progresen solos.</p>
-                </div>
-                <div class="value-card">
-                    <div class="value-num">05</div>
-                    <h4>Diversion</h4>
-                    <p>Sin dejar la profesionalidad, la diversion y las risas nunca faltan en las sesiones Waya.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ═══════════════════════════════════════════
-         09. PERSONALIDAD
-         ═══════════════════════════════════════════ -->
-    <section class="brand-section" id="personalidad">
-        <div class="wrap">
-            <span class="section-label">09 Personalidad</span>
-            <h2 class="section-title">Voz y caracter de marca</h2>
-            <p class="section-desc">La marca Waya habla como un instructor canario que es tu amigo: profesional, cercano, entusiasta y genuino.</p>
-
-            <div class="personality-grid">
-                <div class="personality-card">
-                    <h4>Raices Canarias</h4>
-                    <p>Orgullosamente local. La marca refleja el espiritu isleneo, el ambiente familiar y la conexion con la cultura del surf en Gran Canaria desde los anos 60.</p>
-                    <div class="trait-tags">
-                        <span class="trait-tag">Local</span>
-                        <span class="trait-tag">Autentica</span>
-                        <span class="trait-tag">Familiar</span>
-                    </div>
-                </div>
-                <div class="personality-card">
-                    <h4>Comunidad y Respeto</h4>
-                    <p>El surf como vehiculo para construir comunidad. Respeto al mar, a los companeros y a la cultura local. Surf consciente y responsable.</p>
-                    <div class="trait-tags">
-                        <span class="trait-tag">Comunidad</span>
-                        <span class="trait-tag">Respeto</span>
-                        <span class="trait-tag">Consciencia</span>
-                    </div>
-                </div>
-                <div class="personality-card">
-                    <h4>Profesional pero Cercano</h4>
-                    <p>Instructores titulados, metodologia probada, pero sin perder la calidez, la cercania y el buen rollo que caracteriza a Canarias.</p>
-                    <div class="trait-tags">
-                        <span class="trait-tag">Profesional</span>
-                        <span class="trait-tag">Cercano</span>
-                        <span class="trait-tag">Dinamico</span>
-                    </div>
-                </div>
-                <div class="personality-card">
-                    <h4>Energia y Alegria</h4>
-                    <p>Cada sesion es una experiencia inolvidable. La marca irradia energia positiva, entusiasmo y pasion por el surfing y por la vida.</p>
-                    <div class="trait-tags">
-                        <span class="trait-tag">Energetica</span>
-                        <span class="trait-tag">Divertida</span>
-                        <span class="trait-tag">Apasionada</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ═══════════════════════════════════════════
-         10. CONTACTO
-         ═══════════════════════════════════════════ -->
-    <section class="brand-section alt" id="contacto">
-        <div class="wrap">
-            <span class="section-label">10 Contacto</span>
-            <h2 class="section-title">Datos oficiales</h2>
-            <p class="section-desc">Canales de comunicacion y datos de contacto oficiales de la marca.</p>
-
-            <div class="contact-grid">
-                <div class="contact-card">
-                    <div class="contact-icon">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                    </div>
-                    <h4>Ubicacion</h4>
-                    <p>Paseo Maritimo<br>Playa del Hombre, Telde<br>Las Palmas, Gran Canaria</p>
-                </div>
-                <div class="contact-card">
-                    <div class="contact-icon">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
-                    </div>
-                    <h4>Telefono</h4>
-                    <p>+34 636 56 24 48</p>
-                </div>
-                <div class="contact-card">
-                    <div class="contact-icon">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                    </div>
-                    <h4>Email</h4>
-                    <p>info@wayasurf.com</p>
-                </div>
-                <div class="contact-card">
-                    <div class="contact-icon">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
-                    </div>
-                    <h4>Instagram</h4>
-                    <p>@wayasurf</p>
-                </div>
-                <div class="contact-card">
-                    <div class="contact-icon">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
-                    </div>
-                    <h4>Web</h4>
-                    <p>wayasurf.com</p>
-                </div>
-                <div class="contact-card">
-                    <div class="contact-icon">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                    </div>
-                    <h4>Horario</h4>
-                    <p>Todos los dias<br>09:00 — 20:00</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ═══════════════════════════════════════════
-         11. SERVICIOS
-         ═══════════════════════════════════════════ -->
-    <section class="brand-section" id="servicios">
-        <div class="wrap">
-            <span class="section-label">11 Servicios</span>
-            <h2 class="section-title">Oferta de la marca</h2>
-            <p class="section-desc">Todos los servicios que Waya Surf School ofrece, cada uno con su propia pagina y comunicacion dentro del sitio web.</p>
-
-            <div class="services-overview">
-                <div class="service-item">
-                    <div class="service-dot"></div>
-                    <div>
-                        <h4>Clases Grupales</h4>
-                        <p>Grupos reducidos (max 8 principiantes / 6 intermedios). Dinamicas, divertidas y adaptadas.</p>
-                    </div>
-                </div>
-                <div class="service-item">
-                    <div class="service-dot"></div>
-                    <div>
-                        <h4>Clases Privadas</h4>
-                        <p>1:1 con el instructor. Aprendizaje intensivo, video analisis y correccion especifica.</p>
-                    </div>
-                </div>
-                <div class="service-item">
-                    <div class="service-dot"></div>
-                    <div>
-                        <h4>Clases Semi-Privadas</h4>
-                        <p>Para 2 personas: amigos, parejas o familiares que quieren aprender juntos.</p>
-                    </div>
-                </div>
-                <div class="service-item">
-                    <div class="service-dot"></div>
-                    <div>
-                        <h4>Clases Familiares</h4>
-                        <p>Disenadas para familias. Seguridad, diversion y un ritmo para todas las edades.</p>
-                    </div>
-                </div>
-                <div class="service-item">
-                    <div class="service-dot"></div>
-                    <div>
-                        <h4>Bono Residentes</h4>
-                        <p>Programa exclusivo para residentes de Gran Canaria. Entrena con regularidad, mejora tu nivel.</p>
-                    </div>
-                </div>
-                <div class="service-item">
-                    <div class="service-dot"></div>
-                    <div>
-                        <h4>Waya Kids</h4>
-                        <p>Surf para ninos: metodologia ludica, segura y respetuosa con el mar. 1.5h de clase.</p>
-                    </div>
-                </div>
-                <div class="service-item">
-                    <div class="service-dot"></div>
-                    <div>
-                        <h4>Surfcamps</h4>
-                        <p>Experiencias completas de surf con alojamiento, clases y actividades complementarias.</p>
-                    </div>
-                </div>
-                <div class="service-item">
-                    <div class="service-dot"></div>
-                    <div>
-                        <h4>Alquileres</h4>
-                        <p>+30 tablas (softboards y hardboards), neoprenos y accesorios. Desde 5EUR/dia.</p>
-                    </div>
-                </div>
-                <div class="service-item">
-                    <div class="service-dot"></div>
-                    <div>
-                        <h4>Grupos y Eventos</h4>
-                        <p>Team building, cumpleanos, centros educativos. Experiencias a medida para colectivos.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ═══════════════════════════════════════════
-         12. COMPONENTES UI
-         ═══════════════════════════════════════════ -->
-    <section class="brand-section alt" id="componentes">
-        <div class="wrap">
-            <span class="section-label">12 Componentes UI</span>
-            <h2 class="section-title">Elementos de interfaz</h2>
-            <p class="section-desc">Especificaciones tecnicas de los elementos de diseno reutilizables en toda la web.</p>
-
-            <div class="ui-components">
-                <div class="ui-block">
-                    <h4>Border Radius</h4>
-                    <div class="ui-radius-demos">
-                        <div class="ui-radius-box" style="border-radius: 0;">0px</div>
-                        <div class="ui-radius-box" style="border-radius: 8px;">8px</div>
-                        <div class="ui-radius-box" style="border-radius: 12px;">12px</div>
-                        <div class="ui-radius-box" style="border-radius: 50px;">pill</div>
-                        <div class="ui-radius-box" style="border-radius: 50%;">50%</div>
-                    </div>
-                    <br>
-                    <p style="font-size: .85rem; color: #666;">
-                        <strong>12px</strong> &mdash; Cards, dropdowns, secciones<br>
-                        <strong>50px</strong> &mdash; Botones, tags, pills<br>
-                        <strong>8px</strong> &mdash; Dropdown items, elementos menores<br>
-                        <strong>18px</strong> &mdash; Carousel viewport
+                <div class="home-about-content">
+                    <h2 class="section-title" data-i18n="home.about.title">Tu camino en las olas</h2>
+                    <p class="section-desc" data-i18n="home.about.desc">
+                        Waya significa "camino" en la lengua swahili. Aunque nosotros vemos ese camino como un viaje
+                        para toda la vida.
+                        Nuestra metodología se basa en más de 15 años de experiencia internacional de nuestro fundador,
+                        Víctor Bueno Ureña.
                     </p>
+                    <a href="nosotros.html" class="btn btn-secondary" data-i18n="home.about.cta">Conócenos Mejor</a>
                 </div>
+            </div>
+        </div>
+    </section>
 
-                <div class="ui-block">
-                    <h4>Sombras</h4>
-                    <div class="ui-shadow-demos">
-                        <div class="ui-shadow-box" style="box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
-                            <strong>Default</strong><br>
-                            <span style="font-size:.75rem; color: #999;">0 4px 20px rgba(0,0,0,0.08)</span>
+    <!-- ============================================
+         3. SERVICIOS (Grid)
+         ============================================ -->
+    <section class="section section--gray" id="servicios">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag" data-i18n="home.services.tag">Clases y Cursos</span>
+                <h2 class="section-title" data-i18n="home.services.title">Servicios Waya</h2>
+            </div>
+
+            <div class="services-grid-home">
+                <!-- 1. Clases de Surf -->
+                <div class="service-card-home">
+                    <div class="service-card-img">
+                        <img src="images/service-clases.jpg" alt="Clases de Surf" loading="lazy">
+                        <span class="service-card-badge" data-i18n="home.services.badge_classes">Desde 40€</span>
+                    </div>
+                    <div class="service-card-body">
+                        <h3 class="service-card-title" data-i18n="home.services.classes_title">Clases de Surf</h3>
+                        <p class="service-card-desc" data-i18n="home.services.classes_desc">
+                            Aprende con nuestra metodología propia en grupos reducidos o clases privadas.
+                        </p>
+                        <div class="service-tags">
+                            <span class="service-tag" data-i18n="home.services.tag_2h">2h Clase</span>
+                            <span class="service-tag" data-i18n="home.services.tag_instructor">Instructor FES</span>
+                            <span class="service-tag" data-i18n="home.services.tag_material">Material Incluido</span>
+                            <span class="service-tag" data-i18n="home.services.tag_seguro">Seguro</span>
                         </div>
-                        <div class="ui-shadow-box" style="box-shadow: 0 10px 40px rgba(0,0,0,0.12);">
-                            <strong>Large</strong><br>
-                            <span style="font-size:.75rem; color: #999;">0 10px 40px rgba(0,0,0,0.12)</span>
-                        </div>
-                        <div class="ui-shadow-box" style="box-shadow: 0 4px 15px rgba(253,216,2,0.3);">
-                            <strong>CTA Glow</strong><br>
-                            <span style="font-size:.75rem; color: #999;">0 4px 15px rgba(253,216,2,0.3)</span>
-                        </div>
+                        <a href="informacion-general.html" class="btn btn-primary service-card-btn"
+                            data-i18n="home.services.classes_cta">Ver Clases</a>
                     </div>
                 </div>
 
-                <div class="ui-block">
-                    <h4>Tags / Pills</h4>
-                    <div class="ui-tags">
-                        <span class="ui-tag">Desde 40EUR</span>
-                        <span class="ui-tag">2h clase</span>
-                        <span class="ui-tag">Max 8 alumnos</span>
-                        <span class="ui-tag">Fotos incluidas</span>
-                        <span class="ui-tag">Principiante</span>
-                        <span class="ui-tag">Intermedio</span>
+                <!-- 2. Alquiler de Material -->
+                <div class="service-card-home">
+                    <div class="service-card-img">
+                        <img src="images/service-alquiler.jpg" alt="Alquiler de Material" loading="lazy">
+                        <span class="service-card-badge" data-i18n="home.services.badge_rentals">Desde 5€</span>
                     </div>
-                    <br>
-                    <p style="font-size: .85rem; color: #666;">
-                        Background: #f8f9fa &middot; Border: 1px solid rgba(0,0,0,0.05)<br>
-                        Padding: 0.4rem 0.8rem &middot; Radius: 6px &middot; Font: 600 / 0.8rem
-                    </p>
+                    <div class="service-card-body">
+                        <h3 class="service-card-title" data-i18n="home.services.rentals_title">Alquiler de Material</h3>
+                        <p class="service-card-desc" data-i18n="home.services.rentals_desc">
+                            Disponemos de tablas soft, fibra y neoprenos de alta gama.
+                        </p>
+                        <div class="service-tags">
+                            <span class="service-tag" data-i18n="home.services.tag_boards">Tablas Soft/Fibra</span>
+                            <span class="service-tag" data-i18n="home.services.tag_wetsuits">Neoprenos</span>
+                            <span class="service-tag" data-i18n="home.services.tag_showers">Duchas</span>
+                            <span class="service-tag" data-i18n="home.services.tag_beachfront">A pie de playa</span>
+                        </div>
+                        <a href="alquileres.html" class="btn btn-primary service-card-btn"
+                            data-i18n="home.services.rentals_cta">Ver Material</a>
+                    </div>
                 </div>
 
-                <div class="ui-block">
-                    <h4>Card (ejemplo)</h4>
-                    <div class="ui-card-demo">
-                        <h5>Clases de Surf</h5>
-                        <p>Instructores titulados, material completo y grupos reducidos para una experiencia inolvidable.</p>
+                <!-- 3. Surf Camp -->
+                <div class="service-card-home">
+                    <div class="service-card-img">
+                        <img src="images/service-surfcamp.jpg" alt="Surf Camp" loading="lazy">
+                        <span class="service-card-badge service-card-badge--soon" data-i18n="home.services.badge_camp">Próximamente</span>
                     </div>
-                    <br>
-                    <p style="font-size: .85rem; color: #666;">
-                        Background: white &middot; Radius: 12px &middot; Padding: 2.5rem<br>
-                        Shadow: default &middot; Border: 1px solid rgba(0,0,0,0.05)<br>
-                        Hover: translateY(-10px) + shadow-lg
-                    </p>
+                    <div class="service-card-body">
+                        <h3 class="service-card-title" data-i18n="home.services.camp_title">Surf Camp</h3>
+                        <p class="service-card-desc" data-i18n="home.services.camp_desc">
+                            Vive la experiencia completa de surf, alojamiento y naturaleza.
+                        </p>
+                        <div class="service-tags">
+                            <span class="service-tag" data-i18n="home.services.tag_accommodation">Alojamiento</span>
+                            <span class="service-tag" data-i18n="home.services.tag_coaching">Surf Coaching</span>
+                            <span class="service-tag" data-i18n="home.services.tag_yoga">Yoga</span>
+                            <span class="service-tag" data-i18n="home.services.tag_transport">Transporte</span>
+                        </div>
+                        <a href="surfcamps.html" class="btn btn-secondary service-card-btn"
+                            data-i18n="home.services.camp_cta">Ver Info</a>
+                    </div>
                 </div>
             </div>
 
-            <br><br>
+            <div class="services-see-all">
+                <a href="surf.html" class="btn btn-secondary" data-i18n="home.services.see_all">Ver todos los
+                    cursos</a>
+            </div>
+        </div>
+    </section>
 
-            <div class="ui-block" style="border: 1px solid rgba(0,0,0,0.06); border-radius: 12px; padding: 2rem;">
-                <h4>Spacing Scale (CSS Variables)</h4>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px,1fr)); gap: 1rem; margin-top: 1rem;">
-                    <div style="text-align:center;">
-                        <div style="height: 8px; background: var(--primary); border-radius: 4px; margin-bottom: .5rem;"></div>
-                        <span style="font-size: .8rem; color: #999;">XS &middot; 0.5rem</span>
+    <!-- ============================================
+         4. BONO RESIDENTES
+         ============================================ -->
+    <section id="bono-residentes-home" class="bono-v2">
+        <div class="container">
+            <div class="bono-v2-header">
+                <span class="bono-v2-badge" data-i18n="home.promo.tag">Solo Residentes</span>
+                <h2 class="bono-v2-title" data-i18n="home.promo.title">Bono Residentes</h2>
+                <p class="bono-v2-sub" data-i18n="home.promo.subtitle">
+                    Surf todo el año al mejor precio. Flexibilidad horaria y comunidad local.
+                </p>
+            </div>
+
+            <div class="bono-v2-cards">
+                <!-- Adultos -->
+                <div class="bono-v2-card">
+                    <div class="bono-v2-card-top">
+                        <h3 class="bono-v2-card-title" data-i18n="home.promo.adults_title">Adultos</h3>
+                        <p class="bono-v2-card-desc" data-i18n="home.promo.adults_desc">Entrena con regularidad y mejora tu nivel cada semana.</p>
                     </div>
-                    <div style="text-align:center;">
-                        <div style="height: 16px; background: var(--primary); border-radius: 4px; margin-bottom: .5rem;"></div>
-                        <span style="font-size: .8rem; color: #999;">SM &middot; 1rem</span>
+                    <ul class="bono-v2-list">
+                        <li data-i18n="home.promo.feat1"><strong>Pack 4 o 8</strong> sesiones</li>
+                        <li data-i18n="home.promo.feat2">Horario <strong>Flexible</strong></li>
+                        <li data-i18n="home.promo.feat3">Tarifa <strong>Reducida</strong></li>
+                        <li data-i18n="home.promo.feat4">Instructor certificado FES</li>
+                        <li data-i18n="home.promo.feat5">Material completo incluido</li>
+                    </ul>
+                    <a href="bono-residente.html" class="btn bono-v2-btn" data-i18n="home.promo.cta">Ver Bono Adultos</a>
+                </div>
+
+                <!-- Niños -->
+                <div class="bono-v2-card bono-v2-card--dark">
+                    <div class="bono-v2-card-top">
+                        <h3 class="bono-v2-card-title" data-i18n="home.promo.kids_title">Escuela Infantil</h3>
+                        <p class="bono-v2-card-desc" data-i18n="home.promo.kids_desc">Surf diseñado para los pequeños. Seguro, lúdico y divertido.</p>
                     </div>
-                    <div style="text-align:center;">
-                        <div style="height: 32px; background: var(--primary); border-radius: 4px; margin-bottom: .5rem;"></div>
-                        <span style="font-size: .8rem; color: #999;">MD &middot; 2rem</span>
+                    <ul class="bono-v2-list">
+                        <li data-i18n="home.promo.kids_feat1">Clases Semanales</li>
+                        <li data-i18n="home.promo.kids_feat2">Metodología Lúdica</li>
+                        <li data-i18n="home.promo.kids_feat3">Grupos por Edades</li>
+                        <li data-i18n="home.promo.kids_feat4">Seguimiento individualizado</li>
+                        <li data-i18n="home.promo.kids_feat5">Material completo incluido</li>
+                    </ul>
+                    <a href="waya-kids.html" class="btn bono-v2-btn bono-v2-btn--light" data-i18n="home.promo.cta_kids">Ver Bono Niños</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         5. CARRUSEL EXPERIENCIAS
+         ============================================ -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag" data-i18n="home.carousel.tag">Experiencias Waya</span>
+                <h2 class="section-title" data-i18n="home.carousel.title">Empieza Tu Camino</h2>
+                <p class="section-desc" data-i18n="home.carousel.desc">Desliza y descubre el plan que mejor encaja contigo.</p>
+            </div>
+
+            <div class="home-carousel home-carousel--arrows-side" data-home-carousel>
+                <button class="carousel-btn carousel-btn--side carousel-btn--prev" type="button" data-carousel-prev aria-label="Anterior">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                </button>
+                <button class="carousel-btn carousel-btn--side carousel-btn--next" type="button" data-carousel-next aria-label="Siguiente">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 6 15 12 9 18"></polyline>
+                    </svg>
+                </button>
+                <div class="home-carousel-viewport">
+                    <div class="home-carousel-track">
+                        <article class="home-carousel-slide">
+                            <div class="home-carousel-card">
+                                <div class="home-carousel-media">
+                                    <img src="images/carousel-grupales.jpg" alt="Clases Grupales Waya" loading="lazy">
+                                </div>
+                                <div class="home-carousel-content">
+                                    <span class="carousel-label">01</span>
+                                    <h3 class="home-carousel-title" data-i18n="home.carousel.c1_title">Clases Grupales</h3>
+                                    <p class="home-carousel-text" data-i18n="home.carousel.c1_desc">Ambiente motivador, progresión estructurada y máximo 8
+                                        personas por grupo.</p>
+                                    <a href="clases-grupales.html" class="btn btn-primary" data-i18n="home.carousel.c1_cta">Ver Grupales</a>
+                                </div>
+                            </div>
+                        </article>
+
+                        <article class="home-carousel-slide">
+                            <div class="home-carousel-card">
+                                <div class="home-carousel-media">
+                                    <img src="images/carousel-privadas.jpg" alt="Clases Privadas Waya" loading="lazy">
+                                </div>
+                                <div class="home-carousel-content">
+                                    <span class="carousel-label">02</span>
+                                    <h3 class="home-carousel-title" data-i18n="home.carousel.c2_title">Clases Privadas</h3>
+                                    <p class="home-carousel-text" data-i18n="home.carousel.c2_desc">Seguimiento 1:1, correcciones en detalle y plan de
+                                        avance a tu medida.</p>
+                                    <a href="clases-privadas.html" class="btn btn-primary" data-i18n="home.carousel.c2_cta">Ver Privadas</a>
+                                </div>
+                            </div>
+                        </article>
+
+                        <article class="home-carousel-slide">
+                            <div class="home-carousel-card">
+                                <div class="home-carousel-media">
+                                    <img src="images/carousel-semiprivadas.jpg" alt="Clases Semi Privadas Waya" loading="lazy">
+                                </div>
+                                <div class="home-carousel-content">
+                                    <span class="carousel-label">03</span>
+                                    <h3 class="home-carousel-title" data-i18n="home.carousel.c3_title">Semi-Privadas</h3>
+                                    <p class="home-carousel-text" data-i18n="home.carousel.c3_desc">Perfectas para parejas o amigos que quieren progresar
+                                        juntos sin perder calidad.</p>
+                                    <a href="clases-semiprivadas.html" class="btn btn-primary" data-i18n="home.carousel.c3_cta">Ver Semi-Privadas</a>
+                                </div>
+                            </div>
+                        </article>
+
+                        <article class="home-carousel-slide">
+                            <div class="home-carousel-card">
+                                <div class="home-carousel-media">
+                                    <img src="images/carousel-familiar.jpg" alt="Curso Familiar Waya" loading="lazy">
+                                </div>
+                                <div class="home-carousel-content">
+                                    <span class="carousel-label">04</span>
+                                    <h3 class="home-carousel-title" data-i18n="home.carousel.c4_title">Curso Familiar</h3>
+                                    <p class="home-carousel-text" data-i18n="home.carousel.c4_desc">Una experiencia segura y divertida para aprender surf
+                                        en familia.</p>
+                                    <a href="clases-familiares.html" class="btn btn-primary" data-i18n="home.carousel.c4_cta">Ver Familiar</a>
+                                </div>
+                            </div>
+                        </article>
                     </div>
-                    <div style="text-align:center;">
-                        <div style="height: 64px; background: var(--primary); border-radius: 4px; margin-bottom: .5rem;"></div>
-                        <span style="font-size: .8rem; color: #999;">LG &middot; 4rem</span>
-                    </div>
-                    <div style="text-align:center;">
-                        <div style="height: 96px; background: var(--primary); border-radius: 4px; margin-bottom: .5rem;"></div>
-                        <span style="font-size: .8rem; color: #999;">XL &middot; 6rem</span>
+                </div>
+
+                <div class="home-carousel-controls">
+                    <div class="home-carousel-dots" data-carousel-dots></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         6. NIVELES CTA
+         ============================================ -->
+    <section class="section">
+        <div class="container">
+            <div class="niveles-cta-box">
+                <div class="niveles-cta-content">
+                    <span class="section-tag" data-i18n="home.levels.tag">Progresión</span>
+                    <h2 class="niveles-cta-title" data-i18n="home.levels.title">¿Cuál es tu Nivel?</h2>
+                    <p class="niveles-cta-desc" data-i18n="home.levels.desc">
+                        Desde tu primera espuma hasta perfeccionar maniobras avanzadas.
+                        Tenemos un sistema de niveles claro para guiar tu progreso.
+                    </p>
+                    <a href="niveles.html" class="btn btn-primary" data-i18n="home.levels.cta">Descubre los
+                        Niveles</a>
+                </div>
+                <div class="niveles-cta-visual">
+                    <div class="niveles-levels-preview">
+                        <div class="niveles-level-item">
+                            <span class="niveles-level-num">0-1</span>
+                            <span class="niveles-level-name" data-i18n="home.levels.l_beginner">Principiante</span>
+                        </div>
+                        <div class="niveles-level-item">
+                            <span class="niveles-level-num">2-3</span>
+                            <span class="niveles-level-name" data-i18n="home.levels.l_inter">Intermedio</span>
+                        </div>
+                        <div class="niveles-level-item">
+                            <span class="niveles-level-num">4+</span>
+                            <span class="niveles-level-name" data-i18n="home.levels.l_advanced">Avanzado</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ═══════════════════════════════════════════
-         FOOTER
-         ═══════════════════════════════════════════ -->
-    <footer class="brand-footer">
-        <div class="wrap">
-            <img src="images/waya-logo-new.png" alt="Waya Surf School" style="filter: brightness(0) invert(1);">
-            <p>&copy; 2026 Waya Surf School &middot; Manual de Identidad Corporativa</p>
-            <p style="margin-top: .5rem;">wayasurf.com &middot; Playa del Hombre, Telde, Gran Canaria</p>
-        </div>
-    </footer>
+    <!-- ============================================
+         7. REVIEWS
+         ============================================ -->
+    <section class="section section--gray" id="reviews">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag" data-i18n="home.reviews.tag">Testimonios</span>
+                <h2 class="section-title" data-i18n="home.reviews.title">Lo que dicen de nosotros</h2>
+                <a href="https://www.google.com/maps?hl=es&gl=es&um=1&ie=UTF-8&fb=1&sa=X&ftid=0xc40bd89cc4ea29d:0xb20011e14afb4931" target="_blank" rel="noopener" class="google-rating-badge">
+                    <svg class="google-rating-icon" viewBox="0 0 24 24" width="22" height="22">
+                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.27-4.74 3.27-8.1z"/>
+                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                    </svg>
+                    <span class="google-rating-score">5.0</span>
+                    <span class="google-rating-stars">
+                        <svg viewBox="0 0 20 20" fill="#FDD802" width="16" height="16"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg viewBox="0 0 20 20" fill="#FDD802" width="16" height="16"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg viewBox="0 0 20 20" fill="#FDD802" width="16" height="16"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg viewBox="0 0 20 20" fill="#FDD802" width="16" height="16"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg viewBox="0 0 20 20" fill="#FDD802" width="16" height="16"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    </span>
+                    <span class="google-rating-text" data-i18n="home.reviews.google_link">Ver en Google</span>
+                </a>
+            </div>
 
+            <div class="reviews-grid">
+                <div class="review-card">
+                    <div class="review-stars">
+                        <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    </div>
+                    <p class="review-text" data-i18n="home.reviews.r1_text">
+                        "Probé el surf por primera vez aquí en Playa del Hombre y me enamoré del deporte. ¡Víctor es un
+                        gran instructor, paciente y tranquilizador! ¡Muy recomendable!"
+                    </p>
+                    <div class="review-footer">
+                        <div class="review-avatar">E</div>
+                        <div>
+                            <p class="review-author" data-i18n="home.reviews.r1_author">Elena</p>
+                            <span class="review-role" data-i18n="home.reviews.r1_role">Principiante</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="review-card">
+                    <div class="review-stars">
+                        <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    </div>
+                    <p class="review-text" data-i18n="home.reviews.r2_text">
+                        "Hicimos surf en varios puntos de la isla... y sin duda el mejor fue Víctor. Pendiente de
+                        nosotros, corrigiendo y haciendo la mañana divertida. Se nota que le apasiona enseñar."
+                    </p>
+                    <div class="review-footer">
+                        <div class="review-avatar">M</div>
+                        <div>
+                            <p class="review-author" data-i18n="home.reviews.r2_author">Marc y amigos</p>
+                            <span class="review-role" data-i18n="home.reviews.r2_role">Grupo</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="review-card">
+                    <div class="review-stars">
+                        <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    </div>
+                    <p class="review-text" data-i18n="home.reviews.r3_text">
+                        "Nunca he tenido un entrenador tan bueno. Se toma tiempo para comprender tu nivel y te da
+                        feedback muy específico. Análisis de vídeo profesional que marca la diferencia."
+                    </p>
+                    <div class="review-footer">
+                        <div class="review-avatar">S</div>
+                        <div>
+                            <p class="review-author" data-i18n="home.reviews.r3_author">Sarah</p>
+                            <span class="review-role" data-i18n="home.reviews.r3_role">Intermedio</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="review-card">
+                    <div class="review-stars">
+                        <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    </div>
+                    <p class="review-text" data-i18n="home.reviews.r4_text">
+                        "¡Nos lo pasamos genial! Con sus explicaciones pudimos ponernos de pie en una sesión. Es muy
+                        participativo, se mete al agua con nosotros. ¡Corre a por clases con él!"
+                    </p>
+                    <div class="review-footer">
+                        <div class="review-avatar">C</div>
+                        <div>
+                            <p class="review-author" data-i18n="home.reviews.r4_author">Carlos</p>
+                            <span class="review-role" data-i18n="home.reviews.r4_role">Iniciación</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         8. NOTICIAS / BLOG CTA
+         ============================================ -->
+    <section class="section">
+        <div class="container">
+            <div class="blog-cta-home">
+                <div class="blog-cta-icon">
+                    <img src="images/icon-surf-wave.png" alt="Wave Icon">
+                </div>
+                <h3 class="blog-cta-title" data-i18n="home.bottom_grid.news_title">Noticias & Cultura</h3>
+                <p class="blog-cta-desc" data-i18n="home.bottom_grid.news_desc">
+                    Explora la historia del surf en Gran Canaria, los mejores spots y consejos técnicos.
+                </p>
+                <a href="blog.html" class="btn btn-secondary" data-i18n="home.bottom_grid.news_cta">Leer Noticias</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Placeholder -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Scripts -->
+    <script src="js/translations.js?v=2"></script>
+    <script src="js/i18n.js?v=2"></script>
+    <script src="js/components.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="js/script.js"></script>
 </body>
+
 </html>

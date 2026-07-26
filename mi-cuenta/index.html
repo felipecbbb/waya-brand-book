@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- El panel se sirve en /mi-cuenta/ (subcarpeta). base=/ hace que el fetch de
+         components.js y los enlaces/imágenes relativos del header/footer globales
+         resuelvan contra la raíz del sitio, no contra /mi-cuenta/. -->
+    <base href="/">
+    <title>Mi cuenta | Waya Surf School</title>
+    <meta name="description" content="Área de cliente de Waya Surf School: reserva clases, gestiona tus bonos, tu familia y tus pagos.">
+    <meta name="robots" content="noindex, nofollow">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/images/waya-isotipo.png">
+
+    <!-- Fonts (Outfit + Inter, como el resto del sitio) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+
+    <!-- CSS del sitio Waya + panel -->
+    <link rel="stylesheet" href="/css/styles.css?v=btn_yellow">
+    <link rel="stylesheet" href="/mi-cuenta/account.css">
+    <link rel="stylesheet" href="/css/reservas.css">
+    <link rel="stylesheet" href="/css/i18n.css">
+</head>
+
+<body>
+    <!-- Header global del sitio (inyectado por components.js) -->
+    <div id="header-placeholder"></div>
+
+    <!-- Contenedor único del panel: lo rellena account.js -->
+    <main id="account-root"></main>
+
+    <!-- Footer global del sitio (inyectado por components.js) -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Globales públicos: deben cargar ANTES del módulo del panel -->
+    <script src="/js/translations.js?v=2"></script>
+    <script src="/js/i18n.js?v=2"></script>
+    <script src="/js/components.js"></script>
+
+    <!-- Núcleo del panel de cliente -->
+    <script type="module" src="/mi-cuenta/account.js"></script>
+</body>
+
+</html>

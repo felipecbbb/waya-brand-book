@@ -1,0 +1,457 @@
+/* =========================================
+   RESERVA PREMIUM - MAGAZINE STYLE
+   ========================================= */
+
+/* Use variables from styles.css & surf-redesign.css */
+:root {
+    --book-bg: #F8FAFC;
+    --booking-sidebar-bg: #0F172A;
+    /* Navy from surf page */
+    --booking-accent: #FACC15;
+    /* Yellow */
+}
+
+body.is-magazine {
+    background-color: var(--book-bg);
+}
+
+/* --- Layout Structure --- */
+.booking-layout {
+    display: grid;
+    grid-template-columns: 1fr 450px;
+    min-height: 100vh;
+    padding-top: 0;
+}
+
+/* --- Left Column: Form Area --- */
+.booking-main {
+    padding: 8rem 4rem 4rem 6rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.booking-header {
+    margin-bottom: 3rem;
+    max-width: 700px;
+}
+
+.booking-tag {
+    display: inline-block;
+    font-family: var(--font-display);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--mag-primary);
+    background: var(--booking-accent);
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    margin-bottom: 1rem;
+}
+
+.booking-title {
+    font-family: var(--font-display);
+    font-size: 4rem;
+    /* Big impact */
+    font-weight: 800;
+    line-height: 0.95;
+    color: var(--mag-primary);
+    margin-bottom: 1rem;
+}
+
+.booking-intro {
+    font-size: 1.2rem;
+    color: var(--color-gray);
+    line-height: 1.6;
+    max-width: 600px;
+}
+
+/* --- The Form --- */
+.booking-form {
+    max-width: 700px;
+    display: grid;
+    gap: 2rem;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+
+.form-group-premium {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group-premium label {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    color: var(--mag-primary);
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.5px;
+}
+
+.input-premium {
+    background: white;
+    border: 2px solid #E2E8F0;
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--color-dark);
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.input-premium:focus {
+    outline: none;
+    border-color: var(--mag-primary);
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+}
+
+.input-premium::placeholder {
+    color: #CBD5E1;
+}
+
+select.input-premium {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%230F172A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1em;
+}
+
+textarea.input-premium {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.btn-submit-premium {
+    background: var(--booking-sidebar-bg);
+    /* Dark Navy */
+    color: white;
+    font-family: var(--font-display);
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 1.2rem;
+    padding: 1.5rem;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 1rem;
+    letter-spacing: 1px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-submit-premium:hover {
+    background: var(--booking-accent);
+    /* Yellow on hover */
+    color: var(--booking-sidebar-bg);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(250, 204, 21, 0.3);
+}
+
+/* --- Right Column: Info Sidebar --- */
+.booking-sidebar {
+    background: var(--booking-sidebar-bg);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    /* Sticky Logic */
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    /* Important: Content fits viewport height. If content is taller, sticky top:0 cuts bottom.
+       Let's assume content is short enough for 100vh. */
+    overflow-y: auto;
+    /* Allow internal scroll if needed, but don't hide overflow of parent */
+    padding: 6rem 3rem 3rem 3rem;
+    z-index: 10;
+}
+
+/* Hide scrollbar for sidebar aesthetics */
+.booking-sidebar::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+}
+
+.sidebar-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    opacity: 0.4;
+    object-fit: cover;
+    mix-blend-mode: overlay;
+    pointer-events: none;
+}
+
+.sidebar-content {
+    position: relative;
+    z-index: 1;
+}
+
+.sidebar-title {
+    font-family: var(--font-display);
+    font-size: 2.5rem;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 2rem;
+    color: var(--booking-accent);
+}
+
+.benefits-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-bottom: 4rem;
+}
+
+.benefits-list li {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    font-size: 1.1rem;
+    line-height: 1.4;
+}
+
+.check-icon {
+    color: var(--booking-accent);
+    font-weight: bold;
+}
+
+.contact-mini {
+    position: relative;
+    z-index: 1;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.contact-mini h4 {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    opacity: 0.7;
+}
+
+.contact-row {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 0.8rem;
+    font-size: 1rem;
+}
+
+.contact-row a {
+    color: white;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* --- Responsive --- */
+@media (max-width: 1024px) {
+    .booking-layout {
+        grid-template-columns: 1fr;
+        /* Stack */
+    }
+
+    .booking-sidebar {
+        position: relative;
+        /* Not sticky on mobile */
+        height: auto;
+        padding: 4rem 2rem;
+        order: 2;
+        /* Sidebar at bottom */
+        overflow-y: visible;
+    }
+
+    .booking-main {
+        padding: 6rem 2rem 4rem 2rem;
+    }
+
+    .booking-title {
+        font-size: 3rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .booking-main {
+        padding: 7rem 1.5rem 3rem 1.5rem;
+        /* More top padding for logo space */
+    }
+
+    .booking-title {
+        font-size: 2.2rem;
+        margin-bottom: 1rem;
+    }
+
+    .booking-intro {
+        font-size: 1rem;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+        /* Stack inputs */
+        gap: 1.25rem;
+    }
+
+    .input-premium,
+    .btn-submit-premium {
+        font-size: 16px;
+        /* Prevent zoom on iOS */
+    }
+}
+
+/* =========================================
+   NOTE: DUAL OPTION LAYOUT (Redesign)
+   ========================================= */
+.booking-split-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 100vh;
+    padding-top: 0;
+    /* Space for fixed header */
+}
+
+/* Option A: WhatsApp (Left) */
+.option-whatsapp {
+    background: var(--booking-sidebar-bg);
+    color: white;
+    padding: 6rem 4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.whatsapp-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+}
+
+.whatsapp-gradient-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(15, 23, 42, 0.4), rgba(15, 23, 42, 0.8));
+    z-index: 2;
+}
+
+.whatsapp-content {
+    position: relative;
+    z-index: 3;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.wa-btn-giant {
+    background: #25D366;
+    color: white;
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    padding: 1.5rem 3rem;
+    border-radius: 100px;
+    text-transform: uppercase;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    font-weight: 800;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 10px 30px rgba(37, 211, 102, 0.3);
+}
+
+.wa-btn-giant:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(37, 211, 102, 0.5);
+    background: #22bf5b;
+}
+
+/* Option B: Form (Right) */
+.option-form {
+    background: #f1f5f9;
+    /* Light slate background */
+    padding: 6rem 4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow-y: auto;
+}
+
+.form-content {
+    max-width: 600px;
+    margin: 0 auto;
+    width: 100%;
+    background: white;
+    padding: 3rem;
+    border-radius: 24px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06);
+}
+
+.separator-text {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.5);
+    margin: 2rem 0;
+    font-family: var(--font-display);
+    letter-spacing: 2px;
+}
+
+.separator-text::before,
+.separator-text::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.separator-text:not(:empty)::before {
+    margin-right: 1em;
+}
+
+.separator-text:not(:empty)::after {
+    margin-left: 1em;
+}
+
+@media (max-width: 1024px) {
+    .booking-split-container {
+        grid-template-columns: 1fr;
+        padding-top: 60px;
+    }
+
+    .option-whatsapp {
+        padding: 4rem 2rem;
+        text-align: center;
+    }
+
+    .option-form {
+        padding: 4rem 2rem;
+    }
+}
