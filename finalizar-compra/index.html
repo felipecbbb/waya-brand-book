@@ -13,7 +13,7 @@
     <meta name="robots" content="noindex, nofollow">
 
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="/images/waya-isotipo.png">
+    <link rel="icon" type="image/png" href="/images/favicon-waya.png">
 
     <!-- Fonts (Outfit + Inter, como el resto del sitio) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -211,7 +211,7 @@
                                 <button type="submit" class="btn red co-pay-btn" data-i18n="checkout.pay">Reservar</button>
                                 <p class="co-secure">
                                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
-                                    <span data-i18n="checkout.secure">Sin pago ahora — lo abonas en la escuela</span>
+                                    <span data-i18n="checkout.secure">Pago seguro con tarjeta · datos protegidos por SumUp</span>
                                 </p>
                             </form>
                         </div>
@@ -259,6 +259,7 @@
     <!-- Globales públicos: deben cargar ANTES del módulo del checkout -->
     <script src="/js/translations.js?v=2"></script>
     <script src="/js/i18n.js?v=2"></script>
+    <script type="module" src="/lib/supabase-global.js"></script>
     <script src="/js/components.js"></script>
 
     <!-- Núcleo del checkout (su propio módulo, NO carrito.js) -->

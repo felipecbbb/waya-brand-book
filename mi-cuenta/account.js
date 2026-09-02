@@ -649,7 +649,19 @@ async function renderDashboard() {
     });
   });
 
-  await loadTab('datos');
+  // Pestaña inicial según el hash (p.ej. /mi-cuenta/#clases desde el header)
+  const VALID_TABS = ['datos', 'familia', 'bonos', 'calendario', 'clases', 'pagos', 'pedidos'];
+  const startTab = VALID_TABS.includes((location.hash || '').slice(1)) ? location.hash.slice(1) : 'datos';
+  if (startTab === 'datos') {
+    await loadTab('datos');
+  } else {
+    switchTab(startTab);
+  }
+  // Cambiar de pestaña si el hash cambia estando ya en la página
+  window.addEventListener('hashchange', () => {
+    const t = (location.hash || '').slice(1);
+    if (VALID_TABS.includes(t)) switchTab(t);
+  });
 }
 
 // Lazy-load de un tab externo (import dinámico + guardas de error).

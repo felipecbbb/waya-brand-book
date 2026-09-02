@@ -14,7 +14,9 @@
 import { supabase } from '/lib/supabase.js';
 import { showToast, formatDate, formatCurrency, statusBadge } from '../modules/ui.js';
 import { TYPE_LABELS } from '../modules/constants.js';
-import { createPayment, deletePayment, fetchPayments, moveToTrash } from '../modules/api.js';
+import {
+  createPayment, deletePayment, fetchPayments, moveToTrash, enviarAviso,
+} from '../modules/api.js';
 import { openPaymentEditModal } from '../modules/payment-edit.js';
 import { bonoExpected, getPackPrice, round2 } from '/lib/domain/pricing.js';
 import { recalcBonoPaid } from '/lib/domain/payments.js';
@@ -392,7 +394,7 @@ export async function openBonoFicha(bonoId, { onChange } = {}) {
           if (bono.user_id) { const { data } = await supabase.rpc('get_user_email', { p_user_id: bono.user_id }); email = data || null; }
           if (email && cls) {
             const fmtD = (d) => { try { return new Date(d + 'T00:00:00').toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short' }); } catch { return d || ''; } };
-            await supabase.functions.invoke('send-email', { body: { to: email, type: 'class_booked', data: { customerName: cliName || '', className: cls.title || cls.type || 'Clase', classDate: fmtD(cls.date), classTime: (cls.time_start || '').slice(0, 5), instructor: cls.instructor || '' } } });
+            await enviarAviso({ to: email, type: 'class_booked', data: { customerName: cliName || '', className: cls.title || cls.type || 'Clase', classDate: fmtD(cls.date), classTime: (cls.time_start || '').slice(0, 5), instructor: cls.instructor || '' } });
           }
         } catch {}
       })();

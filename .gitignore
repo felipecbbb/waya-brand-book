@@ -15,3 +15,6 @@ dist/
 
 # docs internos (plan + maps de Entreolas — no exponer en repo público)
 docs/reservas/
+
+# credenciales de servidor (se despliegan, NO se versionan)
+public/config-secreto.php

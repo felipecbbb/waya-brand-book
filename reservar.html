@@ -10,7 +10,7 @@
     <meta name="keywords"
         content="reservar surf gran canaria, booking surf telde, reservar clases surf, contacto waya surf">
     <link rel="canonical" href="https://wayasurf.com/reservar.html">
-    <link rel="icon" type="image/png" href="images/waya-isotipo.png">
+    <link rel="icon" type="image/png" href="images/favicon-waya.png">
     <link
         href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap"
         rel="stylesheet">
@@ -30,7 +30,7 @@
 
     <!-- Hero -->
     <section class="res-hero">
-        <div class="res-hero-bg" style="background-image: url('images/reservar-hero.jpg');"></div>
+        <div class="res-hero-bg" style="background-image: url('images/reservar-hero.webp');"></div>
         <div class="res-hero-overlay"></div>
         <div class="container res-hero-content">
             <span class="res-hero-tag" data-i18n="reservar.tag">Plazas Limitadas</span>
@@ -103,7 +103,7 @@
                 </div>
 
                 <div class="res-form-card">
-                    <form action="contact-submit.php" method="POST" class="res-form">
+                    <form action="/contacto.php" method="POST" class="res-form">
                         <input type="text" name="website" autocomplete="off" tabindex="-1"
                             style="position:absolute;left:-9999px;opacity:0;pointer-events:none;">
 
@@ -164,6 +164,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="js/script.js"></script>
+    <script type="module" src="/lib/supabase-global.js"></script>
     <script src="js/components.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {

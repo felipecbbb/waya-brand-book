@@ -1,0 +1,80 @@
+/* ============================================================
+   legal.css — Páginas legales (aviso legal, privacidad,
+   cookies, condiciones). Tipografía limpia y legible, Waya.
+   ============================================================ */
+.legal-page {
+  max-width: 840px;
+  margin: 0 auto;
+  padding: clamp(7rem, 12vw, 9.5rem) clamp(1.2rem, 5vw, 2rem) clamp(3.5rem, 7vw, 6rem);
+}
+.legal-page h1 {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  font-size: clamp(2.2rem, 5.5vw, 3.4rem);
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: #1a1a1a;
+  margin: 0 0 0.6rem;
+}
+.legal-updated {
+  font-family: 'Space Mono', 'SFMono-Regular', monospace;
+  font-size: 0.75rem;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin: 0 0 2.6rem;
+}
+.legal-page h2 {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  font-size: clamp(1.3rem, 2.6vw, 1.6rem);
+  letter-spacing: -0.01em;
+  color: #1a1a1a;
+  margin: 2.4rem 0 0.8rem;
+}
+.legal-page h3 {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #1a1a1a;
+  margin: 1.5rem 0 0.5rem;
+}
+.legal-page p,
+.legal-page li {
+  color: #3a3a3a;
+  line-height: 1.75;
+  font-size: 1.02rem;
+}
+.legal-page ul { padding-left: 1.3rem; margin: 0.6rem 0 1.2rem; }
+.legal-page li { margin-bottom: 0.45rem; }
+.legal-page a { color: #1a1a1a; text-decoration: underline; text-underline-offset: 2px; }
+.legal-page a:hover { color: #b89e00; }
+.legal-page strong { color: #1a1a1a; }
+
+.legal-note {
+  background: #fff8d6;
+  border: 1px solid #f0e08a;
+  border-left: 4px solid #FDD802;
+  border-radius: 12px;
+  padding: 1rem 1.2rem;
+  font-size: 0.92rem;
+  color: #6f6220;
+  line-height: 1.6;
+  margin: 1.6rem 0;
+}
+.legal-note strong { color: #5a4f18; }
+
+.legal-table { width: 100%; border-collapse: collapse; margin: 1rem 0 1.4rem; font-size: 0.9rem; }
+.legal-table th,
+.legal-table td { border: 1px solid #e6e6e3; padding: 0.65rem 0.85rem; text-align: left; vertical-align: top; }
+.legal-table th { background: #f6f6f4; font-family: 'Outfit', sans-serif; font-weight: 700; color: #1a1a1a; }
+.legal-table td { color: #444; }
+
+.legal-contact-box {
+  background: #f6f6f4;
+  border: 1px solid #e6e6e3;
+  border-radius: 16px;
+  padding: 1.4rem 1.6rem;
+  margin-top: 1rem;
+}
+.legal-contact-box p { margin: 0.2rem 0; }

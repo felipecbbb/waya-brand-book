@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-const FALLBACK_IMAGE = 'images/stock-hero-main.png';
+const FALLBACK_IMAGE = 'images/stock-hero-main.webp';
 const DEFAULT_LANGUAGE = 'es';
 let lastNewsFetchError = '';
 const ALLOWED_CONTENT_TAGS = new Set([

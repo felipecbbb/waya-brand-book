@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pago completado | Waya Surf School</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" type="image/png" href="images/favicon-waya.png">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/i18n.css">
+    <link rel="stylesheet" href="css/pago.css">
+</head>
+
+<body>
+    <div id="header-placeholder"></div>
+
+    <section class="pago-wrap">
+        <div class="pago-card" id="pago-card">
+            <div class="pago-spinner" aria-hidden="true"></div>
+            <h1 class="pago-title">Confirmando tu pago…</h1>
+            <p class="pago-text">Un momento, estamos comprobando el cobro con el banco.</p>
+        </div>
+    </section>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="js/translations.js"></script>
+    <script src="js/i18n.js"></script>
+    <script type="module" src="/lib/supabase-global.js"></script>
+    <script src="js/components.js"></script>
+    <script type="module" src="/lib/pago.js"></script>
+</body>
+
+</html>

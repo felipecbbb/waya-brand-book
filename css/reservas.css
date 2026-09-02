@@ -1292,3 +1292,89 @@
   box-shadow: var(--shadow-lg, 0 10px 40px rgba(0, 0, 0, 0.18));
 }
 .booking-modal-content.rental-modal { max-width: 480px; }
+
+/* ============================================================
+   Modal de alquiler — ajustes de respiración
+   El contenido llegaba pegado a los bordes y el resumen y el botón
+   quedaban comprimidos contra el pie.
+   ============================================================ */
+.rental-modal {
+  padding: clamp(1.4rem, 3vw, 2rem);
+  border-radius: 24px;
+}
+
+.rental-modal-header {
+  margin-bottom: 1.75rem;
+  padding-bottom: 1.1rem;
+}
+
+.rental-modal-section { margin-bottom: 1.75rem; }
+
+/* Leyenda del calendario: separada de la rejilla y sin apelotonarse */
+.rental-cal-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 1.1rem;
+  font-size: .78rem;
+  color: var(--color-gray);
+}
+.rental-cal-legend span { display: inline-flex; align-items: center; gap: .4rem; }
+
+/* Resumen: tarjeta clara, con aire, en vez de un bloque pegado al botón */
+.rental-modal-summary {
+  background: var(--color-light-gray);
+  border-radius: 16px;
+  padding: 1.1rem 1.2rem;
+  margin-bottom: 1.2rem;
+  font-size: .95rem;
+  line-height: 1.65;
+  color: var(--color-dark);
+}
+.rental-deposit-detail {
+  display: inline-block;
+  margin-top: .35rem;
+  font-size: .84rem;
+  color: var(--color-gray);
+}
+
+/* Botón: alto cómodo y ancho completo */
+.rental-modal-confirm {
+  width: 100%;
+  padding: 1rem 1.5rem;
+  border-radius: 50px;
+  font-size: .95rem;
+}
+.rental-modal-confirm:disabled { opacity: .45; cursor: not-allowed; }
+
+@media (max-width: 480px) {
+  .rental-modal { padding: 1.2rem; border-radius: 20px; }
+  .rental-cal-legend { gap: .6rem; font-size: .72rem; }
+}
+
+/* Aviso cuando el mes no tiene ninguna clase publicada: sin esto el cliente
+   veía un calendario entero en gris sin explicación de por qué. */
+.cp-empty--nomonth {
+  background: var(--color-light-gray);
+  border-radius: 14px;
+  padding: 1.1rem 1.2rem;
+  margin-bottom: 1rem;
+  text-align: center;
+  line-height: 1.6;
+  color: var(--color-gray);
+}
+.cp-empty--nomonth strong { color: var(--color-dark); }
+
+/* Botones deshabilitados del picker: sin esto, "Continuar" se veía idéntico a
+   uno activo aunque no hiciera nada — el cliente pulsaba y no pasaba nada. */
+.cp-footer-btns .btn:disabled,
+.cp-footer-btns .btn[disabled] {
+  opacity: .4;
+  cursor: not-allowed;
+  filter: grayscale(.6);
+}
+.cp-footer-btns .btn:disabled:hover,
+.cp-footer-btns .btn[disabled]:hover {
+  transform: none;
+  box-shadow: none;
+}

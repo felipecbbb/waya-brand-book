@@ -4,6 +4,7 @@
 import { openModal, closeModal, showToast, formatDate, formatCurrency } from '../modules/ui.js';
 const RENTAL_DEPOSIT = 5;
 import { supabase } from '/lib/supabase.js';
+import { fetchSiteSetting, upsertSiteSetting } from '../modules/api.js';
 import { compareSizes } from '/lib/shared-constants.js';
 
 // ---- API helpers ----
@@ -173,6 +174,7 @@ export async function renderMaterial(container) {
   let invSearch = '';            // búsqueda libre
   const invCache = {};           // unidades por categoría (evita refetch en búsqueda)
   let catalogList = null;        // ítems de rental_equipment (para asignar unidad ↔ catálogo)
+  let rentalsOn = true;          // ¿se puede alquilar desde la web? (site_settings)
 
   function viewSwitcher(active) {
     return `
@@ -195,15 +197,70 @@ export async function renderMaterial(container) {
     });
   }
 
+  /* ==================== INTERRUPTOR DE ALQUILERES ====================
+     Los alquileres se pueden cerrar al público sin desmontar nada: la página
+     sigue mostrando material y precios, pero el botón pasa a "Próximamente".
+     El catálogo de aquí abajo se sigue gestionando igual, y el panel puede
+     seguir apuntando alquileres hechos en persona. */
+  function switchAlquileres() {
+    return `
+      <div class="mat-rentals-switch" style="display:flex;align-items:center;gap:14px;justify-content:space-between;
+        background:${rentalsOn ? '#f0fdf4' : '#fff7ed'};border:1px solid ${rentalsOn ? '#bbf7d0' : '#fed7aa'};
+        border-radius:12px;padding:14px 18px;margin-bottom:18px">
+        <div>
+          <strong style="display:block;font-size:.95rem;color:var(--color-navy,#0f172a)">
+            Alquileres en la web: ${rentalsOn ? 'abiertos' : 'cerrados'}
+          </strong>
+          <span style="font-size:.85rem;color:#64748b">
+            ${rentalsOn
+              ? 'Los clientes pueden reservar material online.'
+              : 'La página sigue visible, pero el botón muestra “Próximamente”. Tú puedes seguir apuntando alquileres a mano.'}
+          </span>
+        </div>
+        <button id="mat-rentals-toggle" role="switch" aria-checked="${rentalsOn}"
+          aria-label="Alquileres en la web"
+          style="flex:none;position:relative;width:52px;height:30px;border:none;cursor:pointer;border-radius:999px;
+            background:${rentalsOn ? '#22c55e' : '#cbd5e1'};transition:background .18s">
+          <span style="position:absolute;top:3px;left:${rentalsOn ? '25px' : '3px'};width:24px;height:24px;
+            border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:left .18s"></span>
+        </button>
+      </div>`;
+  }
+
+  function wireSwitchAlquileres() {
+    const btn = container.querySelector('#mat-rentals-toggle');
+    if (!btn) return;
+    btn.addEventListener('click', async () => {
+      const nuevo = !rentalsOn;
+      btn.disabled = true;
+      try {
+        await upsertSiteSetting('alquileres_activos', { activo: nuevo });
+        rentalsOn = nuevo;
+        showToast(nuevo ? 'Alquileres abiertos en la web' : 'Alquileres cerrados en la web', 'success');
+        renderList();
+      } catch (e) {
+        // Sin esto el interruptor se quedaría "movido" aparentando un cambio
+        // que la base de datos ha rechazado.
+        showToast(e.message || 'No se pudo cambiar el estado', 'error');
+        btn.disabled = false;
+      }
+    });
+  }
+
   // ===================== LIST VIEW =====================
   async function renderList() {
     selectedItem = null;
     const items = await fetchEquipment();
+    try {
+      const cfg = await fetchSiteSetting('alquileres_activos');
+      rentalsOn = cfg?.activo !== false;   // sin fila guardada → abiertos
+    } catch { rentalsOn = true; }
     const count = items.length;
 
     container.innerHTML = `
       <div class="act-list-page">
         <div style="margin-bottom:18px">${viewSwitcher('catalogo')}</div>
+        ${switchAlquileres()}
         <div class="act-list-header">
           <h2 class="act-list-title">Catálogo y precios (${count})</h2>
           <div class="act-list-actions">
@@ -283,6 +340,7 @@ export async function renderMaterial(container) {
     });
 
     wireViewSwitcher();
+    wireSwitchAlquileres();
   }
 
   // ===================== INVENTARIO (unidades) =====================
@@ -734,10 +792,23 @@ export async function renderMaterial(container) {
 
     // ---- Events ----
     container.querySelector('#mat-back').addEventListener('click', () => renderList());
+    // Guardar ANTES de repintar: renderDetail() reconstruye el formulario y
+    // se llevaba por delante lo escrito y no guardado. En material NUEVO no
+    // se auto-guarda: crearía la ficha a medias sin que el usuario lo pida.
     container.querySelectorAll('.act-nav-item').forEach(nav => {
-      nav.addEventListener('click', (e) => {
+      nav.addEventListener('click', async (e) => {
         e.preventDefault();
-        activeTab = nav.dataset.tab;
+        const destino = nav.dataset.tab;
+        if (!destino || destino === activeTab) return;
+        if (item.id) {
+          try {
+            await saveItem(item, { silent: true });
+          } catch (err) {
+            showToast('No se pudo guardar: ' + err.message, 'error');
+            return;
+          }
+        }
+        activeTab = destino;
         renderDetail();
       });
     });
@@ -969,7 +1040,9 @@ export async function renderMaterial(container) {
   }
 
   // ===================== SAVE =====================
-  async function saveItem(item) {
+  // silent: auto-guardado al cambiar de pestaña — sin toast ni repintado,
+  // y propaga el error para que el llamador decida si mueve de pestaña.
+  async function saveItem(item, { silent = false } = {}) {
     // Read from DOM if available, otherwise keep existing value
     const name = container.querySelector('#mat-name')?.value?.trim() || item.name;
     const type = container.querySelector('#mat-type')?.value || item.type;
@@ -1014,6 +1087,7 @@ export async function renderMaterial(container) {
     }
 
     if (!name) {
+      if (silent) throw new Error('El nombre es obligatorio');
       showToast('El nombre es obligatorio', 'error');
       return;
     }
@@ -1032,15 +1106,16 @@ export async function renderMaterial(container) {
     try {
       const saved = await upsertEquipment(obj);
       if (!item.id) {
-        showToast('Material creado', 'success');
-        renderList();
+        if (!silent) { showToast('Material creado', 'success'); renderList(); }
       } else {
         Object.assign(item, saved || obj);
-        showToast('Material guardado', 'success');
-        renderDetail();
+        if (!silent) { showToast('Material guardado', 'success'); renderDetail(); }
       }
+      return true;
     } catch (err) {
+      if (silent) throw err;
       showToast('Error: ' + err.message, 'error');
+      return false;
     }
   }
 

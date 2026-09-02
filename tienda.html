@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienda | Material y Ropa de Surf en Telde - Waya Surf School</title>
+    <meta name="description"
+        content="Tienda de Waya Surf School en Telde, Gran Canaria. Tablas, neoprenos, ropa y accesorios de surf. Consulta disponibilidad y precio por WhatsApp y recoge en la escuela.">
+    <meta name="keywords"
+        content="tienda surf gran canaria, material surf telde, comprar tabla surf canarias, neopreno gran canaria">
+    <link rel="canonical" href="https://wayasurf.com/tienda.html">
+    <link rel="icon" type="image/png" href="images/favicon-waya.png">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/i18n.css">
+    <link rel="stylesheet" href="css/tienda.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <div id="header-placeholder"></div>
+
+    <!-- Hero -->
+    <section class="shop-hero">
+        <div class="shop-hero-overlay"></div>
+        <div class="shop-hero-inner">
+            <span class="shop-hero-kicker" data-i18n="shop.hero.kicker">Tienda</span>
+            <h1 class="shop-hero-title" data-i18n="shop.hero.title">Material de surf, sin complicaciones</h1>
+            <p class="shop-hero-sub" data-i18n="shop.hero.sub">
+                Elige lo que te interesa y nos escribes por WhatsApp. Te confirmamos disponibilidad,
+                talla y precio, y lo recoges en la escuela.
+            </p>
+        </div>
+    </section>
+
+    <!-- Aviso: aquí no se compra online -->
+    <div class="shop-notice">
+        <div class="shop-notice-inner">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                aria-hidden="true">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" y1="16" x2="12" y2="12" />
+                <line x1="12" y1="8" x2="12.01" y2="8" />
+            </svg>
+            <p data-i18n="shop.notice">
+                Este catálogo es informativo: no se paga por la web. Escríbenos y coordinamos
+                contigo la compra y la recogida.
+            </p>
+        </div>
+    </div>
+
+    <!-- Catálogo (se rellena desde el panel vía Supabase) -->
+    <section class="shop-section">
+        <div class="shop-container">
+            <div class="shop-filters" id="shop-filters" hidden></div>
+            <div id="shop-root" class="shop-grid" aria-live="polite">
+                <p class="shop-loading" data-i18n="shop.loading">Cargando productos…</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="js/translations.js"></script>
+    <script src="js/i18n.js"></script>
+    <script src="js/script.js"></script>
+    <script type="module" src="/lib/supabase-global.js"></script>
+    <script src="js/components.js"></script>
+    <script type="module" src="/lib/tienda.js"></script>
+</body>
+
+</html>

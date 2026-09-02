@@ -9,6 +9,7 @@ import {
   fetchEquipmentReservationsOverlapping, updateEquipmentReservationStatus,
   updateEquipmentReservation, cancelEquipmentReservation,
   fetchPayments, createPayment, deletePayment,
+  enviarAviso,
 } from '../modules/api.js';
 import { openModal, closeModal, showToast, formatDate } from '../modules/ui.js';
 import { openPaymentEditModal } from '../modules/payment-edit.js';
@@ -96,9 +97,7 @@ async function notifyEnrolledClients(classId, kind, payload) {
       }
       if (!email) { result.withoutEmail++; continue; }
       try {
-        const { error } = await supabase.functions.invoke('send-email', {
-          body: { to: email, type: emailType, data: { customerName: name, ...payload } },
-        });
+        const { error } = await enviarAviso({ to: email, type: emailType, data: { customerName: name, ...payload } });
         if (error) { result.failed++; continue; }
         result.sent++;
       } catch (err) {

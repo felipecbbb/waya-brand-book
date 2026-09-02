@@ -1,7 +1,7 @@
 /* ============================================================
    Reservas Section — Camp bookings grouped by camp
    ============================================================ */
-import { fetchBookings, fetchCamps, updateBookingStatus, createPayment, fetchPayments, deletePayment, deleteReservationFully, createBooking, sendBookingConfirmationEmail, searchProfiles, moveToTrash } from '../modules/api.js';
+import { fetchBookings, fetchCamps, updateBookingStatus, createPayment, fetchPayments, deletePayment, deleteReservationFully, createBooking, sendBookingConfirmationEmail, searchProfiles, moveToTrash, enviarAviso, sincronizarCliente } from '../modules/api.js';
 import { statusBadge, formatDate, formatCurrency, openModal, closeModal, showToast } from '../modules/ui.js';
 import { openPaymentEditModal } from '../modules/payment-edit.js';
 import { recalcPaidState } from '/lib/domain/payments.js';
@@ -691,15 +691,13 @@ export async function renderReservas(container) {
               if (data) emailData = data;
             }
             if (emailData) {
-              supabase.functions.invoke('send-email', {
-                body: {
+              enviarAviso({
                   to: emailData,
                   type: 'camp_cancelled',
                   data: {
                     customerName: booking.profiles?.full_name || booking.guest_name,
                     orderId: booking.id,
                   },
-                },
               });
             }
           } catch {}
@@ -827,9 +825,29 @@ export async function renderReservas(container) {
       const btn = $('nb-save');
       btn.disabled = true; btn.textContent = 'Creando…';
       try {
+        // Si hay email pero no se eligió un cliente existente, se le crea la
+        // ficha antes de reservar. Sin esto la reserva quedaba como "invitado"
+        // y ese cliente no aparecía nunca en Clientes ni acumulaba historial.
+        let userId = $('nb-user-id').value || null;
+        if (!userId && email) {
+          try {
+            const cli = await sincronizarCliente({
+              email,
+              full_name: $('nb-name').value.trim(),
+              last_name: $('nb-lastname').value.trim(),
+              phone: $('nb-phone').value.trim(),
+            });
+            userId = cli.id || null;
+          } catch (e) {
+            // Que no bloquee la reserva: se guarda como invitado y se avisa.
+            console.warn('cliente-sync:', e.message);
+            showToast('Reserva creada sin ficha de cliente: ' + e.message, 'error');
+          }
+        }
+
         const booking = await createBooking({
           camp_id: campId,
-          user_id: $('nb-user-id').value || null,
+          user_id: userId,
           guest_name: fullName,
           guest_email: email || null,
           guest_phone: $('nb-phone').value.trim() || null,

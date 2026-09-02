@@ -2,11 +2,13 @@
    Surf Camps Section — Full content management with tabs
    ============================================================ */
 import { showToast } from '../modules/ui.js';
+import { resizeImage, uploadAll } from '../modules/images.js';
 import {
   fetchCamps, upsertCamp, deleteCamp, duplicateCamp, fetchCampFull,
   upsertCampPhoto, deleteCampPhoto, uploadCampImage,
   upsertCampTestimonial, deleteCampTestimonial,
   upsertCampFaq, deleteCampFaq,
+  fetchSiteSetting, upsertSiteSetting, traducirCamp,
 } from '../modules/api.js';
 
 const esc = s => s ? String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;') : '';
@@ -70,6 +72,7 @@ const iconStar = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" st
 const iconHelp = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>';
 const iconLayout = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg>';
 const iconSettings = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>';
+const iconLang = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>';
 const iconMoney = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>';
 
 /* ============================================================ */
@@ -89,10 +92,15 @@ export async function renderCamps(container) {
     container.innerHTML = `
       <div class="sc-header">
         <span class="sc-count">${camps.length} camp${camps.length !== 1 ? 's' : ''}</span>
-        <button class="sc-new-btn" id="sc-new">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          Nuevo Camp
-        </button>
+        <div style="display:flex;gap:8px;align-items:center">
+          <button class="act-action-btn" id="sc-hero-settings" style="white-space:nowrap">
+            ${iconImage} Cabecera de la página
+          </button>
+          <button class="sc-new-btn" id="sc-new">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Nuevo Camp
+          </button>
+        </div>
       </div>
 
       ${upcoming.length ? `<div class="sc-group-label">Proximos</div><div class="sc-grid">${upcoming.map(campCard).join('')}</div>` : ''}
@@ -103,6 +111,7 @@ export async function renderCamps(container) {
       </div>` : ''}`;
 
     container.querySelector('#sc-new')?.addEventListener('click', () => openCreate());
+    container.querySelector('#sc-hero-settings')?.addEventListener('click', () => openHeroSettings());
 
     container.querySelectorAll('.sc-card').forEach(card => {
       card.addEventListener('click', async () => {
@@ -189,7 +198,7 @@ export async function renderCamps(container) {
         </div>
         <div style="max-width:600px;padding:24px 0">
           <div class="act-form-card">
-            <div class="act-form-field"><label class="act-form-label">TITULO</label><input type="text" class="act-form-input" id="new-title" placeholder="Surf Camp Conil 20-23 Marzo" /></div>
+            <div class="act-form-field"><label class="act-form-label">TÍTULO</label><input type="text" class="act-form-input" id="new-title" placeholder="Surf Camp Conil 20-23 Marzo" /></div>
             <div class="act-form-field"><label class="act-form-label">SLUG (URL)</label><input type="text" class="act-form-input" id="new-slug" placeholder="surf-camp-20-23-marzo" /><small class="act-form-hint">Se genera automaticamente.</small></div>
             <div class="act-form-field"><label class="act-form-label">FECHA INICIO</label><input type="date" class="act-form-input" id="new-start" /></div>
             <div class="act-form-field"><label class="act-form-label">FECHA FIN</label><input type="date" class="act-form-input" id="new-end" /></div>
@@ -257,6 +266,7 @@ export async function renderCamps(container) {
         { id: 'fotos', label: 'Fotos', icon: iconCamera },
         { id: 'testimonios', label: 'Testimonios', icon: iconStar },
         { id: 'faq', label: 'FAQ', icon: iconHelp },
+        { id: 'idiomas', label: 'Traducciones', icon: iconLang },
       ]},
       { group: 'CONFIGURACION', items: [
         { id: 'precios', label: 'Precios / Plazas', icon: iconMoney },
@@ -299,6 +309,107 @@ export async function renderCamps(container) {
     bindDetailEvents(c);
   }
 
+
+  /* ==================== CABECERA DE LA PÁGINA (site_settings) ====================
+     El hero del listado de /surfcamps.html estaba escrito a fuego en el HTML
+     ("Vive el surf en Gran Canaria") y la imagen fijada en el CSS. Como los
+     camps son por todo el mundo, el texto era incorrecto y no había forma de
+     cambiarlo sin tocar código. Aquí se edita, con sus traducciones. */
+  async function openHeroSettings() {
+    let v = {};
+    try { v = (await fetchSiteSetting('surfcamps_hero')) || {}; }
+    catch (err) { showToast('No se pudo cargar: ' + err.message, 'error'); return; }
+
+    const i18n = v.i18n || {};
+    const f = (id, label, val, hint = '') => `
+      <div class="act-form-field">
+        <label class="act-form-label">${label}</label>
+        <input type="text" class="act-form-input" id="${id}" value="${esc(val || '')}" />
+        ${hint ? `<small class="act-form-hint">${hint}</small>` : ''}
+      </div>`;
+
+    container.innerHTML = `
+      <div class="act-detail-page">
+        <div class="act-detail-topbar">
+          <button class="act-back-btn" id="hs-back">‹</button>
+          <div><h2 style="margin:0">Cabecera de /surfcamps.html</h2></div>
+        </div>
+        <div class="act-detail-body" style="max-width:820px">
+          <h3 class="act-detail-section-title">Español</h3>
+          <div class="act-form-card">
+            ${f('hs-kicker', 'KICKER', v.kicker, 'La píldora pequeña sobre el título.')}
+            ${f('hs-title', 'TÍTULO', v.title)}
+            ${f('hs-sub', 'SUBTÍTULO', v.subtitle)}
+            <div class="act-form-field">
+              <label class="act-form-label">IMAGEN DE FONDO</label>
+              <input type="file" id="hs-file" accept="image/*" style="margin-bottom:8px" />
+              <input type="text" class="act-form-input" id="hs-image" value="${esc(v.image || '')}" placeholder="O pega una URL" />
+              <small class="act-form-hint">Si lo dejas vacío se usa la imagen por defecto del CSS.</small>
+            </div>
+          </div>
+
+          <h3 class="act-detail-section-title">🇬🇧 Inglés</h3>
+          <div class="act-form-card">
+            ${f('hs-en-kicker', 'KICKER', i18n.en?.kicker)}
+            ${f('hs-en-title', 'TÍTULO', i18n.en?.title)}
+            ${f('hs-en-sub', 'SUBTÍTULO', i18n.en?.subtitle)}
+          </div>
+
+          <h3 class="act-detail-section-title">🇩🇪 Alemán</h3>
+          <div class="act-form-card">
+            ${f('hs-de-kicker', 'KICKER', i18n.de?.kicker)}
+            ${f('hs-de-title', 'TÍTULO', i18n.de?.title)}
+            ${f('hs-de-sub', 'SUBTÍTULO', i18n.de?.subtitle)}
+          </div>
+
+          <div style="display:flex;gap:8px;margin-top:16px">
+            <button class="act-action-btn primary" id="hs-save">Guardar</button>
+          </div>
+        </div>
+      </div>`;
+
+    container.querySelector('#hs-back').addEventListener('click', () => renderList());
+
+    container.querySelector('#hs-file')?.addEventListener('change', async e => {
+      const file = e.target.files[0];
+      if (!file) return;
+      try {
+        const url = await uploadCampImage(await resizeImage(file), 'pagina');
+        container.querySelector('#hs-image').value = url;
+        showToast('Imagen subida', 'success');
+      } catch (err) { showToast('Error: ' + err.message, 'error'); }
+    });
+
+    container.querySelector('#hs-save').addEventListener('click', async () => {
+      const val = id => container.querySelector(id)?.value.trim() || '';
+      // Solo se guardan los idiomas con algo escrito: si un campo va vacío,
+      // el frontend cae al español.
+      const lang = (p) => {
+        const o = {};
+        for (const k of ['kicker', 'title', 'subtitle']) {
+          const t = val(`#hs-${p}-${k === 'subtitle' ? 'sub' : k}`);
+          if (t) o[k] = t;
+        }
+        return Object.keys(o).length ? o : null;
+      };
+      const payload = {
+        kicker: val('#hs-kicker'),
+        title: val('#hs-title'),
+        subtitle: val('#hs-sub'),
+        image: val('#hs-image'),
+        i18n: {},
+      };
+      const en = lang('en'), de = lang('de');
+      if (en) payload.i18n.en = en;
+      if (de) payload.i18n.de = de;
+
+      try {
+        await upsertSiteSetting('surfcamps_hero', payload);
+        showToast('Cabecera guardada', 'success');
+      } catch (err) { showToast('Error: ' + err.message, 'error'); }
+    });
+  }
+
   /* ==================== TAB CONTENT ==================== */
   function renderTabContent(c) {
     switch (activeTab) {
@@ -309,6 +420,7 @@ export async function renderCamps(container) {
       case 'testimonios': return tabTestimonios(c);
       case 'faq': return tabFaq(c);
       case 'precios': return tabPrecios(c);
+      case 'idiomas': return tabIdiomas(c);
       case 'ajustes': return tabAjustes(c);
       default: return '';
     }
@@ -318,12 +430,12 @@ export async function renderCamps(container) {
     return `
       <h3 class="act-detail-section-title">Datos generales</h3>
       <div class="act-form-card">
-        <div class="act-form-field"><label class="act-form-label">TITULO</label><input type="text" class="act-form-input" id="f-title" value="${esc(c.title)}" /></div>
+        <div class="act-form-field"><label class="act-form-label">TÍTULO</label><input type="text" class="act-form-input" id="f-title" value="${esc(c.title)}" /></div>
         <div class="act-form-field"><label class="act-form-label">SLUG (URL)</label><input type="text" class="act-form-input" id="f-slug" value="${esc(c.slug)}" readonly style="background:#f3f4f6;cursor:not-allowed" /><small class="act-form-hint">Se genera automáticamente desde las fechas al guardar. Al cambiar fechas/título, la URL del camp cambia (los enlaces antiguos dejan de funcionar).</small></div>
         <div class="act-form-field"><label class="act-form-label">KICKER (texto bajo el título en las cards)</label><input type="text" class="act-form-input" id="f-kicker" value="${esc(c.kicker||'')}" placeholder="Ej: Conil x Sambatrips" /></div>
         <div class="act-form-field"><label class="act-form-label">VIBE / TAGS DE LA CARD</label><input type="text" class="act-form-input" id="f-card-vibe" value="${esc(c.card_vibe||'')}" placeholder="Ej: SURF, SOCIAL" /><small class="act-form-hint">Texto del ⚡ en la card (se muestra en mayúsculas).</small></div>
         <div class="act-form-field"><label class="act-form-label">DURACIÓN (TEXTO DE LA CARD)</label><input type="text" class="act-form-input" id="f-duration-label" value="${esc(c.duration_label||'')}" placeholder="Ej: 4 días / 3 noches" /><small class="act-form-hint">Si lo dejas vacío, se calcula automáticamente desde las fechas.</small></div>
-        <div class="act-form-field"><label class="act-form-label">DESCRIPCION</label><textarea class="act-form-textarea" id="f-description" rows="4">${esc(c.description||'')}</textarea></div>
+        <div class="act-form-field"><label class="act-form-label">DESCRIPCIÓN</label><textarea class="act-form-textarea" id="f-description" rows="4">${esc(c.description||'')}</textarea></div>
         <div class="act-form-field"><label class="act-form-label">COLOR DE ACENTO</label><input type="color" class="act-form-input" id="f-color" value="${c.color||'#0f2f39'}" style="height:40px;padding:4px" /></div>
         <div class="act-form-field"><label class="act-form-label">FECHA INICIO</label><input type="date" class="act-form-input" id="f-date-start" value="${c.date_start||''}" /></div>
         <div class="act-form-field"><label class="act-form-label">FECHA FIN</label><input type="date" class="act-form-input" id="f-date-end" value="${c.date_end||''}" /></div>
@@ -342,8 +454,8 @@ export async function renderCamps(container) {
           <input type="text" class="act-form-input" id="f-hero-image" value="${esc(c.hero_image||'')}" placeholder="O pega una URL" />
         </div>
         <div class="act-form-field"><label class="act-form-label">KICKER (texto sobre el titulo)</label><input type="text" class="act-form-input" id="f-hero-kicker" value="${esc(c.hero_kicker||'')}" /></div>
-        <div class="act-form-field"><label class="act-form-label">TITULO PRINCIPAL</label><input type="text" class="act-form-input" id="f-hero-title" value="${esc(c.hero_title||'')}" /></div>
-        <div class="act-form-field"><label class="act-form-label">SUBTITULO</label><input type="text" class="act-form-input" id="f-hero-subtitle" value="${esc(c.hero_subtitle||'')}" /></div>
+        <div class="act-form-field"><label class="act-form-label">TÍTULO PRINCIPAL</label><input type="text" class="act-form-input" id="f-hero-title" value="${esc(c.hero_title||'')}" /></div>
+        <div class="act-form-field"><label class="act-form-label">SUBTÍTULO</label><input type="text" class="act-form-input" id="f-hero-subtitle" value="${esc(c.hero_subtitle||'')}" /></div>
         <div class="act-form-field"><label class="act-form-label">TAGS DEL HERO (uno por línea)</label><textarea class="act-form-textarea" id="f-hero-tags" rows="5" placeholder="Ej:&#10;9-13 Septiembre&#10;Roche, Cádiz&#10;Plazas limitadas&#10;Transporte incluido&#10;+18">${heroTags.map(esc).join('\n')}</textarea><small class="act-form-hint">Las píldoras que aparecen bajo el subtítulo en la página de detalle.</small></div>
       </div>`;
   }
@@ -355,12 +467,12 @@ export async function renderCamps(container) {
       <h3 class="act-detail-section-title">Contenido de la pagina</h3>
       <div class="act-form-card">
         <h4 style="margin:0 0 12px;font-size:.95rem;color:var(--color-navy)">Que incluye</h4>
-        <div class="act-form-field"><label class="act-form-label">TITULO DE LA SECCION</label><input type="text" class="act-form-input" id="f-includes-title" value="${esc(c.whats_included_title||'')}" placeholder="Que incluye el Surf Camp?" /></div>
+        <div class="act-form-field"><label class="act-form-label">TÍTULO DE LA SECCIÓN</label><input type="text" class="act-form-input" id="f-includes-title" value="${esc(c.whats_included_title||'')}" placeholder="Que incluye el Surf Camp?" /></div>
         <div class="act-form-field"><label class="act-form-label">ITEMS (uno por linea)</label><textarea class="act-form-textarea" id="f-includes" rows="5">${included.map(esc).join('\n')}</textarea></div>
       </div>
       <div class="act-form-card" style="margin-top:16px">
         <h4 style="margin:0 0 12px;font-size:.95rem;color:var(--color-navy)">Ideal para</h4>
-        <div class="act-form-field"><label class="act-form-label">TITULO DE LA SECCION</label><input type="text" class="act-form-input" id="f-ideal-title" value="${esc(c.ideal_for_title||'')}" placeholder="Ideal para" /></div>
+        <div class="act-form-field"><label class="act-form-label">TÍTULO DE LA SECCIÓN</label><input type="text" class="act-form-input" id="f-ideal-title" value="${esc(c.ideal_for_title||'')}" placeholder="Ideal para" /></div>
         <div class="act-form-field"><label class="act-form-label">ITEMS (uno por linea)</label><textarea class="act-form-textarea" id="f-ideal" rows="5">${ideal.map(esc).join('\n')}</textarea></div>
       </div>`;
   }
@@ -379,7 +491,7 @@ export async function renderCamps(container) {
           <label class="act-photo-upload" id="photo-upload-zone">
             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
             <span>Subir foto</span>
-            <input type="file" id="f-photo-file" accept="image/*" style="display:none" />
+            <input type="file" id="f-photo-file" accept="image/*" multiple style="display:none" />
           </label>
         </div>
         <div class="act-form-field" style="margin-top:16px">
@@ -468,6 +580,60 @@ export async function renderCamps(container) {
       </div>`;
   }
 
+
+  // Traducciones EN/DE del contenido del camp. Lo que se deje vacío se
+  // muestra en español (fallback), así no hace falta traducirlo todo de golpe.
+  function tabIdiomas(c) {
+    const i18n = (c.i18n && typeof c.i18n === 'object') ? c.i18n : {};
+    const campo = (lang, k, label, hint = '') => {
+      const v = i18n[lang]?.[k] ?? '';
+      return `<div class="act-form-field">
+        <label class="act-form-label">${label}</label>
+        <input type="text" class="act-form-input" data-i18n-field="${lang}.${k}" value="${esc(v)}" />
+        ${hint ? `<small class="act-form-hint">${hint}</small>` : ''}
+      </div>`;
+    };
+    const area = (lang, k, label, rows, hint = '') => {
+      const v = i18n[lang]?.[k];
+      const txt = Array.isArray(v) ? v.join('\n') : (v ?? '');
+      return `<div class="act-form-field">
+        <label class="act-form-label">${label}</label>
+        <textarea class="act-form-textarea" data-i18n-field="${lang}.${k}" rows="${rows}">${esc(txt)}</textarea>
+        ${hint ? `<small class="act-form-hint">${hint}</small>` : ''}
+      </div>`;
+    };
+
+    const bloque = (lang, nombre) => `
+      <h3 class="act-detail-section-title">${nombre}</h3>
+      <div class="act-form-card">
+        ${campo(lang, 'title', 'TÍTULO')}
+        ${campo(lang, 'kicker', 'KICKER')}
+        ${campo(lang, 'duration_label', 'DURACIÓN (TEXTO DE LA CARD)')}
+        ${campo(lang, 'card_vibe', 'VIBE / TAGS DE LA CARD')}
+        ${area(lang, 'description', 'DESCRIPCIÓN', 4)}
+        ${campo(lang, 'hero_kicker', 'HERO · KICKER')}
+        ${campo(lang, 'hero_title', 'HERO · TÍTULO')}
+        ${campo(lang, 'hero_subtitle', 'HERO · SUBTÍTULO')}
+        ${area(lang, 'hero_tags', 'HERO · TAGS (uno por línea)', 4)}
+        ${campo(lang, 'whats_included_title', 'TÍTULO "QUÉ INCLUYE"')}
+        ${area(lang, 'whats_included', '"QUÉ INCLUYE" (uno por línea)', 6)}
+        ${campo(lang, 'ideal_for_title', 'TÍTULO "IDEAL PARA TI SI…"')}
+        ${area(lang, 'ideal_for', '"IDEAL PARA TI SI…" (uno por línea)', 6)}
+        ${campo(lang, 'meta_title', 'SEO · TÍTULO')}
+        ${area(lang, 'meta_description', 'SEO · DESCRIPCIÓN', 2)}
+      </div>`;
+
+    return `
+      <div class="act-form-card" style="margin-bottom:16px">
+        <p style="margin:0;color:#666;font-size:14px">
+          Lo que dejes <strong>en blanco</strong> se mostrará en español.
+          El español se edita en las otras pestañas.
+        </p>
+      </div>
+      ${bloque('en', '🇬🇧 Inglés')}
+      ${bloque('de', '🇩🇪 Alemán')}`;
+  }
+
   function tabAjustes(c) {
     return `
       <h3 class="act-detail-section-title">Ajustes</h3>
@@ -481,8 +647,28 @@ export async function renderCamps(container) {
   function bindDetailEvents(c) {
     container.querySelector('#sc-back')?.addEventListener('click', () => { selectedId = null; campFull = null; renderList(); });
 
+    // Al cambiar de pestaña hay que guardar ANTES de repintar: renderDetail()
+    // reconstruye el formulario desde campFull (lo que hay en la base de
+    // datos), así que todo lo escrito y no guardado se perdía en silencio.
+    // Si el guardado falla, no se cambia de pestaña — así lo escrito sigue
+    // en pantalla y el usuario puede corregir en vez de perderlo.
     container.querySelectorAll('.act-nav-item').forEach(item => {
-      item.addEventListener('click', e => { e.preventDefault(); activeTab = item.dataset.tab; renderDetail(); });
+      item.addEventListener('click', async (e) => {
+        e.preventDefault();
+        const destino = item.dataset.tab;
+        if (!destino || destino === activeTab) return;
+        try {
+          if (await saveCurrentTab(c)) {
+            campFull = await fetchCampFull(c.id);
+            camps = await fetchCamps();
+          }
+        } catch (err) {
+          showToast('No se pudo guardar: ' + err.message, 'error');
+          return;
+        }
+        activeTab = destino;
+        renderDetail();
+      });
     });
 
     container.querySelector('#sc-save')?.addEventListener('click', async () => {
@@ -492,6 +678,21 @@ export async function renderCamps(container) {
         campFull = await fetchCampFull(c.id);
         camps = await fetchCamps();
         renderDetail();
+
+        // Traducción automática al publicar. Va DESPUÉS de guardar y refrescar:
+        // el español ya está a salvo, así que si DeepL falla no se pierde nada.
+        // No se hace desde la pestaña Traducciones para no pisar correcciones
+        // hechas a mano.
+        if (activeTab !== 'idiomas') {
+          try {
+            showToast('Traduciendo…', 'info');
+            await autoTraducir(c.id);
+            campFull = await fetchCampFull(c.id);
+            showToast('Traducido a inglés y alemán', 'success');
+          } catch (err) {
+            showToast('Guardado, pero no se pudo traducir: ' + err.message, 'error');
+          }
+        }
       } catch (err) { showToast('Error: ' + err.message, 'error'); }
     });
 
@@ -531,7 +732,7 @@ export async function renderCamps(container) {
         const file = e.target.files[0];
         if (!file) return;
         try {
-          const url = await uploadCampImage(file, c.slug);
+          const url = await uploadCampImage(await resizeImage(file), c.slug);
           container.querySelector('#f-hero-image').value = url;
           showToast('Imagen subida', 'success');
         } catch (err) { showToast('Error: ' + err.message, 'error'); }
@@ -541,14 +742,29 @@ export async function renderCamps(container) {
     /* Fotos */
     if (activeTab === 'fotos') {
       container.querySelector('#f-photo-file')?.addEventListener('change', async e => {
-        const file = e.target.files[0];
-        if (!file) return;
+        const files = [...e.target.files];
+        e.target.value = '';               // permite volver a elegir las mismas
+        if (!files.length) return;
+        const base = (c.photos || []).length;
+        showToast(`Subiendo ${files.length} foto${files.length > 1 ? 's' : ''}…`, 'info');
         try {
-          const url = await uploadCampImage(file, c.slug);
-          await upsertCampPhoto({ camp_id: c.id, url, alt_text: '', sort_order: (c.photos||[]).length });
+          // Comprimidas y de 3 en 3: subir el original de una foto de móvil
+          // (3–8 MB) era lo que hacía que pareciera colgado.
+          const urls = await uploadAll(files, async (file) => {
+            const opt = await resizeImage(file);
+            return uploadCampImage(opt, c.slug);
+          });
+          const ok = urls.filter(Boolean);
+          for (let i = 0; i < ok.length; i++) {
+            await upsertCampPhoto({ camp_id: c.id, url: ok[i], alt_text: '', sort_order: base + i });
+          }
+          // Un único refresco al final, no uno por foto.
           campFull = await fetchCampFull(c.id);
           renderDetail();
-          showToast('Foto subida', 'success');
+          const fallidas = urls.length - ok.length;
+          showToast(
+            fallidas ? `${ok.length} subidas, ${fallidas} fallaron` : `${ok.length} foto${ok.length > 1 ? 's' : ''} subida${ok.length > 1 ? 's' : ''}`,
+            fallidas ? 'error' : 'success');
         } catch (err) { showToast('Error: ' + err.message, 'error'); }
       });
 
@@ -621,6 +837,15 @@ export async function renderCamps(container) {
     }
   }
 
+
+  /* Traduce el camp a EN/DE y guarda la columna i18n.
+     El trabajo lo hace Postgres (función traducir_camp): lee el camp, llama a
+     DeepL y guarda. Aquí solo se dispara. Si falla, el guardado en español YA
+     se hizo y no se pierde nada — solo se avisa. */
+  async function autoTraducir(campId) {
+    await traducirCamp(campId);
+  }
+
   /* ==================== SAVE LOGIC ==================== */
   async function saveCurrentTab(c) {
     const updates = {};
@@ -666,6 +891,24 @@ export async function renderCamps(container) {
       updates.status = container.querySelector('#f-status')?.value || c.status;
     }
 
+    if (activeTab === 'idiomas') {
+      // Se reconstruye el jsonb entero desde los campos del formulario.
+      // Los que llevan lista van por líneas; los vacíos no se guardan, para
+      // que el fallback a español siga funcionando.
+      const LISTAS = new Set(['hero_tags', 'whats_included', 'ideal_for']);
+      const out = {};
+      container.querySelectorAll('[data-i18n-field]').forEach(el => {
+        const [lang, k] = el.dataset.i18nField.split('.');
+        const raw = (el.value || '').trim();
+        if (!raw) return;
+        out[lang] = out[lang] || {};
+        out[lang][k] = LISTAS.has(k)
+          ? raw.split('\n').map(s => s.trim()).filter(Boolean)
+          : raw;
+      });
+      updates.i18n = out;
+    }
+
     if (activeTab === 'ajustes') {
       updates.meta_title = container.querySelector('#f-meta-title')?.value.trim() || null;
       updates.meta_description = container.querySelector('#f-meta-desc')?.value.trim() || null;
@@ -682,7 +925,7 @@ export async function renderCamps(container) {
           stars: parseInt(card.querySelector('.test-stars')?.value) || 5,
         });
       }
-      return;
+      return true;
     }
 
     if (activeTab === 'faq') {
@@ -696,13 +939,15 @@ export async function renderCamps(container) {
           col_index: parseInt(card.querySelector('.faq-col')?.value) || 0,
         });
       }
-      return;
+      return true;
     }
 
     if (Object.keys(updates).length > 0) {
       updates.id = c.id;
       await upsertCamp(updates);
+      return true;
     }
+    return false;
   }
 
   /* start */

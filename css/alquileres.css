@@ -316,6 +316,24 @@
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
 }
 
+/* Alquileres cerrados al público (interruptor del panel).
+   La tarjeta se mantiene igual — material, precios, todo sigue informando —
+   y solo el botón deja de invitar a pulsar. */
+.rent-gear-btn.is-soon,
+.rent-gear-btn--dark.is-soon {
+  background: #ececec;
+  color: #8a8a8a;
+  border-color: #e0e0e0;
+  cursor: default;
+  pointer-events: none;
+}
+
+.rent-gear-btn.is-soon:hover {
+  transform: none;
+  box-shadow: none;
+  color: #8a8a8a;
+}
+
 /* ---- PROCESS ---- */
 .rent-process-section {
   padding: 5rem 0;

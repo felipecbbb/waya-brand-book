@@ -35,6 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initSurfcampWaitlist();
 });
 
+
 // ========================================
 // 7. SURFCAMP WAITLIST (SUPABASE)
 // ========================================

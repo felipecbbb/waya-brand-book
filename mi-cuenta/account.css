@@ -749,3 +749,8 @@ body:has(#account-root) .header .mobile-toggle span {
   .tab-panel .btn, .tab-panel button { min-height: 44px; }
   .bono-card, .booking-card-item, .family-member-card, .pay-summary-card { word-break: break-word; overflow-wrap: break-word; }
 }
+
+/* Fix: solo el tab activo visible (los .tab-panel se apilaban porque no había
+   regla que ocultara los inactivos; switchTab ya alterna la clase .active). */
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }

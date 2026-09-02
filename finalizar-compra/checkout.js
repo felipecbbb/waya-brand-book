@@ -238,26 +238,33 @@ async function init() {
     if (!f.checkValidity()) { f.reportValidity(); return; }
 
     submitBtn.disabled = true;
-    submitBtn.textContent = 'Reservando…';
+    submitBtn.textContent = 'Preparando el pago…';
 
     try {
       // Guardar el teléfono en el perfil (para que la escuela pueda avisar).
       const phone = (f.telefono?.value || '').trim();
       if (phone) { try { await supabase.from('profiles').update({ phone }).eq('id', session.user.id); } catch {} }
 
-      // SIN PASARELA: crea las reservas de alquiler PENDIENTES de pago (se abona
-      // en la escuela). Cuando esté SumUp, aquí se llamará a 'create-checkout'.
-      const { error } = await supabase.rpc('reservar_alquiler_offline', { p_items: cart });
-      if (error) throw new Error(error.message || 'No se pudo completar la reserva');
+      // PASARELA SUMUP. Al servidor solo le decimos QUÉ se compra: él
+      // recalcula el importe desde la base de datos (nunca el precio que
+      // viaja en el carrito, que es editable desde el navegador) y devuelve
+      // la URL de pago alojada de SumUp.
+      const { data, error } = await supabase.rpc('crear_checkout_sumup', {
+        p_items: cart,
+        p_return_url: `${location.origin}/pago-ok.html`,
+      });
+      if (error) throw new Error(error.message || 'No se pudo iniciar el pago');
+      if (!data?.url) throw new Error('SumUp no devolvió una URL de pago');
 
-      clearCart();
-      updateCartPill();
-      try { supabase.functions.invoke('send-email', { body: { to: session.user.email, type: 'rental_booked', data: {} } }); } catch {}
-      show(viewSuccess);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      // El carrito NO se vacía todavía: si el pago se cancela o falla, el
+      // cliente vuelve y se encuentra su compra intacta. Lo vacía pago-ok.html
+      // cuando el cobro está confirmado, y las reservas las crea el webhook.
+      submitBtn.textContent = 'Redirigiendo al pago…';
+      window.location.href = data.url;
+      return;
     } catch (err) {
       submitBtn.disabled = false;
-      submitBtn.textContent = 'Reservar';
+      submitBtn.textContent = 'Pagar';
       showToast('Error: ' + err.message, 'error');
     }
   });

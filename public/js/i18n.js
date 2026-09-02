@@ -43,6 +43,11 @@ function setLanguage(lang) {
 
     // Update selector UI
     updateLanguageSelector(lang);
+
+    // Aviso para el contenido que NO viene de data-i18n sino de la base de
+    // datos (surfcamps, tienda…): esas páginas se pintan por JS y no se
+    // enterarían del cambio, porque aquí no se recarga la página.
+    document.dispatchEvent(new CustomEvent('wayaLanguageChange', { detail: { lang } }));
 }
 
 function updateTranslations(lang) {

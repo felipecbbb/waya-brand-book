@@ -1,0 +1,466 @@
+/* ============================================================
+   home.css — Rediseño de la home (bajo el hero). v3 Refero DENSO.
+   Carga DESPUÉS de home-redesign.css → gana en cascada.
+   Reference-lock: VSCO (display monumental, acento único, densidad
+   compacta) · Elementor (checkerboard de bandas sólidas + cards por
+   inversión de superficie, sin sombra) · jp.works (grids densos) ·
+   Julia Krantz/San Rita (mosaico de fotos edge-to-edge, kickers mono).
+   Objetivo de esta versión: MENOS HUECO — ritmo apretado, contenido
+   que llena el ancho, bandas sólidas y una tira-mosaico de fotos.
+   El hero-slideshow NO se toca. Misma info.
+   ============================================================ */
+:root {
+  --h-yellow: #FDD802;
+  --h-yellow-hover: #E8C702;
+  --h-ink: #1a1a1a;
+  --h-muted: #6b6b6b;
+  --h-line: #e6e6e3;
+  --h-fog: #f4f4f2;
+  --h-mono: 'Space Mono', 'SFMono-Regular', ui-monospace, monospace;
+}
+
+body { counter-reset: waya-sec; }
+
+/* ---------- Ritmo APRETADO, bandas sólidas alternas ---------- */
+.section { padding: clamp(2.6rem, 4.5vw, 4.2rem) 0; background: #fff; }
+.section--gray { background: var(--h-fog) !important; }
+.container { max-width: 1240px; }
+
+/* ============================================================
+   KICKERS MONO NUMERADOS + títulos monumentales (compactos)
+   ============================================================ */
+.section-header { text-align: center; max-width: 900px; margin: 0 auto clamp(1.6rem, 3vw, 2.4rem); }
+
+.section-tag,
+.bono-v2-badge {
+  counter-increment: waya-sec;
+  display: inline-flex !important;
+  align-items: center;
+  gap: 0.55rem;
+  font-family: var(--h-mono) !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.14em !important;
+  font-size: 0.7rem !important;
+  color: var(--h-ink) !important;
+  background: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  margin-bottom: 0.9rem !important;
+}
+.section-tag::before,
+.bono-v2-badge::before {
+  content: counter(waya-sec, decimal-leading-zero);
+  font-family: var(--h-mono);
+  font-weight: 700;
+  color: var(--h-ink);
+  background: var(--h-yellow);
+  padding: 0.2em 0.55em;
+  border-radius: 5px;
+  letter-spacing: 0.02em;
+}
+.niveles-cta-box .section-tag { color: #fff !important; }
+.niveles-cta-box .section-tag::before { background: var(--h-yellow); color: var(--h-ink); }
+.bono-v2-badge { color: var(--h-ink) !important; }
+.bono-v2-badge::before { background: var(--h-ink); color: var(--h-yellow); }
+
+.section-title {
+  font-family: 'Outfit', sans-serif !important;
+  font-weight: 800 !important;
+  font-size: clamp(2.3rem, 5vw, 4rem) !important;
+  line-height: 0.98 !important;
+  letter-spacing: -0.035em !important;
+  color: var(--h-ink) !important;
+  opacity: 1 !important;
+  text-wrap: balance;
+}
+.section-desc {
+  font-size: clamp(1rem, 1.5vw, 1.14rem);
+  line-height: 1.6;
+  color: var(--h-muted);
+  margin-top: 0.8rem;
+}
+
+/* ============================================================
+   2. ABOUT — foto grande + texto, gap corto (menos hueco)
+   ============================================================ */
+.home-about { padding: clamp(3rem, 6vw, 5rem) 0 !important; overflow: hidden; background: #fff; }
+.home-about-inner {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: clamp(1.8rem, 4vw, 3.4rem) !important;
+  max-width: 1180px !important;
+}
+.home-about-brand { position: relative; }
+.home-about-photo {
+  width: 100% !important;
+  height: clamp(340px, 40vw, 500px) !important;
+  border-radius: 22px !important;
+  object-position: center 20% !important;
+  box-shadow: none !important;
+  border: 1px solid var(--h-line);
+}
+.home-about-brand::after {
+  content: 'WAYA — “CAMINO” EN SWAHILI · TELDE, GC';
+  position: absolute;
+  left: 16px;
+  bottom: 16px;
+  font-family: var(--h-mono);
+  font-weight: 700;
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  color: var(--h-ink);
+  background: var(--h-yellow);
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+}
+.home-about-content { max-width: none; }
+.home-about-content .section-title {
+  text-align: left !important;
+  font-size: clamp(2.4rem, 4.6vw, 4rem) !important;
+  line-height: 0.98 !important;
+  margin-bottom: 1.9rem !important;
+}
+.home-about-content .section-desc {
+  text-align: left !important;
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: #3a3a3a;
+  margin-bottom: 1.6rem;
+  max-width: 48ch;
+}
+.home-about-content .btn-secondary { border-width: 2px; }
+
+/* ============================================================
+   SURFCAMPS · PRÓXIMAMENTE — banda inmersiva a sangre
+   ============================================================ */
+.home-surfcamp {
+  position: relative;
+  min-height: clamp(420px, 54vw, 600px);
+  display: flex;
+  align-items: flex-end;
+  padding: clamp(2.6rem, 5vw, 5rem) 0;
+  overflow: hidden;
+}
+.home-surfcamp-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transform: scale(1.05);
+  transition: transform 9s ease;
+  will-change: transform;
+}
+.home-surfcamp:hover .home-surfcamp-bg { transform: scale(1.12); }
+.home-surfcamp-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(26,26,26,0.12) 0%, rgba(26,26,26,0.5) 52%, rgba(26,26,26,0.86) 100%);
+}
+.home-surfcamp-inner { position: relative; z-index: 2; color: #fff; }
+.home-surfcamp-badge {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--h-mono);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.72rem;
+  color: var(--h-ink);
+  background: var(--h-yellow);
+  padding: 0.42rem 0.85rem;
+  border-radius: 6px;
+  margin-bottom: 1.2rem;
+}
+.home-surfcamp-title {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  font-size: clamp(2.6rem, 6vw, 5rem);
+  line-height: 0.96;
+  letter-spacing: -0.035em;
+  margin: 0 0 1rem;
+  max-width: 15ch;
+  text-wrap: balance;
+}
+.home-surfcamp-desc {
+  font-size: clamp(1.04rem, 1.8vw, 1.25rem);
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.9);
+  max-width: 52ch;
+  margin: 0 0 1.8rem;
+}
+.home-surfcamp-actions { display: flex; gap: 0.8rem; flex-wrap: wrap; }
+.home-surfcamp-ghost {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border: 1.5px solid rgba(255, 255, 255, 0.42);
+  backdrop-filter: blur(6px);
+}
+.home-surfcamp-ghost:hover { background: rgba(255, 255, 255, 0.22); color: #fff; transform: translateY(-2px); }
+
+/* ============================================================
+   3. SERVICIOS — grid denso, cards planas por inversión
+   ============================================================ */
+.services-grid-home { gap: clamp(1rem, 1.8vw, 1.4rem) !important; margin-top: 0 !important; }
+.service-card-home {
+  border-radius: 18px !important;
+  border: 1px solid var(--h-line) !important;
+  box-shadow: none !important;
+  background: #fff !important;
+  transition: transform 0.35s cubic-bezier(0.16,1,0.3,1), border-color 0.35s ease !important;
+}
+.service-card-home:hover {
+  transform: translateY(-5px) !important;
+  box-shadow: none !important;
+  border-color: var(--h-ink) !important;
+}
+.service-card-img { height: 230px !important; }
+.service-card-badge {
+  top: 12px !important; right: 12px !important;
+  font-family: var(--h-mono) !important;
+  font-weight: 700 !important;
+  font-size: 0.64rem !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase;
+  padding: 0.38rem 0.65rem !important;
+  border-radius: 6px !important;
+  box-shadow: none !important;
+}
+.service-card-badge--soon { background: var(--h-ink) !important; color: var(--h-yellow) !important; }
+.service-card-body { padding: 1.5rem 1.5rem 1.6rem !important; }
+.service-card-title {
+  font-family: 'Outfit', sans-serif !important;
+  font-size: 1.55rem !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.02em !important;
+  line-height: 1.05 !important;
+  margin-bottom: 0.5rem !important;
+}
+.service-card-desc { font-size: 0.98rem !important; color: var(--h-muted) !important; line-height: 1.5; margin-bottom: 1rem !important; }
+.service-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 1.2rem !important; }
+.service-tag {
+  font-family: var(--h-mono);
+  font-weight: 400;
+  font-size: 0.66rem;
+  letter-spacing: 0.02em;
+  color: #444;
+  background: var(--h-fog);
+  border: 1px solid var(--h-line);
+  padding: 0.3rem 0.55rem;
+  border-radius: 6px;
+}
+.service-card-btn { border-radius: 50px !important; font-weight: 700 !important; }
+.services-see-all { margin-top: clamp(1.8rem, 3vw, 2.6rem) !important; }
+.services-see-all .btn-secondary { border-width: 2px; }
+
+/* ============================================================
+   4. BONO RESIDENTES — la ÚNICA banda amarilla (declaración)
+   ============================================================ */
+.bono-v2 { padding: clamp(3rem, 6vw, 5rem) 0 !important; }
+.bono-v2-header { max-width: 760px; margin-bottom: 2rem !important; }
+.bono-v2-title {
+  font-family: 'Outfit', sans-serif !important;
+  font-size: clamp(2.5rem, 5.5vw, 4.2rem) !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.035em !important;
+  line-height: 0.98 !important;
+}
+.bono-v2-sub { font-size: 1.05rem !important; margin-top: 0.6rem; }
+.bono-v2-cards { max-width: 940px !important; gap: clamp(1rem, 2vw, 1.5rem) !important; }
+.bono-v2-card {
+  border-radius: 20px !important;
+  padding: clamp(1.8rem, 3.5vw, 2.4rem) !important;
+  box-shadow: none !important;
+  border: 1px solid rgba(0,0,0,0.1);
+}
+.bono-v2-card--dark { border-color: rgba(255,255,255,0.12); }
+.bono-v2-card-title { font-family: 'Outfit', sans-serif !important; font-size: 1.7rem !important; letter-spacing: -0.02em; }
+.bono-v2-list li { padding: 0.62rem 0 !important; font-size: 0.96rem !important; }
+.bono-v2-btn { border-radius: 50px !important; }
+
+/* ============================================================
+   5. EXPERIENCIAS (carrusel) — número mono
+   ============================================================ */
+.carousel-label {
+  display: inline-block !important;
+  align-self: flex-start;
+  width: fit-content;
+  font-family: var(--h-mono) !important;
+  font-weight: 700 !important;
+  font-size: 0.85rem !important;
+  letter-spacing: 0.08em !important;
+  color: var(--h-ink) !important;
+  background: var(--h-yellow);
+  padding: 0.18rem 0.5rem;
+  border-radius: 5px;
+}
+.home-carousel-title {
+  font-family: 'Outfit', sans-serif !important;
+  font-size: clamp(1.9rem, 3.5vw, 2.9rem) !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.025em !important;
+  line-height: 1.02 !important;
+}
+
+/* ============================================================
+   6. NIVELES — caja oscura ancha, apretada
+   ============================================================ */
+.niveles-cta-box {
+  border-radius: 24px !important;
+  padding: clamp(2rem, 4vw, 3.5rem) !important;
+  gap: clamp(1.8rem, 4vw, 3.2rem) !important;
+  background:
+    radial-gradient(700px 400px at 110% -20%, rgba(253,216,2,0.14), transparent 60%),
+    var(--h-ink) !important;
+}
+.niveles-cta-title {
+  font-family: 'Outfit', sans-serif !important;
+  font-size: clamp(2.1rem, 4.2vw, 3.2rem) !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.03em !important;
+  line-height: 1 !important;
+}
+.niveles-cta-desc { font-size: 1.05rem !important; margin-bottom: 1.6rem !important; }
+.niveles-level-item {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 0.95rem 1.3rem !important;
+  transition: border-color 0.25s ease, background 0.25s ease;
+}
+.niveles-level-item:hover { border-color: rgba(253,216,2,0.55); background: rgba(255,255,255,0.08); }
+.niveles-level-num {
+  font-family: var(--h-mono);
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--h-ink);
+  background: var(--h-yellow);
+  width: 54px; height: 38px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 8px;
+  flex: 0 0 auto;
+}
+.niveles-level-name { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 1.02rem; color: #fff; }
+
+/* ============================================================
+   7. REVIEWS — grid denso, cards planas, rol mono
+   ============================================================ */
+.reviews-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: clamp(0.9rem, 1.6vw, 1.2rem);
+  margin-top: clamp(1.6rem, 3vw, 2.4rem);
+}
+.review-card {
+  position: relative;
+  background: #fff;
+  border: 1px solid var(--h-line);
+  border-radius: 16px;
+  padding: 1.7rem 1.5rem 1.4rem;
+  box-shadow: none;
+  transition: border-color 0.3s ease, transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+.review-card:hover { transform: translateY(-4px); border-color: var(--h-ink); }
+.review-stars { display: flex; gap: 2px; color: var(--h-yellow); margin-bottom: 0.8rem; }
+.review-stars svg { width: 16px; height: 16px; }
+.review-text { font-size: 0.98rem; line-height: 1.55; color: #333; flex: 1; margin-bottom: 1.2rem; }
+.review-footer { display: flex; align-items: center; gap: 0.75rem; }
+.review-avatar {
+  width: 42px; height: 42px;
+  border-radius: 10px;
+  background: var(--h-yellow);
+  color: var(--h-ink);
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  font-size: 1.1rem;
+  display: flex; align-items: center; justify-content: center;
+  flex: 0 0 auto;
+}
+.review-author { font-family: 'Outfit', sans-serif; font-weight: 700; color: var(--h-ink); font-size: 0.96rem; margin: 0; }
+.review-role { font-family: var(--h-mono); font-weight: 400; color: var(--h-muted); font-size: 0.72rem; letter-spacing: 0.04em; text-transform: uppercase; }
+.google-rating-badge {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  margin-top: 1rem;
+  background: #fff; border: 1px solid var(--h-line);
+  border-radius: 50px; padding: 0.45rem 1rem;
+  box-shadow: none;
+  transition: border-color 0.25s ease, transform 0.25s ease;
+  text-decoration: none;
+}
+.google-rating-badge:hover { transform: translateY(-2px); border-color: var(--h-ink); }
+.google-rating-score { font-family: 'Outfit', sans-serif; font-weight: 800; color: var(--h-ink); }
+.google-rating-stars { display: inline-flex; gap: 1px; }
+.google-rating-text { font-family: var(--h-mono); font-weight: 700; font-size: 0.7rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--h-muted); }
+
+/* ============================================================
+   8. NOTICIAS — banda oscura ANCHA (2 columnas, sin hueco)
+   ============================================================ */
+.blog-cta-home {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: clamp(1.2rem, 3vw, 2.5rem);
+  text-align: left;
+  max-width: none;
+  margin: 0;
+  padding: clamp(2rem, 4vw, 3rem) clamp(1.8rem, 4vw, 3.5rem);
+  background:
+    radial-gradient(600px 300px at 0% 0%, rgba(253,216,2,0.1), transparent 60%),
+    var(--h-ink);
+  border-radius: 24px;
+  overflow: hidden;
+}
+.blog-cta-icon {
+  width: 60px; height: 60px;
+  margin: 0;
+  background: var(--h-yellow);
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  flex: 0 0 auto;
+}
+.blog-cta-icon img { width: 32px; height: 32px; object-fit: contain; }
+.blog-cta-title { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: clamp(1.7rem, 3vw, 2.4rem); color: #fff; margin: 0; letter-spacing: -0.03em; line-height: 1; }
+.blog-cta-desc { color: rgba(255,255,255,0.72); font-size: 1rem; line-height: 1.55; max-width: 52ch; margin: 0.5rem 0 0; grid-column: 2; }
+.blog-cta-home > .blog-cta-title { grid-column: 2; grid-row: 1; align-self: end; }
+.blog-cta-home .btn-secondary {
+  grid-column: 3;
+  grid-row: 1 / span 2;
+  white-space: nowrap;
+  background: var(--h-yellow);
+  color: var(--h-ink);
+  border: 2px solid var(--h-yellow);
+}
+.blog-cta-home .btn-secondary:hover { background: var(--h-yellow-hover); border-color: var(--h-yellow-hover); color: var(--h-ink); transform: translateY(-2px); }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 900px) {
+  .home-about-inner { grid-template-columns: 1fr !important; text-align: center; }
+  .home-about-content .section-title,
+  .home-about-content .section-desc { text-align: center !important; }
+  .home-about-content .section-desc { margin-left: auto; margin-right: auto; }
+  .services-grid-home { grid-template-columns: repeat(2, 1fr) !important; }
+  .bono-v2-cards { grid-template-columns: 1fr !important; }
+  .niveles-cta-box { grid-template-columns: 1fr !important; }
+  .blog-cta-home { grid-template-columns: 1fr; text-align: center; justify-items: center; }
+  .blog-cta-home > .blog-cta-title,
+  .blog-cta-desc,
+  .blog-cta-home .btn-secondary { grid-column: 1; grid-row: auto; }
+}
+@media (max-width: 600px) {
+  .services-grid-home { grid-template-columns: 1fr !important; }
+  .section { padding: 2.4rem 0; }
+  .home-surfcamp { min-height: 62vh; padding: 2.4rem 0; }
+  .home-surfcamp-title { font-size: 2.4rem; }
+  .home-surfcamp-actions { flex-direction: column; align-items: stretch; }
+  .home-surfcamp-actions .btn { width: 100%; text-align: center; justify-content: center; }
+  .niveles-cta-box { padding: 1.6rem !important; }
+  .bono-v2-card, .service-card-body { padding: 1.4rem !important; }
+  .section-title { font-size: clamp(2rem, 9vw, 2.6rem) !important; }
+  .home-about-content .section-title { font-size: 2.3rem !important; }
+}

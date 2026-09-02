@@ -116,7 +116,7 @@ export async function renderTarifas(container) {
         <div class="tar-edit-layout">
           <div class="tar-edit-main">
             <div class="act-form-card">
-              <h3 class="act-detail-section-title">Configuracion general</h3>
+              <h3 class="act-detail-section-title">Configuración general</h3>
               <div class="tar-edit-row">
                 <div class="act-form-field">
                   <label class="act-form-label">ANTICIPO (€)</label>

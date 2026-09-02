@@ -793,19 +793,18 @@ export async function sendBookingConfirmationEmail({ to, customerName, booking }
   if (!to) throw new Error('No hay email del cliente al que enviar la confirmación');
   const total = Number(booking.total_amount || 0);
   const campTitle = booking.surf_camps?.title || 'Surf Camp';
-  const { error } = await supabase.functions.invoke('send-email', {
-    body: {
-      to,
-      type: 'camp',
-      data: {
-        customerName: customerName || '',
-        orderId: booking.id,
-        items: [{ name: campTitle, quantity: 1, price: total }],
-        total,
-      },
+  // enviarAviso lanza excepción si falla (no devuelve {error} como el SDK),
+  // así que se deja subir tal cual: quien llama ya la captura.
+  await enviarAviso({
+    to,
+    type: 'camp',
+    data: {
+      customerName: customerName || '',
+      orderId: booking.id,
+      campName: campTitle,
+      amount: total ? `${total.toLocaleString('es-ES')}€` : '',
     },
   });
-  if (error) throw error;
 }
 
 // ---- Surf Camps ----
@@ -960,9 +959,86 @@ export async function deleteCampFaq(id) {
   if (error) throw error;
 }
 
+/* ==================== SITE SETTINGS ====================
+   Textos e imágenes editables de páginas estáticas (heros).
+   Ver migración 0033. */
+/* ==================== TRADUCCIÓN AUTOMÁTICA ====================
+   Postgres llama a DeepL por nosotros (función traducir_camp, migración 0034).
+   Se hace por RPC y no desde aquí porque la clave de DeepL no puede estar en
+   este bundle —es descargable por cualquiera— y porque DeepL no admite
+   llamadas desde el navegador (no manda cabeceras CORS).
+   La función guarda ella misma la columna i18n del camp. */
+export async function traducirCamp(campId) {
+  const { data, error } = await supabase.rpc('traducir_camp', { p_camp_id: campId });
+  if (error) throw new Error(error.message || 'No se pudo traducir');
+  return data || {};
+}
+
+/* ==================== AVISOS POR CORREO ====================
+   Va a /enviar-aviso.php (Hostinger) y no a la Edge Function 'send-email':
+   esa función NUNCA se desplegó — devolvía 404 y, como las llamadas van en
+   try/catch, llevaba meses fallando en silencio.
+   Mismo contrato { to, type, data } para no tocar cada punto de llamada. */
+/* Asegura que un cliente tenga ficha (profiles) a partir de su email.
+   profiles.id es FK de auth.users, así que sin cuenta no hay ficha: este
+   endpoint la crea en silencio (sin correos ni contraseña utilizable) para
+   que las reservas manuales no dejen clientes sueltos como "invitado".
+   Devuelve el id del perfil. */
+export async function sincronizarCliente({ email, full_name, last_name, phone }) {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) throw new Error('Sin sesión');
+  const res = await fetch('/cliente-sync.php', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${session.access_token}`,
+    },
+    body: JSON.stringify({ email, full_name, last_name, phone }),
+  });
+  const out = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(out.error || 'No se pudo sincronizar el cliente');
+  invalidateCache('clients');
+  return out;
+}
+
+export async function enviarAviso(cuerpo) {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) throw new Error('Sin sesión');
+  const res = await fetch('/enviar-aviso.php', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${session.access_token}`,
+    },
+    body: JSON.stringify(cuerpo),
+  });
+  const out = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(out.error || `Error ${res.status} al enviar el correo`);
+  return out;
+}
+
+export async function fetchSiteSetting(key) {
+  const { data, error } = await supabase
+    .from('site_settings').select('value').eq('key', key).maybeSingle();
+  if (error) throw error;
+  return data?.value || null;
+}
+
+export async function upsertSiteSetting(key, value) {
+  const { data, error } = await supabase
+    .from('site_settings')
+    .upsert({ key, value, updated_at: new Date().toISOString() }, { onConflict: 'key' })
+    .select('value').single();
+  if (error) throw error;
+  return data?.value || null;
+}
+
 export async function uploadCampImage(file, slug) {
-  const ext = file.name.split('.').pop();
-  const path = `camps/${slug}/${Date.now()}.${ext}`;
+  const ext = (file.name.split('.').pop() || 'jpg').toLowerCase();
+  // Date.now() a secas colisiona al subir varias fotos de golpe (mismo ms) y
+  // upload() sin upsert falla con "already exists": solo se guardaba la 1ª.
+  const rand = Math.random().toString(36).slice(2, 8);
+  const path = `camps/${slug}/${Date.now()}-${rand}.${ext}`;
   const { data, error } = await supabase.storage.from('activity-photos').upload(path, file);
   if (error) throw error;
   const { data: publicData } = supabase.storage.from('activity-photos').getPublicUrl(data.path);
@@ -1077,21 +1153,46 @@ export async function updateOrderStatus(id, status) {
 export async function createClientFromAdmin(fields) {
   const f = fields || {};
   if (!f.email) throw new Error('Email es obligatorio para crear un cliente');
-  const { data, error } = await supabase.functions.invoke('create-client', { body: f });
-  if (error) {
-    let serverMsg = null;
-    try { const b = await error.context?.json?.(); if (b?.error) serverMsg = b.error; } catch (_) { /* no JSON */ }
-    throw new Error(serverMsg || error.message || 'No se pudo crear el cliente');
+  // Antes llamaba a la Edge Function 'create-client', que nunca se desplegó:
+  // devolvía 404 y crear un cliente desde el panel fallaba siempre.
+  // cliente-sync.php hace lo mismo (crea cuenta + ficha sin tocar la sesión
+  // del admin) y sí está en producción.
+  const data = await sincronizarCliente({
+    email: f.email,
+    full_name: f.full_name,
+    last_name: f.last_name,
+    phone: f.phone,
+  });
+  // Familiares que vengan con el alta. cliente-sync solo crea la ficha
+  // principal, así que estos se insertan aquí.
+  let familyCreated = 0;
+  const familia = Array.isArray(f.family) ? f.family.filter(m => m && m.full_name) : [];
+  if (data.id && familia.length) {
+    const filas = familia.map(m => ({
+      user_id: data.id,
+      full_name: m.full_name,
+      last_name: m.last_name || null,
+      birth_date: m.birth_date || null,
+      level: m.level || null,
+      weight_kg: m.weight_kg ? Number(m.weight_kg) : null,
+      height_cm: m.height_cm ? Number(m.height_cm) : null,
+      can_swim: typeof m.can_swim === 'boolean' ? m.can_swim : null,
+      has_injury: m.has_injury === true,
+      injury_detail: m.injury_detail || null,
+    }));
+    const { error: famErr } = await supabase.from('family_members').insert(filas);
+    if (!famErr) familyCreated = filas.length;
   }
-  if (data?.error) throw new Error(data.error);
+
   invalidateCache('profiles');
   return {
-    id: data.user_id,
+    id: data.id,
     full_name: f.full_name,
     email: f.email,
-    family_created: data.family_created || 0,
-    already_existed: data.already_existed === true,
-    email_sent: data.email_sent === true,
+    family_created: familyCreated,
+    already_existed: data.creado !== true,
+    // No se manda correo de bienvenida: la ficha se crea en silencio.
+    email_sent: false,
   };
 }
 
@@ -1410,8 +1511,10 @@ export async function deleteActivityFaq(id) {
 
 // ---- Upload photo to Supabase Storage ----
 export async function uploadActivityImage(file, activitySlug) {
-  const ext = file.name.split('.').pop();
-  const path = `${activitySlug}/${Date.now()}.${ext}`;
+  const ext = (file.name.split('.').pop() || 'jpg').toLowerCase();
+  // Mismo motivo que en uploadCampImage: evita colisión al subir en lote.
+  const rand = Math.random().toString(36).slice(2, 8);
+  const path = `${activitySlug}/${Date.now()}-${rand}.${ext}`;
   const { data, error } = await supabase.storage.from('activity-photos').upload(path, file);
   if (error) throw error;
   const { data: urlData } = supabase.storage.from('activity-photos').getPublicUrl(data.path);

@@ -24,19 +24,23 @@ async function fetchStaff() {
   return data || [];
 }
 
+// Va a /crear-staff.php. Antes llamaba a la Edge Function 'create-staff',
+// que nunca se desplegó: daba 404 y dar de alta un encargado fallaba siempre.
 async function callCreateStaff({ email, password, full_name }) {
-  const { data, error } = await supabase.functions.invoke('create-staff', {
-    body: { email, password, full_name },
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) throw new Error('Sin sesión');
+  const res = await fetch('/crear-staff.php', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${session.access_token}`,
+    },
+    body: JSON.stringify({ email, password, full_name }),
   });
-  if (error) {
-    let serverMsg = null;
-    try {
-      const body = await error.context?.json?.();
-      if (body?.error) serverMsg = body.error;
-    } catch (_) { /* response was not JSON */ }
-    throw new Error(serverMsg || error.message || 'No se pudo crear encargado');
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok || data?.error) {
+    throw new Error(data?.error || `No se pudo crear el encargado (${res.status})`);
   }
-  if (data?.error) throw new Error(data.error);
   return data; // { ok, user_id }
 }
 

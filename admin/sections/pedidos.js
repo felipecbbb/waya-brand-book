@@ -1,7 +1,7 @@
 /* ============================================================
    Pedidos Section — Product order management (tienda only)
    ============================================================ */
-import { fetchOrders, fetchOrderItems, updateOrderStatus } from '../modules/api.js';
+import { fetchOrders, fetchOrderItems, updateOrderStatus, enviarAviso } from '../modules/api.js';
 import { renderTable, statusBadge, formatDate, formatCurrency, openModal, closeModal, showToast } from '../modules/ui.js';
 import { supabase } from '/lib/supabase.js';
 
@@ -200,8 +200,7 @@ export async function renderPedidos(container) {
         const emailTo = order.profiles?.email || order.guest_email;
         if (emailType && emailTo) {
           try {
-            supabase.functions.invoke('send-email', {
-              body: {
+            enviarAviso({
                 to: emailTo,
                 type: emailType,
                 data: {
@@ -209,7 +208,6 @@ export async function renderPedidos(container) {
                   orderId: order.id,
                   total: order.total,
                 },
-              },
             });
           } catch {}
         }

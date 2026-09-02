@@ -2,9 +2,9 @@
     <div class="header-container">
         <div class="logo">
             <a href="/">
-                <img src="/images/waya-logo-black.png" alt="Waya Surf School" class="logo-full">
-                <img src="/images/waya-logo-black.png" alt="Waya Surf School" class="logo-mobile">
-                <img src="/images/waya-isotipo.png" alt="Waya Surf School" class="logo-isotipo">
+                <img src="/images/logo-waya.webp" alt="Waya Surf School" class="logo-full">
+                <img src="/images/logo-waya.webp" alt="Waya Surf School" class="logo-mobile">
+                <img src="/images/logo-waya.webp" alt="Waya Surf School" class="logo-isotipo">
             </a>
         </div>
 
@@ -42,12 +42,8 @@
             </div>
             <a href="/surfcamps.html" class="nav-link mobile-item-styled" data-i18n="nav.surfcamp">Surfcamps</a>
             <a href="/alquileres.html" class="nav-link mobile-item-styled" data-i18n="nav.rentals">Alquileres</a>
+            <a href="/tienda.html" class="nav-link mobile-item-styled" data-i18n="nav.shop">Tienda</a>
             <a href="/blog.html" class="nav-link mobile-item-styled" data-i18n="nav.news">Noticias</a>
-            <a href="/mi-cuenta/" class="nav-link mobile-item-styled nav-account">
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:0 0 auto"><circle cx="12" cy="8" r="4"></circle><path d="M5.5 21a6.5 6.5 0 0 1 13 0"></path></svg>
-                <span data-i18n="nav.account">Mi cuenta</span>
-            </a>
-
             <!-- Language Selector -->
             <div id="language-selector" class="language-selector">
                 <span id="lang-btn-es" class="lang-btn active">ES</span>
@@ -57,8 +53,37 @@
                 <span id="lang-btn-de" class="lang-btn">DE</span>
             </div>
 
-            <!-- Button -->
-            <a href="/reservar.html" class="btn btn-primary" data-i18n="nav.book">Reservar</a>
+            <!-- Control de cuenta: link si deslogueado, desplegable si logueado (JS: initAccountNav) -->
+            <div class="account-nav" id="account-nav" data-state="guest">
+                <!-- Estado deslogueado -->
+                <a href="/mi-cuenta/" class="btn btn-primary account-cta" data-account-guest>
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M5.5 21a6.5 6.5 0 0 1 13 0"></path></svg>
+                    <span data-i18n="nav.account">Mi cuenta</span>
+                </a>
+                <!-- Estado logueado -->
+                <div class="account-menu" data-account-user>
+                    <button class="account-trigger" type="button" aria-haspopup="true" aria-expanded="false">
+                        <span class="account-avatar" data-account-initial aria-hidden="true"></span>
+                        <span class="account-name" data-account-name data-i18n="nav.account">Mi cuenta</span>
+                        <svg class="account-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="account-dropdown" role="menu">
+                        <a href="/mi-cuenta/#clases" class="account-dropdown-item" role="menuitem">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                            <span data-i18n="nav.account_bookings">Mis reservas</span>
+                        </a>
+                        <a href="/mi-cuenta/#datos" class="account-dropdown-item" role="menuitem">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M5.5 21a6.5 6.5 0 0 1 13 0"></path></svg>
+                            <span data-i18n="nav.account_profile">Mis datos</span>
+                        </a>
+                        <div class="account-dropdown-sep"></div>
+                        <button type="button" class="account-dropdown-item danger" data-account-logout role="menuitem">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                            <span data-i18n="nav.account_logout">Cerrar sesión</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
         </nav>
     </div>
 </header>

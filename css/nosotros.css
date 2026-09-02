@@ -433,8 +433,13 @@
 }
 
 .about-mission-logo {
-  width: 40px;
-  opacity: 0.8;
+  /* El sello lleva texto en el perímetro: a 40px era ilegible.
+     Block + margin auto porque el contenedor no centra el inline. */
+  display: block;
+  width: 88px;
+  height: auto;
+  margin: 1.5rem auto 0;
+  opacity: 0.9;
 }
 
 .about-mission-btn {

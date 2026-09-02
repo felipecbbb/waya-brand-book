@@ -22,7 +22,10 @@ body.is-magazine {
     font-family: var(--font-body);
     background-color: #FAFAFA;
     color: var(--mag-text);
+    /* clip, no hidden: hidden crea contenedor de scroll y rompe el
+       position:sticky de los descendientes (ver css/styles.css). */
     overflow-x: hidden;
+    overflow-x: clip;
 }
 
 /* UTILS */

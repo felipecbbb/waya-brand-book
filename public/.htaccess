@@ -1,0 +1,90 @@
+# ============================================================
+# Waya Surf School — configuración Apache/LiteSpeed (Hostinger)
+# Equivalente a lo que hacía vercel.json + optimización de imágenes
+# ============================================================
+
+# ---------- 1. Servir WebP automáticamente ----------
+# Si el navegador acepta image/webp y existe el .webp hermano,
+# se sirve ese en lugar del .jpg/.png. Sin tocar el HTML.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  RewriteCond %{HTTP_ACCEPT} image/webp
+  RewriteCond %{REQUEST_FILENAME} (.+)\.(jpe?g|png)$
+  RewriteCond %1\.webp -f
+  RewriteRule (.+)\.(jpe?g|png)$ $1.webp [T=image/webp,E=WEBP:1,L]
+</IfModule>
+
+<IfModule mod_headers.c>
+  # Los proxies deben cachear por separado según Accept
+  Header append Vary Accept env=REDIRECT_WEBP
+</IfModule>
+
+<IfModule mod_mime.c>
+  AddType image/webp .webp
+</IfModule>
+
+# ---------- 2. Compresión ----------
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/css text/xml
+  AddOutputFilterByType DEFLATE application/javascript application/x-javascript
+  AddOutputFilterByType DEFLATE application/json application/xml
+  AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+# ---------- 3. Caché ----------
+<IfModule mod_expires.c>
+  ExpiresActive On
+
+  # Assets con hash en el nombre (Vite) → inmutables, 1 año
+  <FilesMatch "\-[A-Za-z0-9_-]{8,}\.(js|css)$">
+    ExpiresDefault "access plus 1 year"
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+
+  # Imágenes y fuentes → 30 días
+  ExpiresByType image/jpeg               "access plus 30 days"
+  ExpiresByType image/png                "access plus 30 days"
+  ExpiresByType image/webp               "access plus 30 days"
+  ExpiresByType image/svg+xml            "access plus 30 days"
+  ExpiresByType font/woff2               "access plus 1 year"
+
+  # HTML → siempre revalidar (para que los cambios se vean al instante)
+  ExpiresByType text/html                "access plus 0 seconds"
+</IfModule>
+
+<IfModule mod_headers.c>
+  # HTML siempre fresco
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+
+  # js/ y components/ sin caché — igual que hacía vercel.json.
+  # Son ficheros SIN hash que se cargan en runtime (translations.js,
+  # header.html, footer.html): si se cachean, se sirve versión vieja.
+  <FilesMatch "^(script|components|translations|i18n)\.js$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+</IfModule>
+
+# js/ y components/ completos sin caché
+<IfModule mod_rewrite.c>
+  <If "%{REQUEST_URI} =~ m#^/(js|components)/#">
+    <IfModule mod_headers.c>
+      Header set Cache-Control "no-cache, must-revalidate"
+    </IfModule>
+  </If>
+</IfModule>
+
+# ---------- 4. Seguridad básica ----------
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set X-Frame-Options "SAMEORIGIN"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# No listar directorios
+Options -Indexes
+
+# ---------- 5. Páginas de error ----------
+ErrorDocument 404 /index.html

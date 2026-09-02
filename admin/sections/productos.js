@@ -5,6 +5,7 @@
    ============================================================ */
 import { fetchProducts, upsertProduct, deleteProduct, uploadProductImage } from '../modules/api.js';
 import { renderTable, statusBadge, formatCurrency, showToast } from '../modules/ui.js';
+import { resizeImage, uploadAll } from '../modules/images.js';
 
 const STATUSES = [
   { v: 'active', l: 'Activo' },
@@ -18,28 +19,6 @@ const uniq = (arr) => [...new Set(arr.filter(Boolean))];
 const slugify = (s) => String(s || '').toLowerCase().trim()
   .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
   .replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-
-// Redimensiona/comprime una imagen en el cliente antes de subirla.
-// Las fotos de móvil pesan varios MB y hacen que la subida parezca colgada.
-async function resizeImage(file, maxDim = 1600, quality = 0.85) {
-  if (!file.type?.startsWith('image/') || file.type === 'image/gif') return file;
-  let bitmap;
-  try { bitmap = await createImageBitmap(file); } catch { return file; }
-  let { width, height } = bitmap;
-  const max = Math.max(width, height);
-  if (max > maxDim) {
-    const scale = maxDim / max;
-    width = Math.round(width * scale);
-    height = Math.round(height * scale);
-  }
-  const canvas = document.createElement('canvas');
-  canvas.width = width; canvas.height = height;
-  canvas.getContext('2d').drawImage(bitmap, 0, 0, width, height);
-  bitmap.close?.();
-  const blob = await new Promise(res => canvas.toBlob(res, 'image/jpeg', quality));
-  if (!blob) return file;
-  return new File([blob], file.name.replace(/\.\w+$/, '') + '.jpg', { type: 'image/jpeg' });
-}
 
 export async function renderProductos(container) {
 
@@ -311,9 +290,24 @@ export async function renderProductos(container) {
       });
     }
     async function handleGalleryFiles(files) {
-      for (const file of files) {
-        const url = await uploadFile(file, galleryLoading);
-        if (url) { state.gallery.push(url); paintGallery(); }
+      const lista = [...files];
+      if (!lista.length) return;
+      galleryLoading.hidden = false;
+      try {
+        // De 3 en 3 en vez de una a una: con 8 fotos la diferencia es enorme.
+        const urls = await uploadAll(lista, async (file) => {
+          const opt = await resizeImage(file);
+          return uploadProductImage(opt, currentSlug());
+        });
+        const ok = urls.filter(Boolean);
+        state.gallery.push(...ok);
+        paintGallery();
+        const fallidas = urls.length - ok.length;
+        if (fallidas) showToast(`${ok.length} subidas, ${fallidas} fallaron`, 'error');
+      } catch (err) {
+        showToast('Error al subir las imágenes: ' + err.message, 'error');
+      } finally {
+        galleryLoading.hidden = true;
       }
     }
     container.querySelector('#add-gallery-btn').addEventListener('click', () => galleryFile.click());

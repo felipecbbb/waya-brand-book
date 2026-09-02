@@ -2,6 +2,7 @@
    Actividades Section — CRUD de actividades desde Supabase
    ============================================================ */
 import { showToast } from '../modules/ui.js';
+import { resizeImage, uploadAll } from '../modules/images.js';
 import {
   fetchActivities, fetchActivityFull, upsertActivity, deleteActivity,
   toggleActivityStatus, upsertActivityPacks, upsertActivityPhoto,
@@ -51,7 +52,7 @@ export async function renderActividades(container) {
         <div class="act-table">
           <div class="act-table-head">
             <span class="act-col-img">Imagen</span>
-            <span class="act-col-title">Titulo</span>
+            <span class="act-col-title">Título</span>
             <span class="act-col-date">Fecha</span>
             <span class="act-col-tags">Etiquetas</span>
             <span class="act-col-actions"></span>
@@ -211,15 +212,15 @@ export async function renderActividades(container) {
 
     const TABS = [
       { group: 'CONTENIDO', items: [
-        { id: 'descripcion', label: 'Descripcion', icon: iconDoc },
+        { id: 'descripcion', label: 'Descripción', icon: iconDoc },
         { id: 'hero', label: 'Hero / Cabecera', icon: iconImage },
-        { id: 'pagina', label: 'Pagina', icon: iconLayout },
+        { id: 'pagina', label: 'Página', icon: iconLayout },
         { id: 'fotos', label: 'Fotos', icon: iconCamera },
         { id: 'testimonios', label: 'Testimonios', icon: iconStar },
         { id: 'faq', label: 'FAQ', icon: iconHelp },
       ]},
-      { group: 'CONFIGURACION', items: [
-        { id: 'programacion', label: 'Programacion', icon: iconClock },
+      { group: 'CONFIGURACIÓN', items: [
+        { id: 'programacion', label: 'Programación', icon: iconClock },
         { id: 'tarifas', label: 'Tarifas / Packs', icon: iconMoney },
         { id: 'pagos', label: 'Pagos', icon: iconCard },
       ]},
@@ -297,7 +298,7 @@ export async function renderActividades(container) {
   /* -- Descripcion -- */
   function tabDescripcion(a) {
     return `
-      <h3 class="act-detail-section-title">Descripcion</h3>
+      <h3 class="act-detail-section-title">Descripción</h3>
       <div class="act-form-card">
         <div class="act-form-field">
           <label class="act-form-label">NOMBRE</label>
@@ -318,7 +319,7 @@ export async function renderActividades(container) {
           <small class="act-form-hint">Clave interna. Cambiarlo puede romper reservas existentes.</small>
         </div>
         <div class="act-form-field">
-          <label class="act-form-label">DESCRIPCION</label>
+          <label class="act-form-label">DESCRIPCIÓN</label>
           <textarea class="act-form-textarea" id="f-descripcion" rows="4">${esc(a.descripcion||'')}</textarea>
         </div>
         <div class="act-form-field">
@@ -340,15 +341,15 @@ export async function renderActividades(container) {
           <input type="text" class="act-form-input" id="f-hero-image" value="${esc(a.hero_image||'')}" placeholder="O pega una URL de imagen" />
         </div>
         <div class="act-form-field">
-          <label class="act-form-label">KICKER (texto pequeno encima del titulo)</label>
+          <label class="act-form-label">KICKER (texto pequeño encima del título)</label>
           <input type="text" class="act-form-input" id="f-hero-kicker" value="${esc(a.hero_kicker||'')}" />
         </div>
         <div class="act-form-field">
-          <label class="act-form-label">TITULO PRINCIPAL</label>
+          <label class="act-form-label">TÍTULO PRINCIPAL</label>
           <input type="text" class="act-form-input" id="f-hero-title" value="${esc(a.hero_title||'')}" />
         </div>
         <div class="act-form-field">
-          <label class="act-form-label">SUBTITULO</label>
+          <label class="act-form-label">SUBTÍTULO</label>
           <input type="text" class="act-form-input" id="f-hero-subtitle" value="${esc(a.hero_subtitle||'')}" />
           <small class="act-form-hint">Ej: 90 minutos · Max. 6 personas · Material incluido</small>
         </div>
@@ -368,18 +369,18 @@ export async function renderActividades(container) {
           <input type="text" class="act-form-input" id="f-pre-kicker" value="${esc(a.pre_section_kicker||'')}" />
         </div>
         <div class="act-form-field">
-          <label class="act-form-label">TITULO</label>
+          <label class="act-form-label">TÍTULO</label>
           <input type="text" class="act-form-input" id="f-pre-title" value="${esc(a.pre_section_title||'')}" />
         </div>
         <div class="act-form-field">
-          <label class="act-form-label">DESCRIPCION</label>
+          <label class="act-form-label">DESCRIPCIÓN</label>
           <textarea class="act-form-textarea" id="f-pre-lead" rows="3">${esc(a.pre_section_lead||'')}</textarea>
         </div>
       </div>
       <div class="act-form-card" style="margin-top:16px">
         <h4 style="margin:0 0 12px;font-size:.95rem;color:var(--color-navy)">${esc(a.whats_included_title||'Que incluye cada clase?')}</h4>
         <div class="act-form-field">
-          <label class="act-form-label">TITULO DE LA SECCION</label>
+          <label class="act-form-label">TÍTULO DE LA SECCIÓN</label>
           <input type="text" class="act-form-input" id="f-includes-title" value="${esc(a.whats_included_title||'')}" />
         </div>
         <div class="act-form-field">
@@ -390,7 +391,7 @@ export async function renderActividades(container) {
       <div class="act-form-card" style="margin-top:16px">
         <h4 style="margin:0 0 12px;font-size:.95rem;color:var(--color-navy)">${esc(a.ideal_for_title||'Ideal para')}</h4>
         <div class="act-form-field">
-          <label class="act-form-label">TITULO DE LA SECCION</label>
+          <label class="act-form-label">TÍTULO DE LA SECCIÓN</label>
           <input type="text" class="act-form-input" id="f-ideal-title" value="${esc(a.ideal_for_title||'')}" />
         </div>
         <div class="act-form-field">
@@ -415,7 +416,7 @@ export async function renderActividades(container) {
           <label class="act-photo-upload" id="photo-upload-zone">
             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
             <span>Subir foto</span>
-            <input type="file" id="f-photo-file" accept="image/*" style="display:none" />
+            <input type="file" id="f-photo-file" accept="image/*" multiple style="display:none" />
           </label>
         </div>
         <div class="act-form-field" style="margin-top:16px">
@@ -494,7 +495,7 @@ export async function renderActividades(container) {
   /* -- Programacion -- */
   function tabProgramacion(a) {
     return `
-      <h3 class="act-detail-section-title">Programacion</h3>
+      <h3 class="act-detail-section-title">Programación</h3>
       <div class="act-form-card">
         <div class="act-form-field">
           <label class="act-form-label">DURACION (minutos)</label>
@@ -586,10 +587,25 @@ export async function renderActividades(container) {
       selectedId = null; activityFull = null; renderList();
     });
 
+    // Guardar ANTES de repintar: renderDetail() reconstruye el formulario
+    // desde activityFull (lo que hay en la base de datos), así que lo escrito
+    // y no guardado se perdía en silencio al cambiar de pestaña. Si el
+    // guardado falla no se cambia de pestaña, para no perder el texto.
     container.querySelectorAll('.act-nav-item').forEach(item => {
-      item.addEventListener('click', e => {
+      item.addEventListener('click', async (e) => {
         e.preventDefault();
-        activeTab = item.dataset.tab;
+        const destino = item.dataset.tab;
+        if (!destino || destino === activeTab) return;
+        try {
+          if (await saveCurrentTab(a)) {
+            activityFull = await fetchActivityFull(a.id);
+            await loadActivities();
+          }
+        } catch (err) {
+          showToast('No se pudo guardar: ' + err.message, 'error');
+          return;
+        }
+        activeTab = destino;
         renderDetail();
       });
     });
@@ -643,15 +659,30 @@ export async function renderActividades(container) {
     /* Fotos tab */
     if (activeTab === 'fotos') {
       container.querySelector('#f-photo-file')?.addEventListener('change', async e => {
-        const file = e.target.files[0];
-        if (!file) return;
+        const files = [...e.target.files];
+        e.target.value = '';               // permite volver a elegir las mismas
+        if (!files.length) return;
+        const base = (a.photos || []).length;
+        showToast(`Subiendo ${files.length} foto${files.length > 1 ? 's' : ''}…`, 'info');
         try {
-          const url = await uploadActivityImage(file, a.slug);
-          await upsertActivityPhoto({ activity_id: a.id, url, alt_text: '', sort_order: (a.photos||[]).length });
+          // Comprimidas y de 3 en 3: subir el original de una foto de móvil
+          // (3–8 MB) era lo que hacía que pareciera colgado.
+          const urls = await uploadAll(files, async (file) => {
+            const opt = await resizeImage(file);
+            return uploadActivityImage(opt, a.slug);
+          });
+          const ok = urls.filter(Boolean);
+          for (let i = 0; i < ok.length; i++) {
+            await upsertActivityPhoto({ activity_id: a.id, url: ok[i], alt_text: '', sort_order: base + i });
+          }
+          // Un único refresco al final, no uno por foto.
           activityFull = await fetchActivityFull(a.id);
           renderDetail();
-          showToast('Foto subida', 'success');
-        } catch (err) { showToast('Error subiendo foto: ' + err.message, 'error'); }
+          const fallidas = urls.length - ok.length;
+          showToast(
+            fallidas ? `${ok.length} subidas, ${fallidas} fallaron` : `${ok.length} foto${ok.length > 1 ? 's' : ''} subida${ok.length > 1 ? 's' : ''}`,
+            fallidas ? 'error' : 'success');
+        } catch (err) { showToast('Error subiendo fotos: ' + err.message, 'error'); }
       });
 
       container.querySelector('#f-photo-add-url')?.addEventListener('click', async () => {
@@ -787,7 +818,7 @@ export async function renderActividades(container) {
         const file = e.target.files[0];
         if (!file) return;
         try {
-          const url = await uploadActivityImage(file, a.slug);
+          const url = await uploadActivityImage(await resizeImage(file), a.slug);
           container.querySelector('#f-hero-image').value = url;
           showToast('Imagen subida', 'success');
         } catch (err) { showToast('Error: ' + err.message, 'error'); }
@@ -851,7 +882,7 @@ export async function renderActividades(container) {
         });
       });
       await upsertActivityPacks(a.id, packs);
-      return; // packs saved separately
+      return true; // packs saved separately
     }
 
     if (activeTab === 'testimonios') {
@@ -886,7 +917,9 @@ export async function renderActividades(container) {
     if (Object.keys(updates).length > 0) {
       updates.id = a.id;
       await upsertActivity(updates);
+      return true;
     }
+    return false;
   }
 
   /* start */

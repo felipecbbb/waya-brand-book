@@ -73,7 +73,7 @@ export async function renderCupones(container) {
       ${coupons.length ? `
         <div class="cp-table">
           <div class="cp-table-head">
-            <span class="cp-col-code">Codigo</span>
+            <span class="cp-col-code">Código</span>
             <span class="cp-col-name">Nombre</span>
             <span class="cp-col-discount">Descuento</span>
             <span class="cp-col-applies">Aplica a</span>
@@ -159,14 +159,14 @@ export async function renderCupones(container) {
           <div class="act-form-card">
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
               <div class="act-form-field">
-                <label class="act-form-label">CODIGO</label>
+                <label class="act-form-label">CÓDIGO</label>
                 <div style="display:flex;gap:8px">
                   <input type="text" class="act-form-input" id="cp-code" value="${esc(c.code||'')}" placeholder="VERANO25" style="text-transform:uppercase;font-weight:700;letter-spacing:.05em" />
                   <button class="act-action-btn primary" id="cp-generate" style="white-space:nowrap;font-size:.7rem">Generar</button>
                 </div>
               </div>
               <div class="act-form-field">
-                <label class="act-form-label">NOMBRE / DESCRIPCION</label>
+                <label class="act-form-label">NOMBRE / DESCRIPCIÓN</label>
                 <input type="text" class="act-form-input" id="cp-name" value="${esc(c.name||'')}" placeholder="Descuento verano 2026" />
               </div>
             </div>
@@ -307,7 +307,7 @@ export async function renderCupones(container) {
     container.querySelector('#cp-save')?.addEventListener('click', async () => {
       const code = container.querySelector('#cp-code')?.value.trim().toUpperCase();
       const name = container.querySelector('#cp-name')?.value.trim();
-      if (!code || !name) { showToast('Codigo y nombre son obligatorios', 'error'); return; }
+      if (!code || !name) { showToast('Código y nombre son obligatorios', 'error'); return; }
 
       const data = {
         code,

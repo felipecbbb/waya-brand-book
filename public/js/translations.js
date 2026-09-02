@@ -16,8 +16,13 @@ const translations = {
             surf_kids: "Bono Niños",
             surfcamp: "Surfcamps",
             rentals: "Alquileres",
+            shop: "Tienda",
             news: "Noticias",
-            book: "Reservar"
+            book: "Reservar",
+            account: "Mi cuenta",
+            account_bookings: "Mis reservas",
+            account_profile: "Mis datos",
+            account_logout: "Cerrar sesión"
         },
         home: {
             hero: {
@@ -116,6 +121,13 @@ const translations = {
                 kids_feat5: "Material completo incluido",
                 cta: "Ver Bono Adultos",
                 cta_kids: "Ver Bono Niños"
+            },
+            surfcamp: {
+                tag: "Próximamente",
+                title: "Surfcamps en Gran Canaria",
+                desc: "Una semana de surf, comunidad y desconexión total frente al mar. Nuevas ediciones muy pronto — sé el primero en enterarte.",
+                cta: "Ver Surfcamps",
+                cta2: "Avísame"
             },
             carousel: {
                 tag: "Experiencias Waya",
@@ -313,6 +325,12 @@ const translations = {
             title: "RESERVA TU CLASE",
             desc: "Completa el formulario y nos pondremos en contacto contigo en menos de 24h para confirmar tu sesión en las mejores olas de Gran Canaria.",
             form: {
+                section_title: "Platz anfragen",
+                section_desc: "Trag deine Daten ein und wir bestätigen dir die Verfügbarkeit",
+                section_title: "Request your spot",
+                section_desc: "Fill in your details and we'll confirm availability",
+                section_title: "Solicita Tu Plaza",
+                section_desc: "Rellena los datos y te confirmamos disponibilidad",
                 name_label: "Nombre Completo",
                 name_placeholder: "Ej. Alex Smith",
                 email_label: "Email",
@@ -341,6 +359,15 @@ const translations = {
                 submit: "Enviar Reserva"
             },
             sidebar: {
+                phone: "+34 636 56 24 48",
+                email: "info@wayasurf.com",
+                location: "Playa del Hombre, Telde",
+                phone: "+34 636 56 24 48",
+                email: "info@wayasurf.com",
+                location: "Playa del Hombre, Telde",
+                phone: "+34 636 56 24 48",
+                email: "info@wayasurf.com",
+                location: "Playa del Hombre, Telde",
                 title: "WHY WAYA?",
                 list_1: "Instructores certificados y apasionados.",
                 list_2: "Material de primera calidad incluido.",
@@ -349,6 +376,7 @@ const translations = {
                 contact_title: "Contacto Directo"
             },
             booking_options: {
+                form_link_btn: "Ir al Formulario",
                 whatsapp_tag: "Opción Rápida",
                 whatsapp_title: "¿Dudas Rápidas?",
                 whatsapp_desc: "Si no tienes claro qué elegir o prefieres un trato directo, háblanos por WhatsApp. Te contestamos al momento.",
@@ -372,8 +400,7 @@ const translations = {
                 "Instructor especializado en niños",
                 "Precio especial para residentes",
                 "Metodología lúdica y educativa",
-                "Seguro de accidentes incluido"
-            ],
+                "Seguro de accidentes incluido", "Grupos reducidos por edades"],
             benefits_title: "Beneficios para tus hijos:",
             benefits_list: [
                 "Desarrollo físico y coordinación",
@@ -654,6 +681,45 @@ const translations = {
             bring_3: "Crema solar y ganas de disfrutar",
             bring_cta_btn: "Preguntar por WhatsApp"
         },
+        shop: {
+            hero: {
+                kicker: "Tienda",
+                title: "Material de surf, sin complicaciones",
+                sub: "Elige lo que te interesa y nos escribes por WhatsApp. Te confirmamos disponibilidad, talla y precio, y lo recoges en la escuela."
+            },
+            notice: "Este catálogo es informativo: no se paga por la web. Escríbenos y coordinamos contigo la compra y la recogida.",
+            loading: "Cargando productos…"
+        },
+        carrito: {
+            kicker: "Tu pedido",
+            title: "Carrito"
+        },
+        checkout: {
+            kicker: "Finalizar compra",
+            title: "Completa tu reserva",
+            name: "Nombre completo",
+            email: "Email",
+            phone: "Teléfono",
+            shipping: "Dirección",
+            address: "Dirección",
+            city: "Ciudad",
+            zip: "Código postal",
+            notes: "Notas del pedido",
+            invoice: "Quiero factura",
+            invoiceName: "Nombre o razón social",
+            invoiceNif: "NIF / CIF",
+            invoiceAddress: "Dirección fiscal",
+            pay: "Pagar",
+            secure: "Pago seguro con tarjeta · datos protegidos por SumUp",
+            emptyTitle: "No hay nada que pagar",
+            emptyText: "Tu carrito está vacío.",
+            goBook: "Reservar una clase",
+            goHome: "Volver al inicio",
+            okTitle: "¡Reserva confirmada! 🤙",
+            okText: "Tu reserva se ha registrado correctamente.",
+            okEmail: "Te enviamos la confirmación por email con todos los detalles.",
+            myAccount: "Ver mi cuenta"
+        },
         rentals: {
             hero: {
                 vertical_label: "MATERIAL PREMIUM",
@@ -748,6 +814,7 @@ const translations = {
             }
         },
         levels_page: {
+            rack_label: ["Nivel 0-1", "Nivel 2", "Nivel 3", "Nivel 4", "Nivel 5+"],
             hero: {
                 tag: "Progresión Waya",
                 title: "Tu Camino en el Surfing",
@@ -852,7 +919,11 @@ const translations = {
             link_rentals: "Alquileres",
             link_news: "Noticias",
             link_book: "Reservar",
-            rights: "© 2026 Waya Surf School. Todos los derechos reservados."
+            rights: "© 2026 Waya Surf School. Todos los derechos reservados.",
+            legal_notice: "Aviso legal",
+            privacy: "Privacidad",
+            cookies: "Cookies",
+            terms: "Condiciones"
         },
         resident: {
             tag: "Solo Residentes",
@@ -954,8 +1025,13 @@ const translations = {
             surf_kids: "Kids Pass",
             surfcamp: "Surfcamps",
             rentals: "Rentals",
+            shop: "Shop",
             news: "News",
-            book: "Book Now"
+            book: "Book Now",
+            account: "My account",
+            account_bookings: "My bookings",
+            account_profile: "My details",
+            account_logout: "Log out"
         },
         home: {
             hero: {
@@ -1054,6 +1130,13 @@ const translations = {
                 kids_feat5: "Full equipment included",
                 cta: "View Adults Pass",
                 cta_kids: "View Kids Pass"
+            },
+            surfcamp: {
+                tag: "Coming Soon",
+                title: "Surfcamps in Gran Canaria",
+                desc: "A week of surf, community and true disconnection by the sea. New editions coming very soon — be the first to know.",
+                cta: "See Surfcamps",
+                cta2: "Notify me"
             },
             carousel: {
                 tag: "Waya Experiences",
@@ -1263,6 +1346,8 @@ const translations = {
             title: "BOOK YOUR LESSON",
             desc: "Complete the form and we will contact you in less than 24h to confirm your session in the best waves of Gran Canaria.",
             form: {
+                section_title: "Request your spot",
+                section_desc: "Fill in your details and we'll confirm availability",
                 name_label: "Full Name",
                 name_placeholder: "Ex. Alex Smith",
                 email_label: "Email",
@@ -1291,6 +1376,9 @@ const translations = {
                 submit: "Send Booking"
             },
             sidebar: {
+                phone: "+34 636 56 24 48",
+                email: "info@wayasurf.com",
+                location: "Playa del Hombre, Telde",
                 title: "WHY WAYA?",
                 list_1: "Certified and passionate instructors.",
                 list_2: "Top quality equipment included.",
@@ -1299,6 +1387,7 @@ const translations = {
                 contact_title: "Direct Contact"
             },
             booking_options: {
+                form_link_btn: "Go to the form",
                 whatsapp_tag: "Quick Option",
                 whatsapp_title: "Quick Questions?",
                 whatsapp_desc: "Not sure what to choose? Chat directly with us on WhatsApp. We reply instantly.",
@@ -1322,8 +1411,7 @@ const translations = {
                 "Instructor specialized in children",
                 "Special price for residents",
                 "Playful and educational methodology",
-                "Accident insurance included"
-            ],
+                "Accident insurance included", "Small groups by age"],
             benefits_title: "Benefits for your children:",
             benefits_list: [
                 "Physical development and coordination",
@@ -1604,6 +1692,45 @@ const translations = {
             bring_3: "Sunscreen and a desire to have fun",
             bring_cta_btn: "Ask on WhatsApp"
         },
+        shop: {
+            hero: {
+                kicker: "Shop",
+                title: "Surf gear, no hassle",
+                sub: "Pick what you like and message us on WhatsApp. We'll confirm availability, size and price, and you collect it at the school."
+            },
+            notice: "This catalogue is for information only: no payment is taken on the website. Message us and we'll arrange the purchase and pickup with you.",
+            loading: "Loading products…"
+        },
+        carrito: {
+            kicker: "Your order",
+            title: "Cart"
+        },
+        checkout: {
+            kicker: "Checkout",
+            title: "Complete your booking",
+            name: "Full name",
+            email: "Email",
+            phone: "Phone",
+            shipping: "Address",
+            address: "Address",
+            city: "City",
+            zip: "Postcode",
+            notes: "Order notes",
+            invoice: "I need an invoice",
+            invoiceName: "Name or company",
+            invoiceNif: "Tax ID",
+            invoiceAddress: "Billing address",
+            pay: "Pay",
+            secure: "Secure card payment · protected by SumUp",
+            emptyTitle: "Nothing to pay",
+            emptyText: "Your cart is empty.",
+            goBook: "Book a lesson",
+            goHome: "Back to home",
+            okTitle: "Booking confirmed! 🤙",
+            okText: "Your booking has been registered.",
+            okEmail: "We've emailed you the confirmation with all the details.",
+            myAccount: "View my account"
+        },
         rentals: {
             hero: {
                 vertical_label: "PREMIUM GEAR",
@@ -1698,6 +1825,7 @@ const translations = {
             }
         },
         levels_page: {
+            rack_label: ["Level 0-1", "Level 2", "Level 3", "Level 4", "Level 5+"],
             hero: {
                 tag: "Waya Progression",
                 title: "Your Path in Surfing",
@@ -1801,7 +1929,11 @@ const translations = {
             link_rentals: "Rentals",
             link_news: "News",
             link_book: "Book Now",
-            rights: "© 2026 Waya Surf School. All rights reserved."
+            rights: "© 2026 Waya Surf School. All rights reserved.",
+            legal_notice: "Legal notice",
+            privacy: "Privacy",
+            cookies: "Cookies",
+            terms: "Terms"
         },
         news: {
             latest: "LATEST DROP",
@@ -1903,8 +2035,13 @@ const translations = {
             surf_kids: "Kinder-Abo",
             surfcamp: "Surfcamps",
             rentals: "Verleih",
+            shop: "Shop",
             news: "Neuigkeiten",
-            book: "Buchen"
+            book: "Buchen",
+            account: "Mein Konto",
+            account_bookings: "Meine Buchungen",
+            account_profile: "Meine Daten",
+            account_logout: "Abmelden"
         },
         home: {
             hero: {
@@ -2003,6 +2140,13 @@ const translations = {
                 kids_feat5: "Komplettes Material inklusive",
                 cta: "Erwachsenen-Abo ansehen",
                 cta_kids: "Kinder-Abo"
+            },
+            surfcamp: {
+                tag: "Demnächst",
+                title: "Surfcamps auf Gran Canaria",
+                desc: "Eine Woche Surfen, Gemeinschaft und echte Auszeit am Meer. Neue Termine ganz bald — sei der Erste, der es erfährt.",
+                cta: "Surfcamps ansehen",
+                cta2: "Benachrichtige mich"
             },
             carousel: {
                 tag: "Waya Erlebnisse",
@@ -2203,6 +2347,8 @@ const translations = {
             title: "BUCHE DEINE STUNDE",
             desc: "Fülle das Formular aus und wir melden uns innerhalb von 24 Stunden, um deine Session in den besten Wellen Gran Canarias zu bestätigen.",
             form: {
+                section_title: "Platz anfragen",
+                section_desc: "Trag deine Daten ein und wir bestätigen dir die Verfügbarkeit",
                 name_label: "Vollständiger Name",
                 name_placeholder: "z.B. Max Mustermann",
                 email_label: "E-Mail",
@@ -2231,6 +2377,9 @@ const translations = {
                 submit: "Buchung senden"
             },
             sidebar: {
+                phone: "+34 636 56 24 48",
+                email: "info@wayasurf.com",
+                location: "Playa del Hombre, Telde",
                 title: "WARUM WAYA?",
                 list_1: "Zertifizierte und leidenschaftliche Lehrer.",
                 list_2: "Erstklassiges Material inklusive.",
@@ -2239,6 +2388,7 @@ const translations = {
                 contact_title: "Direkter Kontakt"
             },
             booking_options: {
+                form_link_btn: "Zum Formular",
                 whatsapp_tag: "Schnelle Option",
                 whatsapp_title: "Schnelle Fragen?",
                 whatsapp_desc: "Nicht sicher, was du wählen sollst? Chatte direkt mit uns auf WhatsApp. Wir antworten sofort.",
@@ -2262,8 +2412,7 @@ const translations = {
                 "Auf Kinder spezialisierter Lehrer",
                 "Sonderpreis für Einwohner",
                 "Spielerische und pädagogische Methodik",
-                "Unfallversicherung inklusive"
-            ],
+                "Unfallversicherung inklusive", "Kleine Gruppen nach Alter"],
             benefits_title: "Vorteile für deine Kinder:",
             benefits_list: [
                 "Körperliche Entwicklung und Koordination",
@@ -2544,6 +2693,45 @@ const translations = {
             bring_3: "Sonnencreme und Lust auf Spaß",
             bring_cta_btn: "Auf WhatsApp fragen"
         },
+        shop: {
+            hero: {
+                kicker: "Shop",
+                title: "Surfmaterial, ganz unkompliziert",
+                sub: "Wähle aus, was dich interessiert, und schreib uns über WhatsApp. Wir bestätigen dir Verfügbarkeit, Größe und Preis — abgeholt wird in der Schule."
+            },
+            notice: "Dieser Katalog dient nur zur Information: Auf der Website wird nicht bezahlt. Schreib uns, und wir stimmen Kauf und Abholung mit dir ab.",
+            loading: "Produkte werden geladen…"
+        },
+        carrito: {
+            kicker: "Deine Bestellung",
+            title: "Warenkorb"
+        },
+        checkout: {
+            kicker: "Kasse",
+            title: "Buchung abschließen",
+            name: "Vollständiger Name",
+            email: "E-Mail",
+            phone: "Telefon",
+            shipping: "Adresse",
+            address: "Adresse",
+            city: "Stadt",
+            zip: "Postleitzahl",
+            notes: "Anmerkungen zur Bestellung",
+            invoice: "Ich brauche eine Rechnung",
+            invoiceName: "Name oder Firma",
+            invoiceNif: "Steuernummer",
+            invoiceAddress: "Rechnungsadresse",
+            pay: "Bezahlen",
+            secure: "Sichere Kartenzahlung · geschützt durch SumUp",
+            emptyTitle: "Nichts zu bezahlen",
+            emptyText: "Dein Warenkorb ist leer.",
+            goBook: "Kurs buchen",
+            goHome: "Zurück zur Startseite",
+            okTitle: "Buchung bestätigt! 🤙",
+            okText: "Deine Buchung wurde registriert.",
+            okEmail: "Wir haben dir die Bestätigung mit allen Details per E-Mail geschickt.",
+            myAccount: "Mein Konto ansehen"
+        },
         rentals: {
             hero: {
                 vertical_label: "PREMIUM MATERIAL",
@@ -2638,6 +2826,7 @@ const translations = {
             }
         },
         levels_page: {
+            rack_label: ["Level 0-1", "Level 2", "Level 3", "Level 4", "Level 5+"],
             hero: {
                 tag: "Waya Progression",
                 title: "Dein Weg im Surfen",
@@ -2741,7 +2930,11 @@ const translations = {
             link_rentals: "Verleih",
             link_news: "Neuigkeiten",
             link_book: "Jetzt buchen",
-            rights: "© 2026 Waya Surf School. Alle Rechte vorbehalten."
+            rights: "© 2026 Waya Surf School. Alle Rechte vorbehalten.",
+            legal_notice: "Impressum",
+            privacy: "Datenschutz",
+            cookies: "Cookies",
+            terms: "AGB"
         },
         news: {
             latest: "NEUESTES",

@@ -322,3 +322,155 @@
   border-color: var(--color-primary, #FDD802) !important;
   box-shadow: 0 0 0 3px rgba(253, 216, 2, 0.16) !important;
 }
+
+/* ============================================================
+   PÁGINAS INTERNAS v2 — lenguaje de tarjetas de la web Waya
+   Lleva el contenido de las secciones (listas, tablas, estados
+   vacíos) a tarjetas redondeadas con aire, cabeceras de sección
+   claras y acciones en píldora amarilla. Carga la última → gana.
+   ============================================================ */
+
+/* --- Aire del área de contenido --- */
+.admin-content { padding-top: 6px; }
+
+/* --- Cabecera de sección: título grande + acción --- */
+.act-list-header {
+  border-bottom: none !important;
+  padding: 6px 2px 18px !important;
+  margin-bottom: 2px;
+}
+.act-list-title {
+  font-family: 'Outfit', sans-serif !important;
+  font-size: 1.4rem !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.02em;
+  color: #1a1a1a !important;
+}
+
+/* Botón "+" de añadir → círculo amarillo Waya */
+.act-icon-btn {
+  width: 44px !important;
+  height: 44px !important;
+  border: none !important;
+  border-radius: 50% !important;
+  background: #FDD802 !important;
+  color: #1a1a1a !important;
+  box-shadow: 0 4px 14px rgba(253, 216, 2, 0.35);
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+}
+.act-icon-btn:hover {
+  background: #f5d000 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 22px rgba(253, 216, 2, 0.45);
+}
+.act-icon-btn svg { width: 20px; height: 20px; }
+
+/* --- Tabla de Actividades → tarjeta --- */
+.act-table {
+  background: #fff;
+  border: 1px solid #ededed;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(26, 26, 26, 0.03), 0 14px 34px rgba(26, 26, 26, 0.05);
+}
+.act-table-head {
+  background: #fafafa !important;
+  border-bottom: 1px solid #ededed !important;
+  padding: 13px 22px !important;
+  letter-spacing: 0.06em !important;
+  font-weight: 700 !important;
+  color: #9a9a9a !important;
+}
+.act-table-row {
+  padding: 16px 22px !important;
+  border-bottom: 1px solid #f4f4f4 !important;
+  transition: background 0.15s ease;
+}
+.act-table-row:last-child { border-bottom: none !important; }
+.act-table-row:hover { background: rgba(253, 216, 2, 0.05) !important; }
+
+/* --- Tablas envueltas en .table-wrap → tarjeta (catálogo, bonos, pagos) --- */
+.table-wrap {
+  background: #fff;
+  border: 1px solid #ededed;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(26, 26, 26, 0.03), 0 14px 34px rgba(26, 26, 26, 0.05);
+}
+/* Dentro de una form-card no duplicar el marco */
+.act-form-card { border-radius: 18px !important; }
+.act-form-card .table-wrap {
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+}
+@media (max-width: 768px) {
+  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+}
+
+/* --- Segmentos / pestañas internas → estilo Waya --- */
+.mat-cat-tab,
+.rc-tab {
+  border-radius: 999px !important;
+  font-family: 'Outfit', sans-serif !important;
+  font-weight: 600 !important;
+  font-size: 0.82rem !important;
+  border: 1px solid #e6e6e6 !important;
+  background: #fff !important;
+  color: #555 !important;
+  transition: all 0.2s ease;
+}
+.mat-cat-tab:hover,
+.rc-tab:hover { border-color: #d8d8d8 !important; }
+.mat-cat-tab.on,
+.rc-tab.active {
+  background: #1a1a1a !important;
+  color: #fff !important;
+  border-color: #1a1a1a !important;
+}
+
+/* --- KPI tiles de secciones internas (Reserva Clases) --- */
+.admin-stat-card {
+  background: #fff !important;
+  border: 1px solid #ededed !important;
+  border-radius: 16px !important;
+  box-shadow: 0 1px 2px rgba(26, 26, 26, 0.03);
+  padding: 1.25rem 1.4rem !important;
+}
+.admin-stat-value {
+  font-family: 'Outfit', sans-serif !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.02em;
+  color: #1a1a1a !important;
+}
+.admin-stat-label {
+  font-family: 'Outfit', sans-serif !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.08em !important;
+  font-size: 0.68rem !important;
+  color: #999 !important;
+  font-weight: 700 !important;
+}
+
+/* --- Toolbar / buscador --- */
+.admin-toolbar { gap: 0.6rem; align-items: center; margin-bottom: 1rem; }
+.admin-search {
+  border-radius: 12px !important;
+  border: 1.5px solid #e6e6e6 !important;
+  padding: 0.7rem 1rem !important;
+  font-family: 'Inter', sans-serif !important;
+}
+
+/* --- Estado vacío → tarjeta con más presencia --- */
+.admin-empty {
+  background: #fafafa;
+  border: 1px dashed #e0e0e0;
+  border-radius: 18px;
+  padding: 56px 24px !important;
+  margin-top: 6px;
+}
+.admin-empty p {
+  color: #9a9a9a !important;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 500;
+}

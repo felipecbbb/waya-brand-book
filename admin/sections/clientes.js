@@ -9,7 +9,7 @@ import { getPackPrice, bonoExpected, classPrice } from '/lib/domain/pricing.js';
 import { recalcPaidState as recalcPaymentState, recalcBonoPaid } from '/lib/domain/payments.js';
 import { createBono } from '/lib/domain/bonos.js';
 import { openBonoFicha } from '../components/bono-ficha.js';
-import { wetsuitOptionsHtml } from '/lib/shared-constants.js';
+import { clientLevelOptionsHtml, clientLevelLabel } from '/lib/shared-constants.js';
 import { openPaymentEditModal } from '../modules/payment-edit.js';
 
 // recalcPaymentState vive en /lib/domain/payments.js (recalcPaidState).
@@ -236,10 +236,6 @@ async function deleteProfile(id) {
 const TYPE_LABELS = {
   grupal: 'Grupal', individual: 'Individual', yoga: 'Yoga',
   paddle: 'Paddle Surf', surfskate: 'SurfSkate',
-};
-
-const LEVEL_LABELS = {
-  principiante: 'Principiante', intermedio: 'Intermedio', avanzado: 'Avanzado',
 };
 
 export async function renderClientes(container) {
@@ -602,11 +598,8 @@ export async function renderClientes(container) {
   }
 
   function openNewClientModal() {
-    const levelOpts = (sel = '') => `
-      <option value="">Sin definir</option>
-      <option value="principiante" ${sel === 'principiante' ? 'selected' : ''}>Principiante</option>
-      <option value="intermedio" ${sel === 'intermedio' ? 'selected' : ''}>Intermedio</option>
-      <option value="avanzado" ${sel === 'avanzado' ? 'selected' : ''}>Avanzado</option>`;
+    // La escala real de Waya (niveles 0–5), la misma de niveles.html
+    const levelOpts = (sel = '') => clientLevelOptionsHtml(sel);
     const familyRowHtml = () => `
       <div class="ncl-fam-card">
         <button type="button" class="ncl-fam-remove" title="Quitar familiar">✕</button>
@@ -649,7 +642,11 @@ export async function renderClientes(container) {
           </div>
           <div class="cli-form-row">
             <div class="act-form-field"><label class="act-form-label">Código postal</label><input type="text" class="act-form-input" name="postal_code"></div>
-            <div class="act-form-field"><label class="act-form-label">Talla neopreno</label><select class="act-form-input" name="wetsuit_size">${wetsuitOptionsHtml('')}</select></div>
+            <div class="act-form-field"><label class="act-form-label">Peso (kg)</label><input type="number" class="act-form-input" name="weight_kg" min="1" max="299" step="0.5" placeholder="Ej: 72"></div>
+          </div>
+          <div class="cli-form-row">
+            <div class="act-form-field"><label class="act-form-label">Altura (cm)</label><input type="number" class="act-form-input" name="height_cm" min="31" max="259" step="1" placeholder="Ej: 178"></div>
+            <div class="act-form-field"></div>
           </div>
           <div class="cli-form-row">
             <div class="act-form-field"><label class="act-form-label">¿Sabe nadar?</label><select class="act-form-input" name="can_swim"><option value="">Sin definir</option><option value="true">Sí</option><option value="false">No</option></select></div>
@@ -716,7 +713,10 @@ export async function renderClientes(container) {
         city: o.city?.trim() || null,
         postal_code: o.postal_code?.trim() || null,
         level: o.level || null,
-        wetsuit_size: o.wetsuit_size || null,
+        // Peso y altura en vez de pedir la talla de neopreno: el cliente rara
+        // vez la sabe, y con estos dos datos la escuela la deduce.
+        weight_kg: o.weight_kg ? Number(o.weight_kg) : null,
+        height_cm: o.height_cm ? Number(o.height_cm) : null,
         can_swim: o.can_swim === 'true' ? true : o.can_swim === 'false' ? false : null,
         has_injury: o.has_injury === 'true',
         injury_detail: o.injury_detail?.trim() || null,
@@ -1056,10 +1056,14 @@ export async function renderClientes(container) {
         </div>
         <div class="cli-form-row">
           <div class="act-form-field">
-            <label class="act-form-label">TALLA NEOPRENO</label>
-            <select class="act-form-input" id="cli-wetsuit-size">
-              ${wetsuitOptionsHtml(c.wetsuit_size || '')}
-            </select>
+            <label class="act-form-label">PESO (KG)</label>
+            <input type="number" class="act-form-input" id="cli-weight" min="1" max="299" step="0.5"
+                   value="${c.weight_kg ?? ''}" placeholder="Ej: 72">
+          </div>
+          <div class="act-form-field">
+            <label class="act-form-label">ALTURA (CM)</label>
+            <input type="number" class="act-form-input" id="cli-height" min="31" max="259" step="1"
+                   value="${c.height_cm ?? ''}" placeholder="Ej: 178">
           </div>
         </div>
       </div>
@@ -1112,14 +1116,15 @@ export async function renderClientes(container) {
                   <strong class="cli-family-name">${esc(m.full_name)}</strong>
                   <div class="cli-family-meta">
                     ${age !== null ? `<span>${age} años</span>` : ''}
-                    ${m.level ? `<span class="cli-family-level">${LEVEL_LABELS[m.level] || m.level}</span>` : ''}
+                    ${m.level ? `<span class="cli-family-level">${clientLevelLabel(m.level)}</span>` : ''}
                   </div>
                 </div>
               </div>
               <div class="cli-family-card-body">
                 ${m.birth_date ? `<div class="cli-family-field"><span class="cli-family-field-label">Nacimiento</span><span>${formatDate(m.birth_date)}</span></div>` : ''}
-                ${m.level ? `<div class="cli-family-field"><span class="cli-family-field-label">Nivel</span><span>${LEVEL_LABELS[m.level] || m.level}</span></div>` : ''}
-                ${m.wetsuit_size ? `<div class="cli-family-field"><span class="cli-family-field-label">Neopreno</span><span>${m.wetsuit_size}</span></div>` : ''}
+                ${m.level ? `<div class="cli-family-field"><span class="cli-family-field-label">Nivel</span><span>${clientLevelLabel(m.level)}</span></div>` : ''}
+                ${m.weight_kg ? `<div class="cli-family-field"><span class="cli-family-field-label">Peso</span><span>${m.weight_kg} kg</span></div>` : ''}
+                ${m.height_cm ? `<div class="cli-family-field"><span class="cli-family-field-label">Altura</span><span>${m.height_cm} cm</span></div>` : ''}
                 ${m.can_swim === false ? `<div class="cli-family-field"><span class="cli-family-field-label" style="color:#b91c1c">⚠ No sabe nadar</span></div>` : ''}
                 ${m.has_injury ? `<div class="cli-family-field"><span class="cli-family-field-label" style="color:#b91c1c">⚠ Lesión</span><span>${esc(m.injury_detail) || 'Sí'}</span></div>` : ''}
                 ${m.notes ? `<div class="cli-family-field"><span class="cli-family-field-label">Notas</span><span>${esc(m.notes)}</span></div>` : ''}
@@ -1221,10 +1226,14 @@ export async function renderClientes(container) {
             </select>
           </div>
           <div class="act-form-field">
-            <label class="act-form-label">Talla neopreno</label>
-            <select class="act-form-input" name="wetsuit_size">
-              ${wetsuitOptionsHtml(member?.wetsuit_size || '')}
-            </select>
+            <label class="act-form-label">Peso (kg)</label>
+            <input type="number" class="act-form-input" name="weight_kg" min="1" max="299" step="0.5"
+                   value="${member?.weight_kg ?? ''}" placeholder="Ej: 45">
+          </div>
+          <div class="act-form-field">
+            <label class="act-form-label">Altura (cm)</label>
+            <input type="number" class="act-form-input" name="height_cm" min="31" max="259" step="1"
+                   value="${member?.height_cm ?? ''}" placeholder="Ej: 150">
           </div>
         </div>
         <div class="cli-form-row">
@@ -1268,7 +1277,8 @@ export async function renderClientes(container) {
       fields.can_swim = fields.can_swim === 'true' ? true : fields.can_swim === 'false' ? false : null;
       fields.has_injury = fields.has_injury === 'true';
       if (!fields.injury_detail) fields.injury_detail = null;
-      if (!fields.wetsuit_size) fields.wetsuit_size = null;
+      fields.weight_kg = fields.weight_kg ? Number(fields.weight_kg) : null;
+      fields.height_cm = fields.height_cm ? Number(fields.height_cm) : null;
       try {
         if (isEdit) {
           await updateFamilyMemberAdmin(member.id, fields);
@@ -1360,10 +1370,14 @@ export async function renderClientes(container) {
             </select>
           </div>
           <div class="act-form-field">
-            <label class="act-form-label">TALLA NEOPRENO</label>
-            <select class="act-form-input" id="mf-wetsuit">
-              ${wetsuitOptionsHtml(member.wetsuit_size || '')}
-            </select>
+            <label class="act-form-label">PESO (KG)</label>
+            <input type="number" class="act-form-input" id="mf-weight" min="1" max="299" step="0.5"
+                   value="${member.weight_kg ?? ''}" placeholder="Ej: 45">
+          </div>
+          <div class="act-form-field">
+            <label class="act-form-label">ALTURA (CM)</label>
+            <input type="number" class="act-form-input" id="mf-height" min="31" max="259" step="1"
+                   value="${member.height_cm ?? ''}" placeholder="Ej: 150">
           </div>
         </div>
         <div class="cli-form-row">
@@ -1455,7 +1469,8 @@ export async function renderClientes(container) {
         can_swim: el.querySelector('#mf-swim')?.value === 'true' ? true : el.querySelector('#mf-swim')?.value === 'false' ? false : null,
         has_injury: el.querySelector('#mf-injury')?.value === 'true',
         injury_detail: el.querySelector('#mf-injury-detail')?.value?.trim() || null,
-        wetsuit_size: el.querySelector('#mf-wetsuit')?.value || null,
+        weight_kg: el.querySelector('#mf-weight')?.value ? Number(el.querySelector('#mf-weight').value) : null,
+        height_cm: el.querySelector('#mf-height')?.value ? Number(el.querySelector('#mf-height').value) : null,
         notes: el.querySelector('#mf-notes')?.value?.trim() || null,
       };
       try {
@@ -2372,7 +2387,8 @@ export async function renderClientes(container) {
     const canSwimEl = container.querySelector('#cli-can-swim');
     const hasInjuryEl = container.querySelector('#cli-has-injury');
     const injuryDetailEl = container.querySelector('#cli-injury-detail');
-    const wetsuitSizeEl = container.querySelector('#cli-wetsuit-size');
+    const weightEl = container.querySelector('#cli-weight');
+    const heightEl = container.querySelector('#cli-height');
     const birthdateEl = container.querySelector('#cli-birthdate');
 
     if (!fullnameEl) {
@@ -2390,7 +2406,8 @@ export async function renderClientes(container) {
     const can_swim = canSwimEl?.value === 'true' ? true : canSwimEl?.value === 'false' ? false : null;
     const has_injury = hasInjuryEl?.value === 'true';
     const injury_detail = injuryDetailEl?.value?.trim() || null;
-    const wetsuit_size = wetsuitSizeEl?.value || null;
+    const weight_kg = weightEl?.value ? Number(weightEl.value) : null;
+    const height_cm = heightEl?.value ? Number(heightEl.value) : null;
     const birth_date = birthdateEl?.value || null;
 
     if (!fullname) {
@@ -2410,7 +2427,8 @@ export async function renderClientes(container) {
         can_swim,
         has_injury,
         injury_detail,
-        wetsuit_size,
+        weight_kg,
+        height_cm,
         birth_date,
       });
       // Update local copy
@@ -2424,7 +2442,8 @@ export async function renderClientes(container) {
       c.can_swim = can_swim;
       c.has_injury = has_injury;
       c.injury_detail = injury_detail;
-      c.wetsuit_size = wetsuit_size;
+      c.weight_kg = weight_kg;
+      c.height_cm = height_cm;
       c.birth_date = birth_date;
       showToast('Cliente actualizado', 'success');
       renderDetail();

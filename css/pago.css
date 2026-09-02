@@ -1,0 +1,83 @@
+/* ============================================================
+   Página de retorno del pago (pago-ok.html)
+   Sistema Waya: amarillo #FDD802, dark #1a1a1a, tarjetas redondeadas.
+   ============================================================ */
+
+.pago-wrap {
+  min-height: 68vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(7rem, 14vw, 10rem) clamp(1.2rem, 4vw, 3rem) clamp(4rem, 8vw, 6rem);
+  background: var(--color-light-gray);
+}
+
+.pago-card {
+  background: #fff;
+  border-radius: 24px;
+  box-shadow: var(--shadow-lg);
+  padding: clamp(2rem, 5vw, 3.5rem);
+  max-width: 560px;
+  width: 100%;
+  text-align: center;
+}
+
+.pago-icon {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 1.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-light-gray);
+  color: var(--color-dark);
+}
+.pago-icon svg { width: 34px; height: 34px; }
+
+.pago-icon.is-ok    { background: var(--color-primary); color: var(--color-dark); }
+.pago-icon.is-warn  { background: #fff4cc; color: #8a6d00; }
+.pago-icon.is-error { background: var(--color-dark); color: #fff; }
+
+.pago-title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.5rem, 3.5vw, 2.1rem);
+  font-weight: 800;
+  line-height: 1.2;
+  color: var(--color-dark);
+  margin-bottom: .9rem;
+}
+
+.pago-text {
+  color: var(--color-gray);
+  line-height: 1.7;
+  font-size: 1.02rem;
+  max-width: 44ch;
+  margin: 0 auto;
+}
+
+.pago-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .75rem;
+  justify-content: center;
+  margin-top: 2rem;
+}
+.pago-actions .btn { text-decoration: none; }
+
+/* Spinner del estado inicial (mientras se consulta el cobro) */
+.pago-spinner {
+  width: 42px;
+  height: 42px;
+  margin: 0 auto 1.6rem;
+  border: 3px solid #e8e8e8;
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: pagoGira .9s linear infinite;
+}
+@keyframes pagoGira { to { transform: rotate(360deg); } }
+
+@media (max-width: 480px) {
+  .pago-actions { flex-direction: column; }
+  .pago-actions .btn { width: 100%; }
+}

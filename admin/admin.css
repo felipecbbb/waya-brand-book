@@ -80,6 +80,11 @@
   padding: 0 0 16px;
   position: sticky;
   top: 0;
+  /* align-self: start es lo que hace que el sticky funcione de verdad.
+     Como ítem de grid, por defecto se estira (align-self: stretch) a la altura
+     de TODA la fila; con esa altura no le queda recorrido para pegarse y el
+     sidebar se iba con el scroll dejando hueco blanco abajo. */
+  align-self: start;
   height: 100vh;
   overflow-y: auto;
   display: flex;
