@@ -362,13 +362,15 @@ function renderAuth() {
 // ============================================================
 //  VISTA: Cambio de contraseña obligatorio (must_change_password)
 // ============================================================
-function renderChangePassword(profile) {
+function renderChangePassword(profile, { primerAcceso = false } = {}) {
   mainEl.innerHTML = `
     <div class="auth-page auth-page-single">
       <div class="auth-page-left">
         <div class="auth-page-form">
-          <h1 class="auth-title">Cambia tu contraseña</h1>
-          <p class="auth-subtitle">Por seguridad, elige una contraseña nueva para tu primer acceso.</p>
+          <h1 class="auth-title">${primerAcceso ? 'Crea tu contraseña' : 'Cambia tu contraseña'}</h1>
+          <p class="auth-subtitle">${primerAcceso
+            ? 'Elige una contraseña para entrar en tu cuenta de Waya cuando quieras.'
+            : 'Por seguridad, elige una contraseña nueva para tu primer acceso.'}</p>
           <form id="change-pass-form" class="auth-form">
             <div class="auth-field">
               <label for="cp-pass">Nueva contraseña</label>
@@ -846,8 +848,39 @@ function route(profile, opts = {}) {
   renderDashboard();
 }
 
+// Enlace del email "Tu cuenta en Waya" (enviar-acceso.php): trae un token de
+// recuperación que se canjea aquí por una sesión, y se pide la contraseña.
+function renderEnlaceCaducado() {
+  mainEl.innerHTML = `
+    <div class="auth-page auth-page-single">
+      <div class="auth-page-left">
+        <div class="auth-page-form">
+          <h1 class="auth-title">El enlace ha caducado</h1>
+          <p class="auth-subtitle">Este enlace ya se usó o ha caducado. Escríbenos por WhatsApp al
+            <a href="https://wa.me/34636562448" target="_blank" rel="noopener">636 56 24 48</a>
+            y te mandamos uno nuevo.</p>
+          <a href="/mi-cuenta/" class="auth-submit-btn" style="display:inline-block;text-align:center;text-decoration:none">Ir a iniciar sesión</a>
+        </div>
+      </div>
+    </div>`;
+}
+
+async function canjearEnlaceAcceso() {
+  const params = new URLSearchParams(location.search);
+  const tokenHash = params.get('token_hash');
+  if (!tokenHash || params.get('type') !== 'recovery') return false;
+  // Se quita de la URL ya: el token es de un solo uso y no debe quedar en el historial.
+  history.replaceState(null, '', location.pathname);
+  const { error } = await supabase.auth.verifyOtp({ token_hash: tokenHash, type: 'recovery' });
+  if (error) { renderEnlaceCaducado(); return true; }
+  const profile = await getProfile();
+  renderChangePassword(profile, { primerAcceso: true });
+  return true;
+}
+
 async function init() {
   try {
+    if (await canjearEnlaceAcceso()) return;
     const session = await getSession();
     if (!session) { renderAuth(); return; }
     const profile = await getProfile();

@@ -3417,6 +3417,30 @@ export async function renderCalendario(container) {
             };
 
             showToast('Reserva confirmada', 'success');
+
+            // Casilla "Enviar confirmación de reserva": antes solo se guardaba en
+            // la ficha y nunca se mandaba nada. Se envía sin bloquear el flujo.
+            if (enviarConfirmacion && contactData.email.trim()) {
+              const fechas = reservationData.sessions
+                .slice().sort((a, b) => (a.date + a.time_start).localeCompare(b.date + b.time_start))
+                .map(ses => {
+                  const dia = new Date(ses.date + 'T12:00:00').toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' });
+                  return `${dia} · ${(ses.time_start || '').slice(0, 5)}–${(ses.time_end || '').slice(0, 5)}`;
+                });
+              enviarAviso({
+                to: contactData.email.trim(),
+                type: 'class_booked',
+                data: {
+                  customerName: contactData.nombre.trim(),
+                  className: cls.title || label,
+                  date: fechas.join(' | '),
+                  message: `Tu reserva en Waya Surf School queda confirmada${fechas.length > 1 ? ` (${fechas.length} clases)` : ''}. Recuerda llegar 10 minutos antes. ¡Nos vemos en el agua!`,
+                },
+              })
+                .then(() => showToast(`Confirmación enviada a ${contactData.email.trim()}`, 'success'))
+                .catch(err => showToast('Reserva hecha, pero el email de confirmación falló: ' + err.message, 'error'));
+            }
+
             // Caso común (responsable+familia = un bono): abrir la ficha de bono ÚNICA,
             // la misma que se ve desde clientes/reserva-clases/calendario. Multi-bono o
             // sin bono: el resumen de reserva clásico.
@@ -6495,7 +6519,7 @@ export async function renderCalendario(container) {
             title: TYPE_LABELS[type], type, level: 'todos', date,
             time_start: timeStart, time_end: timeEnd,
             max_students: maxStudents, instructor, audience, price: classPrice, published,
-            location: 'Las Canteras', status: 'scheduled',
+            location: 'Playa del Hombre', status: 'scheduled',
           });
         }
         document.getElementById('ns-overlay')?.remove();
@@ -7493,7 +7517,7 @@ export async function renderCalendario(container) {
       obj.id = cls.id;
       obj.title = TYPE_LABELS[obj.type] || cls.title;
       obj.level = cls.level || 'todos';
-      obj.location = cls.location || 'Las Canteras';
+      obj.location = cls.location || 'Playa del Hombre';
       obj.status = cls.status || 'scheduled';
       if (!obj.instructor) obj.instructor = null;
       if (!obj.audience) obj.audience = null;

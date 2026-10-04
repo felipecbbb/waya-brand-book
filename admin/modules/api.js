@@ -1017,6 +1017,24 @@ export async function enviarAviso(cuerpo) {
   return out;
 }
 
+/* Manda al cliente el email con el enlace para crear su contraseña
+   (las cuentas creadas desde el panel no tienen contraseña). */
+export async function enviarAcceso({ email, name }) {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) throw new Error('Sin sesión');
+  const res = await fetch('/enviar-acceso.php', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${session.access_token}`,
+    },
+    body: JSON.stringify({ email, name }),
+  });
+  const out = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(out.error || `Error ${res.status} al enviar el acceso`);
+  return out;
+}
+
 export async function fetchSiteSetting(key) {
   const { data, error } = await supabase
     .from('site_settings').select('value').eq('key', key).maybeSingle();

@@ -1,7 +1,7 @@
 /* ============================================================
    Clientes Section — Client list + detail ficha
    ============================================================ */
-import { fetchProfiles, createClientFromAdmin, createPayment, deletePayment, fetchPayments, deleteEnrollment, updateEnrollmentStatus, updateEquipmentReservationStatus, cancelEquipmentReservation, fetchClientsPending, mergeClients, searchProfiles, findDuplicateProfiles } from '../modules/api.js';
+import { fetchProfiles, createClientFromAdmin, createPayment, deletePayment, fetchPayments, deleteEnrollment, updateEnrollmentStatus, updateEquipmentReservationStatus, cancelEquipmentReservation, fetchClientsPending, mergeClients, searchProfiles, findDuplicateProfiles, enviarAcceso } from '../modules/api.js';
 import { attachClientSuggest } from '../modules/client-suggest.js';
 import { renderTable, statusBadge, formatDate, formatCurrency, openModal, closeModal, showToast } from '../modules/ui.js';
 import { supabase } from '/lib/supabase.js';
@@ -11,6 +11,22 @@ import { createBono } from '/lib/domain/bonos.js';
 import { openBonoFicha } from '../components/bono-ficha.js';
 import { clientLevelOptionsHtml, clientLevelLabel } from '/lib/shared-constants.js';
 import { openPaymentEditModal } from '../modules/payment-edit.js';
+
+/* "Enviar acceso": email al cliente con el enlace para crear su contraseña.
+   Antes era un mailto: que Safari bloqueaba y que abría la app Mail del Mac. */
+async function mandarAcceso(client, btn) {
+  const nombre = [client.full_name, client.last_name].filter(Boolean).join(' ').trim();
+  if (!confirm(`¿Enviar a ${client._email} el email para crear su contraseña y entrar en su cuenta?`)) return;
+  if (btn) btn.disabled = true;
+  try {
+    await enviarAcceso({ email: client._email, name: client.full_name || nombre });
+    showToast(`Acceso enviado a ${client._email}`, 'success');
+  } catch (err) {
+    showToast('No se pudo enviar: ' + err.message, 'error');
+  } finally {
+    if (btn) btn.disabled = false;
+  }
+}
 
 // recalcPaymentState vive en /lib/domain/payments.js (recalcPaidState).
 
@@ -373,7 +389,7 @@ export async function renderClientes(container) {
             <div class="cli-list-right">
               <span class="act-status-badge ${r.role === 'admin' ? 'active' : ''}" style="font-size:.68rem">${r.role === 'admin' ? 'Admin' : 'Cliente'}</span>
               <div class="cli-list-actions">
-                <button class="admin-action-btn" data-id="${r.id}" data-action="email" title="Enviar email">
+                <button class="admin-action-btn" data-id="${r.id}" data-action="email" title="Enviar acceso a su cuenta">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
                 </button>
                 <button class="admin-action-btn danger" data-id="${r.id}" data-action="delete" title="Eliminar cliente">
@@ -455,7 +471,7 @@ export async function renderClientes(container) {
         e.stopPropagation();
         const client = profiles.find(p => p.id === btn.dataset.id);
         if (client?._email) {
-          window.open(`mailto:${client._email}`, '_blank');
+          await mandarAcceso(client, btn);
         } else {
           showToast('No se pudo obtener el email de este cliente', 'error');
         }
@@ -823,7 +839,7 @@ export async function renderClientes(container) {
             </button>
             ${c._email ? `
             <button class="act-action-link" id="cli-email">
-              <span>Enviar email</span>
+              <span>Enviar acceso a su cuenta</span>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
             </button>` : ''}
             <button class="act-action-link danger" id="cli-delete">
@@ -859,8 +875,8 @@ export async function renderClientes(container) {
     });
 
     container.querySelector('#cli-save')?.addEventListener('click', () => saveClientData(c));
-    container.querySelector('#cli-email')?.addEventListener('click', () => {
-      if (c._email) window.open(`mailto:${c._email}`, '_blank');
+    container.querySelector('#cli-email')?.addEventListener('click', (e) => {
+      if (c._email) mandarAcceso(c, e.currentTarget);
     });
     container.querySelector('#cli-delete')?.addEventListener('click', async () => {
       if (!confirm(`¿Eliminar a "${c.full_name || 'este cliente'}"? Esta acción no se puede deshacer.`)) return;

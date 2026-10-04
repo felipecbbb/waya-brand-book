@@ -23,6 +23,7 @@ import { renderCupones } from './sections/cupones.js';
 import { renderEquipo } from './sections/equipo.js';
 import { renderControlHorario } from './sections/control-horario.js';
 import { renderPapelera } from './sections/papelera.js';
+import { renderNoticias } from './sections/noticias.js';
 
 // DOM refs
 const loginView = document.getElementById('login-view');
@@ -71,6 +72,7 @@ register('cupones', renderCupones);
 register('equipo', renderEquipo);
 register('control-horario', renderControlHorario);
 register('papelera', renderPapelera);
+register('noticias', renderNoticias);
 
 // ---- Login form ----
 loginForm.addEventListener('submit', async (e) => {

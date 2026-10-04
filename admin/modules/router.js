@@ -24,6 +24,7 @@ export const sectionTitles = {
   equipo: 'Equipo',
   'control-horario': 'Control Horario',
   papelera: 'Papelera',
+  noticias: 'Noticias',
 };
 
 // Secciones restringidas: solo role='admin' puede acceder (nunca un encargado)

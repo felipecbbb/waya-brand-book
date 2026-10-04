@@ -1378,3 +1378,46 @@
   transform: none;
   box-shadow: none;
 }
+
+/* ============================================================
+   Selector previo al reservar clases: WhatsApp o web (cp-choice-*)
+   Antes del calendario, para no asustar con el flujo completo.
+   ============================================================ */
+.cp-modal.cp-modal--choice { width: min(460px, 100%); }
+.cp-choice-opts {
+  display: grid;
+  gap: 12px;
+  padding: 20px 24px 24px;
+}
+.cp-choice {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 16px 18px;
+  border: 1.5px solid #e5e5e5;
+  border-radius: 14px;
+  background: #fff;
+  color: var(--color-dark);
+  text-align: left;
+  text-decoration: none;
+  font: inherit;
+  cursor: pointer;
+  transition: border-color .15s, background .15s, transform .15s;
+}
+.cp-choice:hover { border-color: var(--color-dark); transform: translateY(-1px); }
+.cp-choice--wa { border-color: #25d366; background: #f2fcf5; }
+.cp-choice--wa:hover { border-color: #1da851; }
+.cp-choice-icon {
+  flex: 0 0 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--color-primary, #FDD802);
+  color: var(--color-dark);
+}
+.cp-choice--wa .cp-choice-icon { background: #25d366; color: #fff; }
+.cp-choice-text { display: flex; flex-direction: column; gap: 2px; }
+.cp-choice-text strong { font-size: 1rem; }
+.cp-choice-text span { font-size: .85rem; color: var(--color-gray); }

@@ -507,7 +507,7 @@ export async function renderActividades(container) {
         </div>
         <div class="act-form-field">
           <label class="act-form-label">UBICACION</label>
-          <input type="text" class="act-form-input" id="f-ubicacion" value="${esc(a.ubicacion||'Las Canteras')}" />
+          <input type="text" class="act-form-input" id="f-ubicacion" value="${esc(a.ubicacion||'Playa del Hombre')}" />
         </div>
       </div>`;
   }
