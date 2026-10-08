@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /mi-cuenta/
+Disallow: /carrito/
+Disallow: /finalizar-compra/
+
+Sitemap: https://wayasurf.com/sitemap.xml

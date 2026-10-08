@@ -5,10 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && node scripts/i18n-pages.mjs",
     "preview": "vite preview"
   },
   "devDependencies": {
+    "node-html-parser": "^6.1.13",
     "vite": "^7.2.4"
   },
   "dependencies": {

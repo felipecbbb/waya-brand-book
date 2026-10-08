@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-const FALLBACK_IMAGE = 'images/stock-hero-main.webp';
+const FALLBACK_IMAGE = '/images/stock-hero-main.webp';  // absoluta: el blog también vive en /en/ y /de/
 const DEFAULT_LANGUAGE = 'es';
 let lastNewsFetchError = '';
 const ALLOWED_CONTENT_TAGS = new Set([
@@ -48,7 +48,7 @@ function sanitizeImageUrl(rawValue) {
     if (!raw) return FALLBACK_IMAGE;
 
     // Keep local assets as-is.
-    if (raw.startsWith('images/')) return raw;
+    if (raw.startsWith('images/')) return '/' + raw;
 
     try {
         const parsed = new URL(raw, window.location.origin);

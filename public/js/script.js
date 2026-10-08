@@ -176,7 +176,8 @@ function initNavigation() {
 
   // Marca el enlace del nav correspondiente a la página actual (subrayado activo)
   try {
-    const norm = (p) => (p || '').replace(/index\.html$/, '').replace(/\.html$/, '').replace(/\/$/, '') || '/';
+    // /en/surf.html y /de/surf.html cuentan como /surf.html
+    const norm = (p) => (p || '').replace(/^\/(en|de)(?=\/)/, '').replace(/index\.html$/, '').replace(/\.html$/, '').replace(/\/$/, '') || '/';
     const current = norm(window.location.pathname);
     document.querySelectorAll('.nav-menu a.nav-link[href]').forEach((a) => {
       const href = norm(a.getAttribute('href'));

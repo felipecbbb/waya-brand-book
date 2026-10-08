@@ -1,5 +1,10 @@
 const translations = {
     es: {
+        seo: {
+            booking_h1: "Reservar Clases de Surf - Waya Surf School",
+            camps_title: "Vive el surf por el mundo",
+            camps_sub: "Viajes de surf con la familia Waya: olas nuevas, comunidad y desconexión. Elige tu próxima edición."
+        },
         nav: {
             waya: "WAYA",
             about: "Quiénes somos",
@@ -1010,6 +1015,11 @@ const translations = {
         }
     },
     en: {
+        seo: {
+            booking_h1: "Book Surf Lessons in Gran Canaria - Waya Surf School",
+            camps_title: "Surf your way around the world",
+            camps_sub: "Surf trips with the Waya family: new waves, community and a proper disconnect. Pick your next edition."
+        },
         nav: {
             waya: "WAYA",
             about: "Who we are",
@@ -2021,6 +2031,11 @@ const translations = {
         }
     },
     de: {
+        seo: {
+            booking_h1: "Surfkurs auf Gran Canaria buchen - Waya Surf School",
+            camps_title: "Surfe rund um die Welt",
+            camps_sub: "Surfreisen mit der Waya-Familie: neue Wellen, Gemeinschaft und echtes Abschalten. Wähle deine nächste Edition."
+        },
         nav: {
             waya: "WAYA",
             about: "Über uns",

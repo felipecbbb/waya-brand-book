@@ -36,16 +36,24 @@ function initCookieBanner() {
     try { if (localStorage.getItem(KEY)) return; } catch (e) { return; }
     if (location.pathname.indexOf('politica-cookies') !== -1) return;
 
+    // Textos en el idioma de la página (las /en/ y /de/ lo marcan en <html lang>).
+    var T = {
+        es: { label: 'Aviso de cookies', text: 'Usamos cookies propias y de terceros para el funcionamiento del sitio y para analizar su uso. Consulta nuestra', link: 'Política de Cookies', no: 'Rechazar', yes: 'Aceptar' },
+        en: { label: 'Cookie notice', text: 'We use our own and third-party cookies to run the site and analyse its use. See our', link: 'Cookie Policy', no: 'Reject', yes: 'Accept' },
+        de: { label: 'Cookie-Hinweis', text: 'Wir verwenden eigene Cookies und Cookies von Drittanbietern für den Betrieb der Website und zur Analyse der Nutzung. Mehr in unserer', link: 'Cookie-Richtlinie', no: 'Ablehnen', yes: 'Akzeptieren' }
+    };
+    var lang = (document.documentElement.lang || 'es').slice(0, 2);
+    var t = T[lang] || T.es;
+
     var el = document.createElement('div');
     el.className = 'waya-cookies';
     el.setAttribute('role', 'dialog');
-    el.setAttribute('aria-label', 'Aviso de cookies');
+    el.setAttribute('aria-label', t.label);
     el.innerHTML =
-        '<p>Usamos cookies propias y de terceros para el funcionamiento del sitio y para analizar su uso. ' +
-        'Consulta nuestra <a href="/politica-cookies.html">Política de Cookies</a>.</p>' +
+        '<p>' + t.text + ' <a href="/politica-cookies.html">' + t.link + '</a>.</p>' +
         '<div class="waya-cookies-actions">' +
-        '<button class="wc-reject" type="button">Rechazar</button>' +
-        '<button class="wc-accept" type="button">Aceptar</button></div>';
+        '<button class="wc-reject" type="button">' + t.no + '</button>' +
+        '<button class="wc-accept" type="button">' + t.yes + '</button></div>';
     document.body.appendChild(el);
     // Forzar reflow para que la transición de entrada dispare de forma fiable
     void el.offsetWidth;
