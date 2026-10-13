@@ -1421,3 +1421,35 @@
 .cp-choice-text { display: flex; flex-direction: column; gap: 2px; }
 .cp-choice-text strong { font-size: 1rem; }
 .cp-choice-text span { font-size: .85rem; color: var(--color-gray); }
+
+/* Contrato y firma (paso resumen del calendario de reservas) */
+.cp-contract-text {
+  max-height: 220px;
+  overflow-y: auto;
+  padding: 12px 14px;
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  background: #fafafa;
+  font-size: .8rem;
+  line-height: 1.5;
+  color: #444;
+}
+.cp-contract-text .ct-title { font-size: .95rem; margin: 0 0 6px; color: var(--color-dark); }
+.cp-contract-text p { margin: 0 0 8px; }
+.cp-contract-text .ct-list { margin: 0 0 10px; padding-left: 1.2rem; }
+.cp-contract-text .ct-list li { margin-bottom: 6px; }
+.cp-contract-text .ct-rep, .cp-contract-text .ct-note { font-size: .75rem; color: var(--color-gray); }
+.cp-contract-accept {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin: 12px 0 10px;
+  font-size: .85rem;
+  color: var(--color-dark);
+  cursor: pointer;
+}
+.cp-contract-accept input { margin-top: 3px; flex: 0 0 auto; width: 18px; height: 18px; }
+.cp-contract-sign { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.cp-contract-sign label { display: flex; flex-direction: column; gap: 4px; font-size: .78rem; font-weight: 600; color: var(--color-dark); }
+.cp-contract-sign input { padding: 9px 12px; border: 1px solid #ddd; border-radius: 10px; font: inherit; font-weight: 400; }
+@media (max-width: 520px) { .cp-contract-sign { grid-template-columns: 1fr; } }
