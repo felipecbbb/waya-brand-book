@@ -1035,6 +1035,21 @@ export async function enviarAcceso({ email, name }) {
   return out;
 }
 
+/* Traduce las FAQs del camp (no las cubre traducir_camp). Va SIEMPRE después
+   de traducirCamp: esa función reescribe la columna i18n entera. */
+export async function traducirFaqs(campId) {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) throw new Error('Sin sesión');
+  const res = await fetch('/traducir-faqs.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` },
+    body: JSON.stringify({ camp_id: campId }),
+  });
+  const out = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(out.error || `Error ${res.status} al traducir las FAQs`);
+  return out;
+}
+
 export async function fetchSiteSetting(key) {
   const { data, error } = await supabase
     .from('site_settings').select('value').eq('key', key).maybeSingle();

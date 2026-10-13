@@ -8,7 +8,7 @@ import {
   upsertCampPhoto, deleteCampPhoto, uploadCampImage,
   upsertCampTestimonial, deleteCampTestimonial,
   upsertCampFaq, deleteCampFaq,
-  fetchSiteSetting, upsertSiteSetting, traducirCamp,
+  fetchSiteSetting, upsertSiteSetting, traducirCamp, traducirFaqs,
 } from '../modules/api.js';
 
 const esc = s => s ? String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;') : '';
@@ -844,6 +844,8 @@ export async function renderCamps(container) {
      se hizo y no se pierde nada — solo se avisa. */
   async function autoTraducir(campId) {
     await traducirCamp(campId);
+    // Las FAQs van aparte y DESPUÉS: traducir_camp reescribe i18n entero.
+    await traducirFaqs(campId);
   }
 
   /* ==================== SAVE LOGIC ==================== */

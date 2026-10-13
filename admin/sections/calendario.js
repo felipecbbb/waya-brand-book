@@ -44,7 +44,25 @@ function normPhone(s) {
 }
 
 // Duración por tipo (min) — la hora de fin se calcula sola desde inicio + duración.
-const TYPE_DURATIONS = { grupal: 90, individual: 90, paddle: 90, surfskate: 90, yoga: 60 };
+// Los valores fijos eran de Entreolas (90 min) y al editar una clase de Waya
+// (120 min) la recortaban a hora y media. Ahora son los de Waya y, en cuanto
+// carga, se sobrescriben con la duración real de cada actividad (activities).
+const TYPE_DURATIONS = { grupal: 120, privada: 120, semiprivada: 120, familiar: 120, residente: 120, kids: 90 };
+supabase.from('activities').select('type_key, duracion').then(({ data }) => {
+  (data || []).forEach(a => { if (a.type_key && a.duracion) TYPE_DURATIONS[a.type_key] = Number(a.duracion); });
+}, () => {});
+
+// Duración que YA tiene una sesión (fin − inicio). Al cambiar solo la hora se
+// conserva: si alguien alargó o acortó una clase a mano, no se pisa.
+function sessionDuration(cls) {
+  if (cls?.time_start && cls?.time_end) {
+    const [sh, sm] = cls.time_start.split(':').map(Number);
+    const [eh, em] = cls.time_end.split(':').map(Number);
+    const mins = (eh * 60 + em) - (sh * 60 + sm);
+    if (mins > 0) return mins;
+  }
+  return TYPE_DURATIONS[cls?.type] || 120;
+}
 function addMinutesToTime(hhmm, mins) {
   const [h, m] = (hhmm || '0:0').split(':').map(Number);
   const total = (h * 60 + m + (mins || 0)) % (24 * 60);
@@ -5814,7 +5832,7 @@ export async function renderCalendario(container) {
         let scheduleChanged = false;
         if (changeTime && newTime) {
           upd.time_start = newTime;
-          upd.time_end = addMinutesToTime(newTime, TYPE_DURATIONS[c.type] || 90);
+          upd.time_end = addMinutesToTime(newTime, sessionDuration(c));
           scheduleChanged = (c.time_start?.slice(0,5) || '') !== newTime;
         }
         try {
@@ -7467,7 +7485,9 @@ export async function renderCalendario(container) {
       const t = overlay.querySelector('#es-type').value;
       const start = overlay.querySelector('#es-start').value;
       const endEl = overlay.querySelector('#es-end');
-      if (endEl && start) endEl.value = addMinutesToTime(start, TYPE_DURATIONS[t] || 90);
+      // Mismo tipo → se conserva la duración de esta sesión; tipo nuevo → la de ese tipo.
+      const mins = t === cls.type ? sessionDuration(cls) : (TYPE_DURATIONS[t] || 120);
+      if (endEl && start) endEl.value = addMinutesToTime(start, mins);
     }
     overlay.querySelector('#es-type').addEventListener('change', recomputeEnd);
     overlay.querySelector('#es-start').addEventListener('input', recomputeEnd);
@@ -7512,7 +7532,7 @@ export async function renderCalendario(container) {
       e.preventDefault();
       const fd = new FormData(e.target);
       const obj = Object.fromEntries(fd);
-      obj.time_end = addMinutesToTime(obj.time_start, TYPE_DURATIONS[obj.type] || 90);
+      obj.time_end = addMinutesToTime(obj.time_start, obj.type === cls.type ? sessionDuration(cls) : (TYPE_DURATIONS[obj.type] || 120));
       obj.published = e.target.published.checked;
       obj.id = cls.id;
       obj.title = TYPE_LABELS[obj.type] || cls.title;
