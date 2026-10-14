@@ -70,9 +70,18 @@ $idioma    = in_array($e['idioma'] ?? '', ['es', 'en', 'de'], true) ? $e['idioma
 $texto     = strip_tags((string) ($e['contrato_html'] ?? ''), '<h3><p><ol><li><br><strong>');
 $texto     = preg_replace('/<(\w+)\s[^>]*>/', '<$1>', $texto);   // sin atributos
 $reserva   = is_array($e['reserva'] ?? null) ? $e['reserva'] : [];
+$firmado   = trim((string) ($e['firmado'] ?? ''));          // "SIGNED BY (Full Name - ID - Date)"
+$ficha     = is_array($e['ficha'] ?? null) ? $e['ficha'] : [];
+// Respuestas del formulario como [[pregunta, respuesta], …], ya legibles.
+$respuestas = [];
+foreach ((array) ($e['respuestas'] ?? []) as $fila) {
+    if (is_array($fila) && count($fila) === 2) $respuestas[] = [mb_substr((string) $fila[0], 0, 200), mb_substr((string) $fila[1], 0, 2000)];
+}
 
 if (mb_strlen($nombre) < 3)    salir(400, ['error' => 'Falta el nombre completo']);
 if (mb_strlen($documento) < 4) salir(400, ['error' => 'Falta el DNI / pasaporte']);
+if (mb_strlen($firmado) < 5)   salir(400, ['error' => 'Falta la firma (Signed by)']);
+if (!$respuestas)              salir(400, ['error' => 'Falta el formulario de reserva']);
 if ($version === '' || $texto === '' || empty($e['acepta'])) salir(400, ['error' => 'Falta aceptar el contrato']);
 
 $ahora = gmdate('c');
@@ -83,6 +92,9 @@ $registro = [
     'idioma'       => $idioma,
     'nombre'       => $nombre,
     'documento'    => $documento,
+    'firmado'      => $firmado,
+    'formulario'   => $respuestas,
+    'ficha'        => $ficha,
     'cuenta'       => ['id' => $uid, 'email' => $correo],
     'ip'           => trim(explode(',', $ip)[0]),
     'navegador'    => substr((string) ($_SERVER['HTTP_USER_AGENT'] ?? ''), 0, 300),
@@ -99,13 +111,15 @@ if ($codigo >= 300) salir(502, ['error' => 'No se pudo registrar la firma: ' . (
 
 // ---- Copia por email (cliente + escuela) ----
 $fechaLegible = (new DateTime('now', new DateTimeZone('Atlantic/Canary')))->format('d/m/Y H:i');
+$filas = '';
+foreach ($respuestas as [$p, $r]) $filas .= waya_dato($p, $r);
 $firma = waya_tabla(
-    waya_dato('Firmado por / Signed by', $nombre)
-    . waya_dato('DNI / ID', $documento)
+    waya_dato('Signed by', $firmado)
     . waya_dato('Fecha / Date', $fechaLegible . ' (Canarias)')
     . waya_dato('Versión / Version', $version)
 );
-$cuerpo = '<div style="font-size:13px;line-height:1.5;color:#333">' . $texto . '</div>' . $firma;
+$cuerpo = '<h3 style="margin:0 0 8px">Surf lesson booking form</h3>' . waya_tabla($filas)
+    . '<div style="font-size:13px;line-height:1.5;color:#333;margin-top:16px">' . $texto . '</div>' . $firma;
 $asuntos = [
     'es' => 'Tu contrato firmado — Waya Surf School',
     'en' => 'Your signed contract — Waya Surf School',
@@ -114,6 +128,6 @@ $asuntos = [
 if (filter_var($correo, FILTER_VALIDATE_EMAIL)) {
     waya_enviar_email($correo, $asuntos[$idioma], waya_plantilla('Waya Surf School', $cuerpo));
 }
-waya_enviar_email(ADMIN_EMAIL, 'Contrato firmado · ' . $nombre, waya_plantilla('Contrato firmado', $cuerpo));
+waya_enviar_email(ADMIN_EMAIL, 'Formulario y contrato firmado · ' . $nombre, waya_plantilla('Nueva reserva: formulario y contrato', $cuerpo));
 
 salir(200, ['ok' => true, 'registro' => $ruta]);

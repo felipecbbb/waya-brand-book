@@ -1453,3 +1453,26 @@
 .cp-contract-sign label { display: flex; flex-direction: column; gap: 4px; font-size: .78rem; font-weight: 600; color: var(--color-dark); }
 .cp-contract-sign input { padding: 9px 12px; border: 1px solid #ddd; border-radius: 10px; font: inherit; font-weight: 400; }
 @media (max-width: 520px) { .cp-contract-sign { grid-template-columns: 1fr; } }
+
+/* Formulario de reserva (réplica del Google Form de la escuela) */
+.bf { display: grid; gap: 14px; }
+.bf-sec { border: 1px solid #e5e5e5; border-radius: 14px; padding: 14px 16px; background: #fff; }
+.bf-sec[hidden] { display: none; }
+.bf-sec h4 { margin: 0 0 10px; font-size: .85rem; letter-spacing: .02em; color: var(--color-dark); }
+.bf-intro { border-top: 4px solid #FDD802; }
+.bf-intro p, .bf-sec > p { font-size: .85rem; line-height: 1.5; color: #444; margin: 0 0 6px; }
+.bf-q { padding: 10px 0; border-top: 1px solid #f0f0f0; }
+.bf-sec h4 + .bf-q { border-top: 0; padding-top: 0; }
+.bf-label { display: block; font-size: .78rem; font-weight: 700; color: var(--color-dark); }
+.bf-req { color: #d93025; }
+.bf-help { margin: 3px 0 0; font-size: .76rem; font-style: italic; color: var(--color-gray); }
+.bf-input { width: 100%; margin-top: 6px; padding: 9px 12px; border: 1px solid #ddd; border-radius: 10px; font: inherit; font-size: .9rem; box-sizing: border-box; }
+textarea.bf-input { resize: vertical; }
+.bf-opts { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 8px; }
+.bf-opt { display: inline-flex; align-items: center; gap: 6px; font-size: .85rem; cursor: pointer; }
+.bf-other { flex-basis: 100%; }
+.bf-other .bf-input { margin-top: 0; flex: 1; }
+.bf-bring { margin: 6px 0; padding-left: 1.2rem; font-size: .85rem; }
+.bf-q--error { background: #fff4f2; border-radius: 10px; box-shadow: 0 0 0 2px #d93025 inset; padding-left: 10px; padding-right: 10px; }
+.ct-rep-list { list-style: disc; padding-left: 1.2rem; margin: 0; font-size: .85rem; }
+.cp-contract .cp-contract-text { max-height: 260px; }
