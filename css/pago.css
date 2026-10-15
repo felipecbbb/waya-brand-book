@@ -81,3 +81,13 @@
   .pago-actions { flex-direction: column; }
   .pago-actions .btn { width: 100%; }
 }
+
+/* Ficha de reserva + contrato tras el pago */
+.pago-ficha { max-width: 720px; margin: 24px auto 0; }
+.pago-ficha:empty { display: none; }
+.fr { background: #fff; border-radius: 20px; padding: 24px; box-shadow: 0 10px 30px rgba(0,0,0,.06); }
+.fr-title { font-size: 1.4rem; margin: 0 0 6px; }
+.fr-sub { color: #666; margin: 0 0 16px; }
+.fr .cp-contract-text { max-height: 320px; }
+.fr-send { width: 100%; margin-top: 18px; }
+.fr-done { text-align: center; }

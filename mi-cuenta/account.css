@@ -754,3 +754,7 @@ body:has(#account-root) .header .mobile-toggle span {
    regla que ocultara los inactivos; switchTab ya alterna la clase .active). */
 .tab-panel { display: none; }
 .tab-panel.active { display: block; }
+
+/* Aviso: reserva pagada sin ficha/contrato (lib/ficha-reserva.js) */
+.fr-banner { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin: 0 0 18px; padding: 14px 18px; border-radius: 14px; background: #fff8d6; border: 1px solid #FDD802; font-weight: 600; color: #1a1a1a; }
+.fr-banner .btn { text-decoration: none; white-space: nowrap; }

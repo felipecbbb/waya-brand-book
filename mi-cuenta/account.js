@@ -18,6 +18,7 @@ import {
 } from '/lib/shared-constants.js';
 import { loadPricing } from '/lib/domain/pricing.js';
 import { TERMS_HTML, WAIVER_HTML, openLegalModal } from '/mi-cuenta/legal-texts.js';
+import { bannerFichaPendienteHtml } from '/lib/ficha-reserva.js';
 
 const mainEl = document.getElementById('account-root');
 
@@ -673,6 +674,7 @@ async function renderDashboard() {
       </aside>
 
       <div class="account-content">
+        ${bannerFichaPendienteHtml()}
         <div class="account-content-header" id="account-header">
           <h2>${TAB_TITLES.datos.title}</h2>
           <p>${TAB_TITLES.datos.desc}</p>
