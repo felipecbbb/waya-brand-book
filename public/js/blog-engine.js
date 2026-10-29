@@ -143,9 +143,33 @@ function getSupabaseClient() {
     return supabase;
 }
 
+/* Guía en PDF: el panel la guarda dentro del contenido como un enlace con
+   title="guia-pdf" (la tabla posts no tiene columna para ello). */
+const GUIA_TXT = {
+    es: { tag: 'GUÍA PDF', download: 'Descargar la guía (PDF)', open: 'Abrir la guía' },
+    en: { tag: 'PDF GUIDE', download: 'Download the guide (PDF)', open: 'Open the guide' },
+    de: { tag: 'PDF-LEITFADEN', download: 'Leitfaden herunterladen (PDF)', open: 'Leitfaden öffnen' },
+};
+function guiaTxt(key) {
+    const lang = String(getCurrentLanguage() || 'es').slice(0, 2);
+    return (GUIA_TXT[lang] || GUIA_TXT.es)[key];
+}
+function extractGuidePdf(html) {
+    const m = String(html || '').match(/<a\s[^>]*title="guia-pdf"[^>]*>/i);
+    if (!m) return '';
+    const href = (m[0].match(/href="([^"]+)"/i) || [])[1] || '';
+    return /^https:\/\//i.test(href) ? href.replace(/&amp;/g, '&') : '';
+}
+// URL que fuerza la descarga (Supabase Storage acepta ?download=nombre.pdf).
+function pdfDownloadUrl(url) {
+    const nombre = decodeURIComponent(url.split('/').pop().split('?')[0]).replace(/^\d+-/, '') || 'guia.pdf';
+    return url + (url.includes('?') ? '&' : '?') + 'download=' + encodeURIComponent(nombre);
+}
+
 function formatPost(post) {
     return {
         ...post,
+        guidePdf: extractGuidePdf(post.content),
         id: Number.parseInt(post.id, 10),
         title: String(post.title || ''),
         excerpt: String(post.excerpt || ''),
@@ -237,8 +261,9 @@ async function loadBlogGrid() {
                 <div class="hero-meta">
                     <span class="hero-tag" data-i18n="news.latest">LATEST DROP</span>
                     <span>${heroDate}</span>
+                    ${heroPost.guidePdf ? `<span class="hero-tag">${guiaTxt('tag')}</span>` : ''}
                 </div>
-                <h1 class="hero-title-large">${heroTitle}</h1>
+                <h1 class="hero-title-large"><a href="noticia.html?id=${heroId}" style="color:inherit;text-decoration:none">${heroTitle}</a></h1>
                 <p class="hero-excerpt">${heroExcerpt}</p>
                 <a href="noticia.html?id=${heroId}" class="btn mag-btn-primary" style="background: #FDD802; color: #000; padding: 1rem 2rem; border-radius: 50px; text-decoration: none; font-weight: 700; text-transform: uppercase;" data-i18n="news.read_article">Leer Artículo</a>
             </div>
@@ -273,7 +298,7 @@ async function loadBlogGrid() {
                                      alt="${postTitle}" 
                                      loading="lazy"
                                      onerror="this.onerror=null;this.src='${FALLBACK_IMAGE}';">
-                                <span class="mag-tag">BLOG</span>
+                                <span class="mag-tag">${post.guidePdf ? guiaTxt('tag') : 'BLOG'}</span>
                             </div>
                             <div class="mag-card-content">
                                 <div>
@@ -303,8 +328,10 @@ async function loadBlogGrid() {
     if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
         gsap.registerPlugin(ScrollTrigger);
 
-        // Content Entry
-        gsap.from('.blog-hero-content > *', {
+        // Content Entry. El botón "Leer artículo" NO se anima: se quedaba
+        // atascado en opacity 0 (choca con el transition de .btn) y la
+        // noticia destacada parecía no tener entrada.
+        gsap.from('.blog-hero-content > :not(.btn)', {
             y: 50,
             opacity: 0,
             duration: 1,
@@ -377,6 +404,24 @@ async function loadArticle() {
     // Content
     const articleBody = document.querySelector('.article-body');
     if (articleBody) articleBody.innerHTML = sanitizeRichHtml(article.content || '');
+
+    // Guía en PDF: botón de descarga en la cabecera (sin tener que bajar) y el
+    // PDF incrustado al principio del texto para verlo en la propia web.
+    if (article.guidePdf) {
+        articleBody?.querySelector('a[title="guia-pdf"]')?.closest('p')?.remove();
+        const pdf = sanitizeImageUrl(article.guidePdf);
+        const descargar = pdfDownloadUrl(pdf);
+        articleTitle?.insertAdjacentHTML('afterend', `
+            <a href="${escapeHtml(descargar)}" class="guia-download-btn">${escapeHtml(guiaTxt('download'))}</a>`);
+        articleBody?.insertAdjacentHTML('afterbegin', `
+            <div class="guia-pdf-box">
+                <iframe class="guia-pdf-viewer" src="${escapeHtml(pdf)}#view=FitH" title="${escapeHtml(article.title)}" loading="lazy"></iframe>
+                <div class="guia-pdf-actions">
+                    <a href="${escapeHtml(descargar)}" class="guia-download-btn">${escapeHtml(guiaTxt('download'))}</a>
+                    <a href="${escapeHtml(pdf)}" target="_blank" rel="noopener" class="guia-open-link">${escapeHtml(guiaTxt('open'))}</a>
+                </div>
+            </div>`);
+    }
 
     // Apply translations now that content is in DOM
     if (typeof updateTranslations === 'function') {

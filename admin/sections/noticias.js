@@ -91,6 +91,32 @@ function reducirFoto(file, max = 1600) {
   });
 }
 
+/* ---- Guía en PDF ----
+   La tabla posts no tiene columna para el PDF (y no hay acceso para
+   añadirla), así que va dentro del contenido como un enlace marcado con
+   title="guia-pdf". blog-engine.js lo detecta y pinta el botón de descarga
+   y el visor. En el editor se separa del texto y se vuelve a poner al guardar. */
+const MARCA_PDF = 'guia-pdf';
+function separarPdf(html) {
+  const doc = new DOMParser().parseFromString(`<div>${html || ''}</div>`, 'text/html');
+  const a = doc.querySelector(`a[title="${MARCA_PDF}"]`);
+  if (!a) return { pdf: '', html: html || '' };
+  const pdf = a.getAttribute('href') || '';
+  (a.closest('p') || a).remove();
+  return { pdf, html: doc.body.firstChild.innerHTML };
+}
+const bloquePdf = url => `<p><a href="${esc(url)}" title="${MARCA_PDF}">Descargar la guía en PDF</a></p>\n`;
+
+async function subirPdf(file) {
+  const { upload_url, url } = await api({ accion: 'pdf', nombre: file.name });
+  const res = await fetch(upload_url, { method: 'PUT', headers: { 'Content-Type': 'application/pdf' }, body: file });
+  if (!res.ok) {
+    const out = await res.json().catch(() => ({}));
+    throw new Error(out.message || out.error || `Error ${res.status}`);
+  }
+  return url;
+}
+
 function fmtDate(d) {
   return d ? new Date(d).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' }) : '—';
 }
@@ -155,6 +181,8 @@ export async function renderNoticias(container) {
   function renderForm(post) {
     const p = post || {};
     let imagen = p.image || '';
+    const separado = separarPdf(p.content || '');
+    let pdf = separado.pdf;
 
     container.innerHTML = `
       <div class="act-detail-page">
@@ -200,11 +228,25 @@ export async function renderNoticias(container) {
           </div>
 
           <div class="act-form-card" style="margin-top:16px">
+            <label class="act-form-label">GUÍA EN PDF <small style="font-weight:400;text-transform:none">(opcional · sale arriba del todo con su botón de descarga)</small></label>
+            <div style="display:flex;gap:12px;align-items:center;margin-top:8px;flex-wrap:wrap">
+              <a id="nt-pdf-link" href="#" target="_blank" style="display:none;font-weight:600"></a>
+              <span id="nt-pdf-none" style="color:#999;font-size:.9rem">Sin guía</span>
+              <label class="act-action-btn primary" style="cursor:pointer">
+                <input type="file" id="nt-pdf-file" accept="application/pdf,.pdf" style="display:none" />
+                <span id="nt-pdf-label">Subir PDF</span>
+              </label>
+              <button class="act-action-btn" id="nt-pdf-clear" type="button">Quitar PDF</button>
+            </div>
+            <small class="act-form-hint" style="display:block;margin-top:8px">Escribe también un texto abajo contando qué trae la guía: es lo que lee Google y lo que posiciona la página.</small>
+          </div>
+
+          <div class="act-form-card" style="margin-top:16px">
             <label class="act-form-label">TEXTO DE LA NOTICIA</label>
             <small class="act-form-hint" style="display:block;margin:4px 0 8px">
               Deja una <strong>línea en blanco</strong> entre párrafos · empieza una línea con <code>## </code> para un subtítulo · <code>**así**</code> para negrita.
             </small>
-            <textarea class="act-form-input" id="nt-content" rows="16" style="font-family:inherit;line-height:1.5">${esc(htmlATexto(p.content || ''))}</textarea>
+            <textarea class="act-form-input" id="nt-content" rows="16" style="font-family:inherit;line-height:1.5">${esc(htmlATexto(separado.html))}</textarea>
           </div>
 
           <div style="display:flex;gap:12px;margin-top:24px">
@@ -221,8 +263,36 @@ export async function renderNoticias(container) {
       prev.textContent = imagen ? '' : 'Sin foto';
       $('nt-img-clear').style.display = imagen ? '' : 'none';
     };
+    const pintarPdf = () => {
+      const link = $('nt-pdf-link');
+      link.style.display = pdf ? '' : 'none';
+      link.href = pdf || '#';
+      link.textContent = pdf ? decodeURIComponent(pdf.split('/').pop()).replace(/^\d+-/, '') : '';
+      $('nt-pdf-none').style.display = pdf ? 'none' : '';
+      $('nt-pdf-clear').style.display = pdf ? '' : 'none';
+      $('nt-pdf-label').textContent = pdf ? 'Cambiar PDF' : 'Subir PDF';
+    };
     const contar = () => { $('nt-ex-count').textContent = $('nt-excerpt').value.length; };
-    pintarImagen(); contar();
+    pintarImagen(); pintarPdf(); contar();
+
+    $('nt-pdf-clear').onclick = () => { pdf = ''; pintarPdf(); };
+    $('nt-pdf-file').onchange = async (e) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      if (!/\.pdf$/i.test(file.name) && file.type !== 'application/pdf') { showToast('Tiene que ser un PDF', 'error'); e.target.value = ''; return; }
+      if (file.size > 50 * 1024 * 1024) { showToast('El PDF pesa más de 50 MB', 'error'); e.target.value = ''; return; }
+      const label = $('nt-pdf-label');
+      label.textContent = 'Subiendo…';
+      try {
+        pdf = await subirPdf(file);
+        showToast('PDF subido. Guarda la noticia para publicarlo.', 'success');
+      } catch (err) {
+        showToast('No se pudo subir el PDF: ' + err.message, 'error');
+      } finally {
+        e.target.value = '';
+        pintarPdf();
+      }
+    };
 
     $('nt-excerpt').addEventListener('input', contar);
     $('nt-back').onclick = $('nt-cancel').onclick = () => renderList();
@@ -259,7 +329,7 @@ export async function renderNoticias(container) {
           title,
           excerpt: $('nt-excerpt').value.trim(),
           category: $('nt-category').value,
-          content: textoAHtml(texto),
+          content: (pdf ? bloquePdf(pdf) : '') + textoAHtml(texto),
           image: imagen,
         });
         showToast(post ? 'Noticia actualizada' : 'Noticia publicada', 'success');

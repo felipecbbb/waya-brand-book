@@ -11,13 +11,11 @@ import { getSession, getProfile, signIn, signUp, signOut, updateProfile, changeP
 import { supabase } from '/lib/supabase.js';
 import { esc, formatDate, formatPrice } from '/lib/utils.js';
 import {
-  LEVEL_OPTIONS,
   levelOptionsHtml,
   wetsuitOptionsHtml,
   phonePrefixSelectHtml,
 } from '/lib/shared-constants.js';
 import { loadPricing } from '/lib/domain/pricing.js';
-import { TERMS_HTML, WAIVER_HTML, openLegalModal } from '/mi-cuenta/legal-texts.js';
 import { bannerFichaPendienteHtml } from '/lib/ficha-reserva.js';
 
 const mainEl = document.getElementById('account-root');
@@ -35,69 +33,48 @@ const AUTH = {
     password: 'Contraseña', passPh: 'Tu contraseña', login: 'Iniciar sesión', loggingIn: 'Entrando…',
     noAccount: '¿No tienes cuenta?', createAccount: 'Crear cuenta', createSub: 'Regístrate para reservar clases y gestionar tu perfil',
     name: 'Nombre *', namePh: 'Tu nombre', lastName: 'Apellidos', lastNamePh: 'Tus apellidos', phone: 'Teléfono *', phonePrefix: 'Prefijo de país',
-    birth: 'Fecha de nacimiento *', address: 'Dirección', addressPh: 'Calle, número', city: 'Ciudad', postal: 'Código postal',
-    level: 'Nivel de surf *', pickLevel: 'Seleccionar nivel', wetsuit: 'Talla de neopreno', undefined: 'Sin definir',
-    swim: '¿Sabes nadar? *', pick: 'Seleccionar', yes: 'Sí', no: 'No', injury: '¿Tienes alguna lesión?', injuryDetail: 'Describe tu lesión', injuryPh: 'Ej: rodilla derecha',
-    acceptTerms: 'Acepto los <a href="#" id="open-terms-modal">Términos y Condiciones</a> *',
-    acceptWaiver: 'Acepto la <a href="#" id="open-waiver-modal">Exención de Responsabilidad</a> *',
-    termsTitle: 'Términos y Condiciones', waiverTitle: 'Exención de Responsabilidad',
-    legalNote: '', next: 'Siguiente →', pass6: 'Mínimo 6 caracteres', repeatPass: 'Repetir contraseña *', repeatPassPh: 'Repite tu contraseña',
-    passwordReq: 'Contraseña *', backBtn: '← Atrás', creating: 'Creando cuenta…', haveAccount: '¿Ya tienes cuenta?',
+    pass6: 'Mínimo 6 caracteres', repeatPass: 'Repetir contraseña *', repeatPassPh: 'Repite tu contraseña',
+    passwordReq: 'Contraseña *', creating: 'Creando cuenta…', haveAccount: '¿Ya tienes cuenta?',
     tagline: 'Surf · Clases · Surfcamps', brandTitle: 'Tu escuela de surf en Gran Canaria', brandDesc: 'Reserva clases, gestiona tus bonos y consulta tu historial desde tu cuenta personal.',
-    errTerms: 'Debes aceptar los Términos y Condiciones.', errWaiver: 'Debes aceptar la Exención de Responsabilidad.',
-    errPhone: 'Escribe un teléfono de contacto válido.', errEmail: 'Escribe tu email.', errPass6: 'La contraseña debe tener al menos 6 caracteres.',
-    errMatch: 'Las contraseñas no coinciden.', created: 'Cuenta creada. Inicia sesión para continuar.',
-    levels: { principiante: ['Principiante', 'No sé nada o he dado muy pocas clases'], intermedio: ['Intermedio', 'Controlo lo básico y quiero mejorar'], avanzado: ['Avanzado', 'Tengo experiencia y busco perfeccionar'], todos: ['Todos los niveles', 'Apto para cualquier nivel'] },
-    cpCreate: 'Crea tu contraseña', cpChange: 'Cambia tu contraseña', cpCreateSub: 'Elige una contraseña para entrar en tu cuenta de Waya cuando quieras.',
+    errTerms: 'Debes aceptar las Condiciones y la Política de privacidad.', errPhone: 'Escribe un teléfono de contacto válido.', errEmail: 'Escribe tu email.', errPass6: 'La contraseña debe tener al menos 6 caracteres.',
+    errMatch: 'Las contraseñas no coinciden.', cpCreate: 'Crea tu contraseña', cpChange: 'Cambia tu contraseña', cpCreateSub: 'Elige una contraseña para entrar en tu cuenta de Waya cuando quieras.',
     cpChangeSub: 'Por seguridad, elige una contraseña nueva para tu primer acceso.', newPass: 'Nueva contraseña', repeatNew: 'Repite la contraseña',
     saveEnter: 'Guardar y entrar', saving: 'Guardando…', errPass8: 'La contraseña debe tener al menos 8 caracteres.', cpFail: 'No se pudo cambiar la contraseña.',
     expTitle: 'El enlace ha caducado', expText: 'Este enlace ya se usó o ha caducado. Escríbenos por WhatsApp al', expText2: 'y te mandamos uno nuevo.', goLogin: 'Ir a iniciar sesión',
+    acceptLegal: 'Acepto las <a href="/condiciones.html" target="_blank" rel="noopener">Condiciones de contratación</a> y la <a href="/politica-privacidad.html" target="_blank" rel="noopener">Política de privacidad</a> *',
+    checkEmail: 'Cuenta creada. Te hemos enviado un email: pulsa el enlace para activarla y entrar.',
   },
   en: {
     back: 'Back to home', welcome: 'Welcome back', welcomeSub: 'Log in to manage your bookings and classes',
     password: 'Password', passPh: 'Your password', login: 'Log in', loggingIn: 'Logging in…',
     noAccount: "Don't have an account?", createAccount: 'Create account', createSub: 'Sign up to book classes and manage your profile',
     name: 'First name *', namePh: 'Your first name', lastName: 'Last name', lastNamePh: 'Your last name', phone: 'Phone *', phonePrefix: 'Country code',
-    birth: 'Date of birth *', address: 'Address', addressPh: 'Street, number', city: 'City', postal: 'Postcode',
-    level: 'Surf level *', pickLevel: 'Choose your level', wetsuit: 'Wetsuit size', undefined: 'Not sure',
-    swim: 'Can you swim? *', pick: 'Choose', yes: 'Yes', no: 'No', injury: 'Do you have any injury?', injuryDetail: 'Describe your injury', injuryPh: 'e.g. right knee',
-    acceptTerms: 'I accept the <a href="#" id="open-terms-modal">Terms and Conditions</a> *',
-    acceptWaiver: 'I accept the <a href="#" id="open-waiver-modal">Liability Waiver</a> *',
-    termsTitle: 'Terms and Conditions', waiverTitle: 'Liability Waiver',
-    legalNote: 'The legal documents are written in Spanish, which is the version that applies.', next: 'Next →', pass6: 'At least 6 characters', repeatPass: 'Repeat password *', repeatPassPh: 'Repeat your password',
-    passwordReq: 'Password *', backBtn: '← Back', creating: 'Creating account…', haveAccount: 'Already have an account?',
+    pass6: 'At least 6 characters', repeatPass: 'Repeat password *', repeatPassPh: 'Repeat your password',
+    passwordReq: 'Password *', creating: 'Creating account…', haveAccount: 'Already have an account?',
     tagline: 'Surf · Lessons · Surf camps', brandTitle: 'Your surf school in Gran Canaria', brandDesc: 'Book classes, manage your passes and see your history from your personal account.',
-    errTerms: 'You must accept the Terms and Conditions.', errWaiver: 'You must accept the Liability Waiver.',
-    errPhone: 'Enter a valid contact phone number.', errEmail: 'Enter your email.', errPass6: 'Password must be at least 6 characters.',
-    errMatch: "Passwords don't match.", created: 'Account created. Log in to continue.',
-    levels: { principiante: ['Beginner', "I've never surfed or only had a few lessons"], intermedio: ['Intermediate', 'I know the basics and want to improve'], avanzado: ['Advanced', "I'm experienced and want to refine my surfing"], todos: ['All levels', 'Suitable for any level'] },
-    cpCreate: 'Create your password', cpChange: 'Change your password', cpCreateSub: 'Choose a password to log in to your Waya account whenever you like.',
+    errTerms: 'You must accept the Terms and the Privacy policy.', errPhone: 'Enter a valid contact phone number.', errEmail: 'Enter your email.', errPass6: 'Password must be at least 6 characters.',
+    errMatch: "Passwords don't match.", cpCreate: 'Create your password', cpChange: 'Change your password', cpCreateSub: 'Choose a password to log in to your Waya account whenever you like.',
     cpChangeSub: 'For security, choose a new password for your first login.', newPass: 'New password', repeatNew: 'Repeat the password',
     saveEnter: 'Save and continue', saving: 'Saving…', errPass8: 'Password must be at least 8 characters.', cpFail: 'Could not change the password.',
     expTitle: 'This link has expired', expText: 'This link has already been used or has expired. Message us on WhatsApp at', expText2: 'and we will send you a new one.', goLogin: 'Go to log in',
+    acceptLegal: 'I accept the <a href="/condiciones.html" target="_blank" rel="noopener">Terms of booking</a> and the <a href="/politica-privacidad.html" target="_blank" rel="noopener">Privacy policy</a> *',
+    checkEmail: "Account created. We've sent you an email: click the link to activate it and log in.",
   },
   de: {
     back: 'Zur Startseite', welcome: 'Willkommen zurück', welcomeSub: 'Melde dich an, um deine Buchungen und Kurse zu verwalten',
     password: 'Passwort', passPh: 'Dein Passwort', login: 'Anmelden', loggingIn: 'Anmeldung…',
     noAccount: 'Noch kein Konto?', createAccount: 'Konto erstellen', createSub: 'Registriere dich, um Kurse zu buchen und dein Profil zu verwalten',
     name: 'Vorname *', namePh: 'Dein Vorname', lastName: 'Nachname', lastNamePh: 'Dein Nachname', phone: 'Telefon *', phonePrefix: 'Ländervorwahl',
-    birth: 'Geburtsdatum *', address: 'Adresse', addressPh: 'Straße, Hausnummer', city: 'Stadt', postal: 'Postleitzahl',
-    level: 'Surf-Level *', pickLevel: 'Level wählen', wetsuit: 'Neoprengröße', undefined: 'Weiß nicht',
-    swim: 'Kannst du schwimmen? *', pick: 'Auswählen', yes: 'Ja', no: 'Nein', injury: 'Hast du eine Verletzung?', injuryDetail: 'Beschreibe deine Verletzung', injuryPh: 'z. B. rechtes Knie',
-    acceptTerms: 'Ich akzeptiere die <a href="#" id="open-terms-modal">AGB</a> *',
-    acceptWaiver: 'Ich akzeptiere den <a href="#" id="open-waiver-modal">Haftungsausschluss</a> *',
-    termsTitle: 'Allgemeine Geschäftsbedingungen', waiverTitle: 'Haftungsausschluss',
-    legalNote: 'Die rechtlichen Dokumente sind auf Spanisch verfasst; die spanische Fassung ist maßgeblich.', next: 'Weiter →', pass6: 'Mindestens 6 Zeichen', repeatPass: 'Passwort wiederholen *', repeatPassPh: 'Passwort wiederholen',
-    passwordReq: 'Passwort *', backBtn: '← Zurück', creating: 'Konto wird erstellt…', haveAccount: 'Schon ein Konto?',
+    pass6: 'Mindestens 6 Zeichen', repeatPass: 'Passwort wiederholen *', repeatPassPh: 'Passwort wiederholen',
+    passwordReq: 'Passwort *', creating: 'Konto wird erstellt…', haveAccount: 'Schon ein Konto?',
     tagline: 'Surf · Kurse · Surfcamps', brandTitle: 'Deine Surfschule auf Gran Canaria', brandDesc: 'Buche Kurse, verwalte deine Pakete und sieh deine Historie in deinem persönlichen Konto.',
-    errTerms: 'Du musst die AGB akzeptieren.', errWaiver: 'Du musst den Haftungsausschluss akzeptieren.',
-    errPhone: 'Gib eine gültige Telefonnummer ein.', errEmail: 'Gib deine E-Mail ein.', errPass6: 'Das Passwort muss mindestens 6 Zeichen haben.',
-    errMatch: 'Die Passwörter stimmen nicht überein.', created: 'Konto erstellt. Melde dich an, um fortzufahren.',
-    levels: { principiante: ['Anfänger', 'Noch nie gesurft oder nur wenige Stunden'], intermedio: ['Mittel', 'Ich kann die Grundlagen und will mich verbessern'], avanzado: ['Fortgeschritten', 'Ich habe Erfahrung und will mich perfektionieren'], todos: ['Alle Niveaus', 'Für jedes Niveau geeignet'] },
-    cpCreate: 'Erstelle dein Passwort', cpChange: 'Ändere dein Passwort', cpCreateSub: 'Wähle ein Passwort, um dich jederzeit in dein Waya-Konto einzuloggen.',
+    errTerms: 'Du musst die Bedingungen und die Datenschutzerklärung akzeptieren.', errPhone: 'Gib eine gültige Telefonnummer ein.', errEmail: 'Gib deine E-Mail ein.', errPass6: 'Das Passwort muss mindestens 6 Zeichen haben.',
+    errMatch: 'Die Passwörter stimmen nicht überein.', cpCreate: 'Erstelle dein Passwort', cpChange: 'Ändere dein Passwort', cpCreateSub: 'Wähle ein Passwort, um dich jederzeit in dein Waya-Konto einzuloggen.',
     cpChangeSub: 'Wähle aus Sicherheitsgründen ein neues Passwort für deine erste Anmeldung.', newPass: 'Neues Passwort', repeatNew: 'Passwort wiederholen',
     saveEnter: 'Speichern und weiter', saving: 'Wird gespeichert…', errPass8: 'Das Passwort muss mindestens 8 Zeichen haben.', cpFail: 'Das Passwort konnte nicht geändert werden.',
     expTitle: 'Der Link ist abgelaufen', expText: 'Dieser Link wurde bereits verwendet oder ist abgelaufen. Schreib uns per WhatsApp an', expText2: 'und wir schicken dir einen neuen.', goLogin: 'Zur Anmeldung',
+    acceptLegal: 'Ich akzeptiere die <a href="/condiciones.html" target="_blank" rel="noopener">Buchungsbedingungen</a> und die <a href="/politica-privacidad.html" target="_blank" rel="noopener">Datenschutzerklärung</a> *',
+    checkEmail: 'Konto erstellt. Wir haben dir eine E-Mail geschickt: Klicke auf den Link, um es zu aktivieren.',
   },
 };
 const A = (k) => (AUTH[lang()] || AUTH.es)[k] ?? AUTH.es[k];
@@ -107,12 +84,15 @@ const A = (k) => (AUTH[lang()] || AUTH.es)[k] ?? AUTH.es[k];
    - container: el <div class="tab-panel"> destino (ya vacío en el DOM).
    - switchTab(tabKey): navega a otra pestaña (p.ej. "bonos" → "calendario").
    Los 5 módulos los generan otros agentes siguiendo esta firma. */
+// Cada `load` es un import() con ruta LITERAL: así Vite empaqueta el tab en
+// el build. Con la ruta en una variable no lo incluía y en producción daba 404
+// ("No se pudo cargar esta sección").
 const TAB_MODULES = {
-  familia:    { path: '/mi-cuenta/tabs/family.js',      fn: 'renderFamily' },
-  bonos:      { path: '/mi-cuenta/tabs/bonos.js',       fn: 'renderBonos' },
-  calendario: { path: '/mi-cuenta/tabs/calendar.js',    fn: 'renderCalendar' },
-  clases:     { path: '/mi-cuenta/tabs/enrollments.js', fn: 'renderEnrollments' },
-  pagos:      { path: '/mi-cuenta/tabs/payments.js',    fn: 'renderPayments' },
+  familia:    { load: () => import('/mi-cuenta/tabs/family.js'),      fn: 'renderFamily' },
+  bonos:      { load: () => import('/mi-cuenta/tabs/bonos.js'),       fn: 'renderBonos' },
+  calendario: { load: () => import('/mi-cuenta/tabs/calendar.js'),    fn: 'renderCalendar' },
+  clases:     { load: () => import('/mi-cuenta/tabs/enrollments.js'), fn: 'renderEnrollments' },
+  pagos:      { load: () => import('/mi-cuenta/tabs/payments.js'),    fn: 'renderPayments' },
 };
 
 // ---------------- Helpers ----------------
@@ -136,12 +116,6 @@ function redirectIfStaff(profile) {
     return true;
   }
   return false;
-}
-
-// ¿El perfil necesita onboarding? (datos de salud sin definir o términos sin aceptar)
-function needsOnboarding(profile) {
-  if (!profile) return false;
-  return profile.can_swim == null || !profile.terms_accepted_at;
 }
 
 // ============================================================
@@ -179,8 +153,9 @@ function renderAuth() {
             <h1 class="auth-title">${A('createAccount')}</h1>
             <p class="auth-subtitle">${A('createSub')}</p>
 
-            <!-- Paso 1: datos personales + salud -->
-            <form id="register-step1" class="auth-form">
+            <!-- Un solo paso: lo justo para crear la cuenta. Nivel, salud y
+                 contrato los recoge el formulario de Víctor después del pago. -->
+            <form id="register-form" class="auth-form">
               <div class="auth-field">
                 <label for="reg-name">${A('name')}</label>
                 <input type="text" id="reg-name" name="fullname" placeholder="${A('namePh')}" required autocomplete="given-name">
@@ -193,93 +168,29 @@ function renderAuth() {
                 <label for="reg-phone">${A('phone')}</label>
                 <div style="display:flex;gap:8px;align-items:center">
                   ${phonePrefixSelectHtml('reg-phone-prefix', '+34', `aria-label="${A('phonePrefix')}"`)}
-                  <input type="tel" id="reg-phone" name="phone" placeholder="600 000 000" required style="flex:1" autocomplete="tel-national">
+                  <input type="tel" id="reg-phone" name="phone" placeholder="600 000 000" required style="flex:1" autocomplete="tel-national" inputmode="tel">
                 </div>
               </div>
               <div class="auth-field">
-                <label for="reg-birthdate">${A('birth')}</label>
-                <input type="date" id="reg-birthdate" name="birth_date" required>
+                <label for="reg-email">Email *</label>
+                <input type="email" id="reg-email" name="email" placeholder="tu@email.com" required autocomplete="email">
               </div>
               <div class="auth-field">
-                <label for="reg-address">${A('address')}</label>
-                <input type="text" id="reg-address" name="address" placeholder="${A('addressPh')}">
+                <label for="reg-pass">${A('passwordReq')}</label>
+                <input type="password" id="reg-pass" name="password" placeholder="${A('pass6')}" required minlength="6" autocomplete="new-password">
               </div>
               <div class="auth-field">
-                <label for="reg-city">${A('city')}</label>
-                <input type="text" id="reg-city" name="city" placeholder="Telde">
-              </div>
-              <div class="auth-field">
-                <label for="reg-postal">${A('postal')}</label>
-                <input type="text" id="reg-postal" name="postal_code" placeholder="35218">
-              </div>
-              <div class="auth-field">
-                <label for="reg-level">${A('level')}</label>
-                <select id="reg-level" name="level" required>
-                  <option value="">${A('pickLevel')}</option>
-                  ${LEVEL_OPTIONS.map(l => { const [lb, ds] = A('levels')[l.value] || [l.label, l.desc]; return `<option value="${l.value}">${lb} (${ds})</option>`; }).join('')}
-                </select>
-              </div>
-              <div class="auth-field">
-                <label for="reg-wetsuit">${A('wetsuit')}</label>
-                <select id="reg-wetsuit" name="wetsuit_size">
-                  ${wetsuitOptionsHtml().replace('Sin definir', A('undefined'))}
-                </select>
-              </div>
-              <div class="auth-field">
-                <label for="reg-swim">${A('swim')}</label>
-                <select id="reg-swim" name="can_swim" required>
-                  <option value="">${A('pick')}</option>
-                  <option value="true">${A('yes')}</option>
-                  <option value="false">${A('no')}</option>
-                </select>
-              </div>
-              <div class="auth-field">
-                <label for="reg-injury">${A('injury')}</label>
-                <select id="reg-injury" name="has_injury">
-                  <option value="false">${A('no')}</option>
-                  <option value="true">${A('yes')}</option>
-                </select>
-              </div>
-              <div class="auth-field" id="reg-injury-wrap" style="display:none">
-                <label for="reg-injury-detail">${A('injuryDetail')}</label>
-                <input type="text" id="reg-injury-detail" name="injury_detail" placeholder="${A('injuryPh')}">
+                <label for="reg-pass2">${A('repeatPass')}</label>
+                <input type="password" id="reg-pass2" name="password2" placeholder="${A('repeatPassPh')}" required minlength="6" autocomplete="new-password">
               </div>
               <div class="auth-field">
                 <label class="auth-checkbox-label">
                   <input type="checkbox" id="reg-terms" required>
-                  ${A('acceptTerms')}
+                  <span>${A('acceptLegal')}</span>
                 </label>
               </div>
-              <div class="auth-field">
-                <label class="auth-checkbox-label">
-                  <input type="checkbox" id="reg-waiver" required>
-                  ${A('acceptWaiver')}
-                </label>
-              </div>
-              ${A('legalNote') ? `<p class="auth-subtitle" style="font-size:.8rem;margin:-4px 0 8px">${A('legalNote')}</p>` : ''}
-              <p class="auth-error" id="register-error-step1"></p>
-              <button type="submit" class="auth-submit-btn">${A('next')}</button>
-            </form>
-
-            <!-- Paso 2: crear cuenta (email + contraseña) -->
-            <form id="register-step2" class="auth-form" style="display:none">
-              <div class="auth-field">
-                <label for="reg2-email">Email *</label>
-                <input type="email" id="reg2-email" name="email" placeholder="tu@email.com" required autocomplete="email">
-              </div>
-              <div class="auth-field">
-                <label for="reg2-pass">${A('passwordReq')}</label>
-                <input type="password" id="reg2-pass" name="password" placeholder="${A('pass6')}" required minlength="6" autocomplete="new-password">
-              </div>
-              <div class="auth-field">
-                <label for="reg2-pass2">${A('repeatPass')}</label>
-                <input type="password" id="reg2-pass2" name="password2" placeholder="${A('repeatPassPh')}" required minlength="6" autocomplete="new-password">
-              </div>
-              <p class="auth-error" id="register-error-step2"></p>
-              <div style="display:flex;gap:8px">
-                <button type="button" class="auth-submit-btn auth-submit-ghost" id="reg-back-btn">${A('backBtn')}</button>
-                <button type="submit" class="auth-submit-btn">${A('createAccount')}</button>
-              </div>
+              <p class="auth-error" id="register-error"></p>
+              <button type="submit" class="auth-submit-btn">${A('createAccount')}</button>
             </form>
 
             <p class="auth-switch">${A('haveAccount')} <a href="#" id="switch-to-login">${A('login')}</a></p>
@@ -328,110 +239,47 @@ function renderAuth() {
     }
   });
 
-  // ---- Registro multi-step ----
-  let regStep1Data = {};
-
-  document.getElementById('reg-injury')?.addEventListener('change', (e) => {
-    document.getElementById('reg-injury-wrap').style.display = e.target.value === 'true' ? '' : 'none';
-  });
-
-  document.getElementById('open-terms-modal')?.addEventListener('click', (e) => {
+  // ---- Registro ----
+  document.getElementById('register-form').addEventListener('submit', async (e) => {
     e.preventDefault();
-    openLegalModal(A('termsTitle'), TERMS_HTML);
-  });
-  document.getElementById('open-waiver-modal')?.addEventListener('click', (e) => {
-    e.preventDefault();
-    openLegalModal(A('waiverTitle'), WAIVER_HTML);
-  });
-
-  // Paso 1 → Paso 2
-  document.getElementById('register-step1').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const errEl = document.getElementById('register-error-step1');
-    errEl.textContent = '';
-
-    if (!document.getElementById('reg-terms').checked) {
-      errEl.textContent = A('errTerms');
-      return;
-    }
-    if (!document.getElementById('reg-waiver').checked) {
-      errEl.textContent = A('errWaiver');
-      return;
-    }
-
-    // Combina prefijo de país + número. Teléfono obligatorio.
-    const regPrefix = document.getElementById('reg-phone-prefix')?.value || '';
-    const regNum = e.target.phone.value.trim();
-    if (regNum.replace(/\D/g, '').length < 6) { errEl.textContent = A('errPhone'); return; }
-    const regPhone = regNum.startsWith('+') ? regNum : (regPrefix ? `${regPrefix} ${regNum}`.trim() : regNum);
-
-    regStep1Data = {
-      fullname: e.target.fullname.value.trim(),
-      last_name: e.target.last_name?.value?.trim() || null,
-      phone: regPhone,
-      birth_date: e.target.birth_date.value || null,
-      address: e.target.address?.value?.trim() || null,
-      city: e.target.city?.value?.trim() || null,
-      postal_code: e.target.postal_code?.value?.trim() || null,
-      level: e.target.level.value,
-      wetsuit_size: e.target.wetsuit_size.value || null,
-      can_swim: e.target.can_swim.value === 'true',
-      has_injury: e.target.has_injury.value === 'true',
-      injury_detail: e.target.injury_detail?.value?.trim() || null,
-    };
-
-    document.getElementById('register-step1').style.display = 'none';
-    document.getElementById('register-step2').style.display = '';
-  });
-
-  document.getElementById('reg-back-btn')?.addEventListener('click', () => {
-    document.getElementById('register-step2').style.display = 'none';
-    document.getElementById('register-step1').style.display = '';
-  });
-
-  // Paso 2 — crear cuenta
-  document.getElementById('register-step2').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const errEl = document.getElementById('register-error-step2');
-    const btn = e.target.querySelector('button[type="submit"]');
+    const f = e.target;
+    const errEl = document.getElementById('register-error');
+    const btn = f.querySelector('button[type="submit"]');
     errEl.style.color = '';
     errEl.textContent = '';
 
-    const email = e.target.email.value.trim();
-    const pass = e.target.password.value;
-    const pass2 = e.target.password2.value;
+    if (!document.getElementById('reg-terms').checked) { errEl.textContent = A('errTerms'); return; }
+
+    // Combina prefijo de país + número. Teléfono obligatorio.
+    const regPrefix = document.getElementById('reg-phone-prefix')?.value || '';
+    const regNum = f.phone.value.trim();
+    if (regNum.replace(/\D/g, '').length < 6) { errEl.textContent = A('errPhone'); return; }
+    const regPhone = regNum.startsWith('+') ? regNum : (regPrefix ? `${regPrefix} ${regNum}`.trim() : regNum);
+
+    const email = f.email.value.trim();
+    const pass = f.password.value;
     if (!email) { errEl.textContent = A('errEmail'); return; }
     if (!pass || pass.length < 6) { errEl.textContent = A('errPass6'); return; }
-    if (pass !== pass2) { errEl.textContent = A('errMatch'); return; }
+    if (pass !== f.password2.value) { errEl.textContent = A('errMatch'); return; }
 
     btn.disabled = true; btn.textContent = A('creating');
     try {
-      // Todos los datos viajan en el metadata → el trigger handle_new_user los
-      // persiste en el perfil al crear la cuenta (contrato §3.3). Las fechas de
-      // aceptación de términos/exención se guardan como timestamptz.
-      const nowIso = new Date().toISOString();
-      const result = await signUp(email, pass, regStep1Data.fullname, {
-        last_name: regStep1Data.last_name,
-        phone: regStep1Data.phone,
-        birth_date: regStep1Data.birth_date,
-        address: regStep1Data.address,
-        city: regStep1Data.city,
-        postal_code: regStep1Data.postal_code,
-        level: regStep1Data.level,
-        wetsuit_size: regStep1Data.wetsuit_size,
-        can_swim: regStep1Data.can_swim,
-        has_injury: regStep1Data.has_injury,
-        injury_detail: regStep1Data.injury_detail,
-        terms_accepted_at: nowIso,
-        waiver_accepted_at: nowIso,
+      // Los datos viajan en el metadata → el trigger handle_new_user los
+      // persiste en el perfil. OJO: el trigger lee `terms_accepted` ('true'),
+      // no `terms_accepted_at`; sin él la cuenta nacía sin términos aceptados.
+      const result = await signUp(email, pass, f.fullname.value.trim(), {
+        last_name: f.last_name?.value?.trim() || null,
+        phone: regPhone,
+        terms_accepted: true,
       });
-      if (result?.session || result?.user) {
+      if (result?.session) {
         const profile = await getProfile();
         if (redirectIfStaff(profile)) return;
         route(profile);
       } else {
+        // Confirmación por email activada en Supabase: hay que pinchar el enlace.
         errEl.style.color = '#166534';
-        errEl.textContent = A('created');
+        errEl.textContent = A('checkEmail');
         btn.disabled = false; btn.textContent = A('createAccount');
       }
     } catch (err) {
@@ -488,114 +336,6 @@ function renderChangePassword(profile, { primerAcceso = false } = {}) {
     try { await updateProfile({ must_change_password: false }); } catch (_) {}
     const fresh = await getProfile();
     route(fresh, { skipPasswordCheck: true });
-  });
-}
-
-// ============================================================
-//  VISTA: Onboarding (perfil incompleto / aceptar términos)
-// ============================================================
-function renderOnboarding(profile) {
-  const needTerms = !profile?.terms_accepted_at;
-  mainEl.innerHTML = `
-    <div class="auth-page">
-      <div class="auth-page-left">
-        <div class="auth-page-form">
-          <h1 class="auth-title">Un último paso</h1>
-          <p class="auth-subtitle">Necesitamos algunos datos para tu seguridad y comodidad</p>
-          <form id="onboarding-form" class="auth-form">
-            <div class="auth-field">
-              <label for="ob-level">Nivel de surf</label>
-              <select id="ob-level" name="level">
-                ${levelOptionsHtml(profile?.level || '', true)}
-              </select>
-            </div>
-            <div class="auth-field">
-              <label for="ob-swim">¿Sabes nadar?</label>
-              <select id="ob-swim" name="can_swim" required>
-                <option value="">Seleccionar</option>
-                <option value="true" ${profile?.can_swim === true ? 'selected' : ''}>Sí</option>
-                <option value="false" ${profile?.can_swim === false ? 'selected' : ''}>No</option>
-              </select>
-            </div>
-            <div class="auth-field">
-              <label for="ob-injury">¿Tienes alguna lesión?</label>
-              <select id="ob-injury" name="has_injury">
-                <option value="false" ${!profile?.has_injury ? 'selected' : ''}>No</option>
-                <option value="true" ${profile?.has_injury ? 'selected' : ''}>Sí</option>
-              </select>
-            </div>
-            <div class="auth-field" id="ob-injury-wrap" style="${profile?.has_injury ? '' : 'display:none'}">
-              <label for="ob-injury-detail">Describe tu lesión</label>
-              <input type="text" id="ob-injury-detail" name="injury_detail" value="${esc(profile?.injury_detail || '')}" placeholder="Ej: rodilla derecha">
-            </div>
-            <div class="auth-field">
-              <label for="ob-wetsuit">Talla de neopreno</label>
-              <select id="ob-wetsuit" name="wetsuit_size">
-                ${wetsuitOptionsHtml(profile?.wetsuit_size || '')}
-              </select>
-            </div>
-            ${needTerms ? `
-            <div class="auth-field">
-              <label class="auth-checkbox-label">
-                <input type="checkbox" id="ob-terms" required>
-                Acepto los <a href="#" id="ob-open-terms">Términos y Condiciones</a> y la <a href="#" id="ob-open-waiver">Exención de Responsabilidad</a> *
-              </label>
-            </div>` : ''}
-            <p class="auth-error" id="onboarding-error"></p>
-            <button type="submit" class="auth-submit-btn">Acceder a mi cuenta</button>
-          </form>
-        </div>
-      </div>
-      <div class="auth-page-right">
-        <div class="auth-brand-card">
-          <div class="auth-brand-content">
-            <p class="auth-brand-tagline">Casi listo</p>
-            <h2 class="auth-brand-heading">Tu seguridad es lo primero</h2>
-            <p class="auth-brand-desc">Estos datos nos ayudan a preparar tu material y adaptar las clases a ti.</p>
-          </div>
-        </div>
-      </div>
-    </div>`;
-
-  document.getElementById('ob-injury').addEventListener('change', (e) => {
-    document.getElementById('ob-injury-wrap').style.display = e.target.value === 'true' ? '' : 'none';
-  });
-  document.getElementById('ob-open-terms')?.addEventListener('click', (e) => {
-    e.preventDefault(); openLegalModal(A('termsTitle'), TERMS_HTML);
-  });
-  document.getElementById('ob-open-waiver')?.addEventListener('click', (e) => {
-    e.preventDefault(); openLegalModal(A('waiverTitle'), WAIVER_HTML);
-  });
-
-  document.getElementById('onboarding-form').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const errEl = document.getElementById('onboarding-error');
-    const btn = e.target.querySelector('button[type="submit"]');
-    errEl.textContent = '';
-    if (needTerms && !document.getElementById('ob-terms').checked) {
-      errEl.textContent = 'Debes aceptar los Términos y la Exención de Responsabilidad.';
-      return;
-    }
-    btn.disabled = true; btn.textContent = 'Guardando…';
-    try {
-      const fields = {
-        level: e.target.level?.value || null,
-        can_swim: e.target.can_swim.value === 'true' ? true : e.target.can_swim.value === 'false' ? false : null,
-        has_injury: e.target.has_injury.value === 'true',
-        injury_detail: e.target.injury_detail?.value || null,
-        wetsuit_size: e.target.wetsuit_size?.value || null,
-      };
-      if (needTerms) {
-        const nowIso = new Date().toISOString();
-        fields.terms_accepted_at = nowIso;
-        fields.waiver_accepted_at = nowIso;
-      }
-      await updateProfile(fields);
-      renderDashboard();
-    } catch (err) {
-      errEl.textContent = err.message;
-      btn.disabled = false; btn.textContent = 'Acceder a mi cuenta';
-    }
   });
 }
 
@@ -753,9 +493,9 @@ async function loadExternalTab(key, panel, switchTab) {
   if (!mod || !panel) return;
   panel.innerHTML = '<div class="tab-loading">Cargando…</div>';
   try {
-    const m = await import(mod.path);
+    const m = await mod.load();
     const fn = m[mod.fn] || m.default;
-    if (typeof fn !== 'function') throw new Error(`Export ${mod.fn} no encontrado en ${mod.path}`);
+    if (typeof fn !== 'function') throw new Error(`Export ${mod.fn} no encontrado en el tab ${key}`);
     await fn(panel, switchTab);
   } catch (err) {
     console.error('Error cargando la pestaña', key, err);
@@ -939,7 +679,6 @@ function volverSiToca() {
 function route(profile, opts = {}) {
   if (!profile) { renderDashboard(); return; }
   if (!opts.skipPasswordCheck && profile.must_change_password) { renderChangePassword(profile); return; }
-  if (needsOnboarding(profile)) { renderOnboarding(profile); return; }
   if (volverSiToca()) return;
   renderDashboard();
 }

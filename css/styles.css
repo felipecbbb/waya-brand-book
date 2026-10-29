@@ -411,7 +411,7 @@ body {
    CONTROL DE CUENTA (header) — link si deslogueado, desplegable
    si logueado. Sustituye al antiguo botón "Reservar".
    ============================================================ */
-.account-nav {
+#account-nav {
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -466,7 +466,7 @@ body {
   background: rgba(255, 255, 255, 0.22);
 }
 
-.account-avatar {
+#account-nav .account-avatar {
   width: 30px;
   height: 30px;
   flex: 0 0 auto;

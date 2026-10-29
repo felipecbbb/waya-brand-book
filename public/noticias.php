@@ -11,6 +11,8 @@
  *   - guardar: { id?, title, excerpt, content, category, image }  → crea o edita
  *   - borrar:  { id }
  *   - foto:    { data (base64), ext }  → sube a storage/news-images y devuelve la URL pública
+ *   - pdf:     { nombre }  → URL firmada para que el navegador suba la guía en PDF
+ *              directamente a storage (en base64 por aquí no caben PDFs grandes)
  */
 
 require_once __DIR__ . '/config-secreto.php';
@@ -80,6 +82,21 @@ if ($accion === 'foto') {
     [$codigo, $res] = sb('POST', '/storage/v1/object/news-images/' . $ruta, $bytes, ['Content-Type: ' . $tipos[$ext]]);
     if ($codigo >= 300) salir(502, ['error' => 'No se pudo subir la foto: ' . ($res['message'] ?? $res['error'] ?? $codigo)]);
     salir(200, ['url' => WAYA_SUPABASE_URL . '/storage/v1/object/public/news-images/' . $ruta]);
+}
+
+// ---- Guía en PDF: URL de subida firmada (el navegador hace el PUT) ----
+if ($accion === 'pdf') {
+    $nombre = (string) ($entrada['nombre'] ?? 'guia');
+    $base = strtolower((string) (iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $nombre) ?: $nombre));
+    $base = trim(preg_replace('/[^a-z0-9]+/', '-', preg_replace('/\.pdf$/i', '', $base)), '-');
+    $base = substr($base !== '' ? $base : 'guia', 0, 60);
+    $ruta = 'guias/' . time() . '-' . $base . '.pdf';
+    [$codigo, $res] = sb('POST', '/storage/v1/object/upload/sign/news-images/' . $ruta, '{}', $json);
+    if ($codigo >= 300 || empty($res['url'])) salir(502, ['error' => 'No se pudo preparar la subida: ' . ($res['message'] ?? $res['error'] ?? $codigo)]);
+    salir(200, [
+        'upload_url' => WAYA_SUPABASE_URL . '/storage/v1' . $res['url'],
+        'url'        => WAYA_SUPABASE_URL . '/storage/v1/object/public/news-images/' . $ruta,
+    ]);
 }
 
 // ---- Borrar ----

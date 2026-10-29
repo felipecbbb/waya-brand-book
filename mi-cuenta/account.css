@@ -374,7 +374,10 @@ body:has(#account-root) .header .mobile-toggle span {
   -moz-appearance: none;
   appearance: none;
 }
-.phone-prefix-select { width: auto; padding-right: 30px; }
+/* El prefijo ocupa lo justo y el número el resto: `.auth-field select`
+   (width:100%) pisaba el width:auto y dejaba el input sin hueco para escribir. */
+.auth-field .phone-prefix-select { width: auto; flex: 0 0 auto; padding-right: 30px; }
+.auth-field .phone-prefix-select + input { min-width: 0; }
 .auth-field select,
 .phone-prefix-select {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23666666' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
@@ -420,7 +423,7 @@ body:has(#account-root) .header .mobile-toggle span {
 }
 .auth-submit-ghost:hover { background: var(--color-dark); color: #fff; box-shadow: none; }
 
-.auth-checkbox-label {
+.auth-field .auth-checkbox-label {  /* .auth-field label (mayúsculas) lo pisaba */
   display: flex;
   align-items: flex-start;
   gap: 10px;

@@ -260,6 +260,10 @@ async function init() {
       // cliente vuelve y se encuentra su compra intacta. Lo vacía pago-ok.html
       // cuando el cobro está confirmado, y las reservas las crea el webhook.
       submitBtn.textContent = 'Redirigiendo al pago…';
+      // Vuelta con "atrás" desde SumUp (bfcache): botón otra vez usable.
+      window.addEventListener('pageshow', (e) => {
+        if (e.persisted) { submitBtn.disabled = false; submitBtn.textContent = 'Pagar'; }
+      }, { once: true });
       window.location.href = data.url;
       return;
     } catch (err) {

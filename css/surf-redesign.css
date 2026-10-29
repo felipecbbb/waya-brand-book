@@ -2368,3 +2368,51 @@ body.is-diary {
         height: auto;
     }
 }
+
+/* Guía en PDF dentro de una noticia (blog-engine.js): botón de descarga en la
+   cabecera, para no tener que bajar, y el PDF incrustado al principio. */
+.guia-download-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    margin-top: 1.5rem;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    background: #FDD802;
+    color: #1A1A1A;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 800;
+    font-size: 1rem;
+    text-transform: uppercase;
+    text-decoration: none;
+}
+.guia-download-btn:hover { background: #E8C702; }
+
+.guia-pdf-box { margin: 0 0 3rem; }
+.guia-pdf-viewer {
+    display: block;
+    width: 100%;
+    height: 80vh;
+    border: 1px solid #e5e5e5;
+    border-radius: 16px;
+    background: #F5F5F5;
+}
+.guia-pdf-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 1.5rem;
+}
+.guia-open-link {
+    margin-top: 1.5rem;
+    font-family: 'Outfit', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1A1A1A;
+}
+
+/* En móvil el visor incrustado solo enseña la primera página: mejor el botón. */
+@media (max-width: 768px) {
+    .guia-pdf-viewer { display: none; }
+    .guia-pdf-actions { margin-top: -1.5rem; }
+}

@@ -69,6 +69,9 @@ function deepl(array $textos, string $destino, string $clave): array
     $res = json_decode((string) curl_exec($ch), true);
     $codigo = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
+    // 456 = cuota de DeepL agotada (el plan gratis son 500.000 caracteres/mes y
+    // cada guardado del camp lo vuelve a traducir entero).
+    if ($codigo === 456) salir(502, ['error' => 'se ha agotado la cuota mensual de DeepL. Las FAQs se quedan sin traducir hasta que se renueve o se amplíe el plan.']);
     if ($codigo !== 200 || !isset($res['translations'])) salir(502, ['error' => "DeepL devolvió $codigo"]);
     return array_map(fn($t) => $t['text'], $res['translations']);
 }
