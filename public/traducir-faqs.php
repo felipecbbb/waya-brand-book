@@ -47,7 +47,6 @@ function sb(string $metodo, string $ruta, $cuerpo = null, array $extra = [], str
     if ($cuerpo !== null) curl_setopt($ch, CURLOPT_POSTFIELDS, $cuerpo);
     $respuesta = (string) curl_exec($ch);
     $codigo = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    curl_close($ch);
     return [$codigo, json_decode($respuesta, true)];
 }
 
@@ -68,7 +67,6 @@ function deepl(array $textos, string $destino, string $clave): array
     ]);
     $res = json_decode((string) curl_exec($ch), true);
     $codigo = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    curl_close($ch);
     // 456 = cuota de DeepL agotada (el plan gratis son 500.000 caracteres/mes y
     // cada guardado del camp lo vuelve a traducir entero).
     if ($codigo === 456) salir(502, ['error' => 'se ha agotado la cuota mensual de DeepL. Las FAQs se quedan sin traducir hasta que se renueve o se amplíe el plan.']);
@@ -109,20 +107,44 @@ $i18n = is_array($camp[0]['i18n'] ?? null) ? $camp[0]['i18n'] : [];
 [, $faqs] = sb('GET', '/rest/v1/camp_faqs?select=id,question,answer&camp_id=eq.' . $campId . '&order=sort_order');
 $faqs = array_values(array_filter($faqs ?: [], fn($f) => trim($f['question'] ?? '') !== ''));
 
-// ---- Traducir: preguntas y respuestas en un solo lote por idioma ----
-$textos = [];
-foreach ($faqs as $f) { $textos[] = trim($f['question']); $textos[] = trim($f['answer'] ?? '') ?: ' '; }
+// ---- Caché: solo se manda a DeepL lo nuevo o lo editado ----
+// El plan gratis de DeepL son 500.000 caracteres/mes y retraducir las 18 FAQs
+// en cada guardado lo agotaba. Cada traducción se guarda en site_settings
+// ('faqs_traducidas') con la huella de su texto en español: si no ha cambiado,
+// se reutiliza. Va fuera de surf_camps.i18n porque traducir_camp lo reescribe.
+const CLAVE_CACHE = 'faqs_traducidas';
+[, $filaCache] = sb('GET', '/rest/v1/site_settings?select=value&key=eq.' . CLAVE_CACHE);
+$cache = is_array($filaCache[0]['value'] ?? null) ? $filaCache[0]['value'] : [];
 
-foreach (['en' => 'EN-GB', 'de' => 'DE'] as $lang => $destino) {
-    $trad = deepl($textos, $destino, $clave);
-    $mapa = [];
-    foreach ($faqs as $i => $f) {
-        $mapa[$f['id']] = ['question' => $trad[$i * 2] ?? '', 'answer' => trim($trad[$i * 2 + 1] ?? '')];
+$huella = fn($f) => md5(trim($f['question']) . "\n" . trim($f['answer'] ?? ''));
+$pendientes = array_values(array_filter($faqs, fn($f) =>
+    ($cache[$f['id']]['hash'] ?? '') !== $huella($f) || empty($cache[$f['id']]['en']) || empty($cache[$f['id']]['de'])));
+
+if ($pendientes) {
+    // Preguntas y respuestas en un solo lote por idioma.
+    $textos = [];
+    foreach ($pendientes as $f) { $textos[] = trim($f['question']); $textos[] = trim($f['answer'] ?? '') ?: ' '; }
+    $trad = [];
+    foreach (['en' => 'EN-GB', 'de' => 'DE'] as $lang => $destino) $trad[$lang] = deepl($textos, $destino, $clave);
+    foreach ($pendientes as $i => $f) {
+        $cache[$f['id']] = ['hash' => $huella($f)];
+        foreach (['en', 'de'] as $lang) {
+            $cache[$f['id']][$lang] = ['question' => $trad[$lang][$i * 2] ?? '', 'answer' => trim($trad[$lang][$i * 2 + 1] ?? '')];
+        }
     }
+    [$codigo, $res] = sb('POST', '/rest/v1/site_settings?on_conflict=key',
+        json_encode(['key' => CLAVE_CACHE, 'value' => (object) $cache, 'updated_at' => gmdate('c')], JSON_UNESCAPED_UNICODE),
+        ['Content-Type: application/json', 'Prefer: resolution=merge-duplicates']);
+    if ($codigo >= 300) salir(502, ['error' => 'No se pudo guardar la caché de traducciones: ' . ($res['message'] ?? $codigo)]);
+}
+
+foreach (['en', 'de'] as $lang) {
+    $mapa = [];
+    foreach ($faqs as $f) $mapa[$f['id']] = $cache[$f['id']][$lang];
     if (!isset($i18n[$lang]) || !is_array($i18n[$lang])) $i18n[$lang] = [];
     $i18n[$lang]['faqs'] = (object) $mapa;
 }
 
 [$codigo, $res] = sb('PATCH', '/rest/v1/surf_camps?id=eq.' . $campId, json_encode(['i18n' => $i18n], JSON_UNESCAPED_UNICODE), ['Content-Type: application/json']);
 if ($codigo >= 300) salir(502, ['error' => $res['message'] ?? 'No se pudo guardar']);
-salir(200, ['ok' => true, 'faqs' => count($faqs)]);
+salir(200, ['ok' => true, 'faqs' => count($faqs), 'traducidas' => count($pendientes)]);

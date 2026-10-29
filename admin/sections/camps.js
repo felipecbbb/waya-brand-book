@@ -685,10 +685,9 @@ export async function renderCamps(container) {
         // hechas a mano.
         if (activeTab !== 'idiomas') {
           try {
-            showToast('Traduciendo…', 'info');
-            await autoTraducir(c.id);
+            const traducido = await autoTraducir(campFull);
             campFull = await fetchCampFull(c.id);
-            showToast('Traducido a inglés y alemán', 'success');
+            if (traducido) showToast('Traducido a inglés y alemán', 'success');
           } catch (err) {
             showToast('Guardado, pero no se pudo traducir: ' + err.message, 'error');
           }
@@ -841,11 +840,39 @@ export async function renderCamps(container) {
   /* Traduce el camp a EN/DE y guarda la columna i18n.
      El trabajo lo hace Postgres (función traducir_camp): lee el camp, llama a
      DeepL y guarda. Aquí solo se dispara. Si falla, el guardado en español YA
-     se hizo y no se pierde nada — solo se avisa. */
-  async function autoTraducir(campId) {
-    await traducirCamp(campId);
+     se hizo y no se pierde nada — solo se avisa.
+
+     Solo se traduce si el texto en español ha CAMBIADO desde la última vez:
+     DeepL gratis son 500.000 caracteres/mes y retraducir el camp entero en
+     cada guardado (aunque solo cambiara una foto o el precio) lo agotaba.
+     La huella del último texto traducido vive en site_settings
+     ('camps_traducidos'). Devuelve true si llamó a DeepL para el camp. */
+  async function autoTraducir(camp) {
+    const huella = await huellaTextos(camp);
+    const hechas = (await fetchSiteSetting('camps_traducidos')) || {};
+    let traducido = false;
+    if (hechas[camp.id] !== huella || !camp.i18n?.en || !camp.i18n?.de) {
+      await traducirCamp(camp.id);
+      await upsertSiteSetting('camps_traducidos', { ...hechas, [camp.id]: huella });
+      traducido = true;
+    }
     // Las FAQs van aparte y DESPUÉS: traducir_camp reescribe i18n entero.
-    await traducirFaqs(campId);
+    // traducir-faqs.php solo manda a DeepL las nuevas o editadas (caché).
+    await traducirFaqs(camp.id);
+    return traducido;
+  }
+
+  // Mismos campos que traduce traducir_camp (migración 0034).
+  const CAMPOS_TRADUCIBLES = [
+    'title', 'kicker', 'duration_label', 'card_vibe', 'description',
+    'hero_kicker', 'hero_title', 'hero_subtitle',
+    'whats_included_title', 'ideal_for_title', 'meta_title', 'meta_description',
+    'hero_tags', 'whats_included', 'ideal_for',
+  ];
+  async function huellaTextos(camp) {
+    const texto = JSON.stringify(CAMPOS_TRADUCIBLES.map(k => camp[k] ?? null));
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(texto));
+    return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
   }
 
   /* ==================== SAVE LOGIC ==================== */
